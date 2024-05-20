@@ -1,23 +1,42 @@
 using UnityEngine;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Protocol;
 using System.Threading.Tasks;
 using System;
 using System.Threading;
+using TMPro;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 namespace OrdureX.Mqtt
 {
-
+    /// <summary>Enacapsulates an MQTT client and provides methods to interact with it.
+    /// <para>
+    /// The MQTT client is run in a separate thread to avoid blocking the Unity main thread.
+    /// This class handles transparently the communication between the Unity main thread and the MQTT client thread.
+    /// </para>
+    /// 
+    /// <para>
+    /// To use it, add a MqttController field to your component and set it in the Unity editor.
+    /// Then call Subscribe() to listen for messages and Publish() to send messages.
+    /// </para>
+    /// </summary>
     public class MqttController : MonoBehaviour
     {
         [Header("Connection Settings")]
-        public string ServerUri = "localhost:9001/mqtt";
+        public string ServerUri = "broker.hivemq.com:8000/mqtt";
         [Tooltip("Connection/disconnection timeout in milliseconds")]
         public int ConnectionTimeout = 2000;
         [Tooltip("Duration to listen for messages in milliseconds")]
         public int ListenDuration = 2500;
+
+        [Header("UI")]
+        [Tooltip("Text field to display the connection status, optional")]
+        public TextMeshProUGUI StatusDisplay;
 
         /// <summary>
         /// Root cancellation token for the MQTT task.
@@ -25,56 +44,121 @@ namespace OrdureX.Mqtt
         /// </summary>
         private CancellationTokenSource cts;
 
-        void Start()
-        {
-            EditorApplication.playModeStateChanged += OnPlayStateChanged;
+        private readonly Dictionary<string, List<TopicSubscription>> subscriptions = new();
 
+        private readonly ConcurrentQueue<Func<IMqttClient, MqttFactory, Task>> mqttThreadActions = new();
+        private readonly AutoResetEvent mqttThreadActionsSignal = new(true);
+
+        public void Start()
+        {
+#if UNITY_EDITOR
+            EditorApplication.playModeStateChanged += OnPlayStateChanged;
+#endif
+
+            UnityThreadExecutor.Init();
+
+            // Launch MQTT client in a separate thread for Unity
             Task.Run(async delegate
             {
                 cts = new CancellationTokenSource();
 
                 try
                 {
-                    await PingMqttServer();
+                    await StartMqttClient();
+                    SetStatus("Stopped");
                 }
                 catch (OperationCanceledException)
                 {
                     // ignore cancellation
-                    Debug.Log("Task cancelled");
+                    Debug.Log("MQTT Task cancelled");
+                    SetStatus("Cancelled");
                 }
                 catch (Exception ex)
                 {
+                    SetStatus($"Errored: {ex.Message}");
                     Debug.LogException(ex, this);
                 }
                 finally
                 {
                     cts.Dispose();
+                    subscriptions.Clear();
+                    mqttThreadActionsSignal.Set();
                     cts = null;
                 }
             });
         }
 
-        void OnDestroy()
+        public void OnDestroy()
         {
+#if UNITY_EDITOR
             EditorApplication.playModeStateChanged -= OnPlayStateChanged;
-            Debug.Log("OnDestroy called, cancelling MQTT task");
+#endif
+            SetStatus("Cancelling");
             cts?.Cancel();
         }
 
+        /// <summary>
+        /// Subcribes to a given MQTT topic using the provided filter.
+        /// </summary>
+        /// <param name="topicFilter">The topic, accepts wildcards ('+', '#')</param>
+        /// <param name="handler">The function to run on message reception</param>
+        /// <returns>A handle to this subscription</returns>
+        public TopicSubscription Subscribe(string topicFilter, Action<MqttApplicationMessageReceivedEventArgs> handler)
+        {
+            var subscription = new TopicSubscription(this, topicFilter, handler);
+
+            ExecuteOnMqttThread(async (mqttClient, mqttFactory) =>
+            {
+                // We are on Unity's thread
+                if (!subscriptions.ContainsKey(topicFilter))
+                {
+                    subscriptions[topicFilter] = new List<TopicSubscription>();
+
+                    var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
+                        .WithTopicFilter(f => f.WithTopic(topicFilter))
+                        .Build();
+
+                    await mqttClient.SubscribeAsync(mqttSubscribeOptions, cts.Token);
+                }
+                subscriptions[topicFilter].Add(subscription);
+            });
+
+            return subscription;
+        }
+
+        /// <summary>
+        /// Publishes a message to the MQTT server.
+        /// It is safe to call this method from any thread.
+        /// </summary>
+        /// <param name="message">The MQTT message, use MqttApplicationMessageBuilder to construct.</param>
+        public void Publish(MqttApplicationMessage message)
+        {
+            ExecuteOnMqttThread((mqttClient, mqttFactory) => mqttClient.PublishAsync(message, cts.Token));
+        }
+
+        internal void Unsubscribe(string topicFilter, TopicSubscription subscription)
+        {
+            if (subscriptions.ContainsKey(topicFilter))
+            {
+                subscriptions[topicFilter]?.Remove(subscription);
+            }
+        }
+
+#if UNITY_EDITOR
         private void OnPlayStateChanged(PlayModeStateChange state)
         {
             if (state == PlayModeStateChange.ExitingPlayMode)
             {
-                Debug.Log("Play mode exited, cancelling MQTT task");
+                SetStatus("Cancelling");
                 cts?.Cancel();
             }
         }
+#endif
 
-        /// <summary>
-        /// Connect to the MQTT server and send a message to the "ordurex/test/first" topic.
-        /// </summary>
-        private async Task PingMqttServer()
+        private async Task StartMqttClient()
         {
+            SetStatus("Connecting");
+
             var mqttFactory = new MqttFactory();
 
             using var mqttClient = mqttFactory.CreateMqttClient();
@@ -85,16 +169,34 @@ namespace OrdureX.Mqtt
                 .Build();
 
             // Setup message handler *before* connecting
+            subscriptions.Clear();
+            mqttThreadActionsSignal.Set();
             mqttClient.ApplicationMessageReceivedAsync += (MqttApplicationMessageReceivedEventArgs args) =>
             {
                 var message = args.ApplicationMessage;
-                Debug.Log("Received message");
-                Debug.Log($"- Topic: {message.Topic}");
-                Debug.Log($"- QoS:   {message.QualityOfServiceLevel}");
+                var toInvoke = new HashSet<TopicSubscription>();
+
+                // Collect matching subscriptions
+                foreach (var (filter, subs) in subscriptions)
+                {
+                    if (MqttTopicFilterComparer.Compare(message.Topic, filter) == MqttTopicFilterCompareResult.IsMatch)
+                    {
+                        toInvoke.UnionWith(subs);
+                    }
+                }
+
+                // Dispatch to Unity main thread
+                ExecuteOnUnityThread(() =>
+                {
+                    StatusDisplay.text = $"Listening, last message: {message.ConvertPayloadToString()}";
+                    foreach (var sub in toInvoke)
+                    {
+                        sub.Invoke(args);
+                    }
+                });
+
                 return Task.CompletedTask;
             };
-
-            Debug.Log("Connecting to broker...");
 
             using (var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token))
             {
@@ -102,26 +204,23 @@ namespace OrdureX.Mqtt
                 await mqttClient.ConnectAsync(mqttClientOptions, timeoutCts.Token);
             }
 
-            Debug.Log($"Connection established, listening for events (max: {ListenDuration}ms)...");
+            SetStatus("Listening");
 
-            var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
-                .WithTopicFilter(f => f.WithTopic("ordurex/test/first"))
-                .Build();
+            // Poll events from the Unity thread indefinitely
+            while (!cts.Token.IsCancellationRequested)
+            {
+                mqttThreadActionsSignal.WaitOne(100);
+                var toAwait = new List<Task>();
 
-            await mqttClient.SubscribeAsync(mqttSubscribeOptions, cts.Token);
+                while (mqttThreadActions.TryDequeue(out var action))
+                {
+                    toAwait.Add(action(mqttClient, mqttFactory));
+                }
+                await Task.WhenAll(toAwait);
+            }
 
-            await Task.Delay(ListenDuration / 2);
 
-            var toPublish = new MqttApplicationMessageBuilder()
-                .WithTopic("ordurex/test/first")
-                .WithPayload("yes")
-                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.ExactlyOnce)
-                .Build();
-            await mqttClient.PublishAsync(toPublish, cts.Token);
-
-            await Task.Delay(ListenDuration / 2);
-
-            Debug.Log("Duration elapsed, disconnecting...");
+            SetStatus("Disconnecting");
 
             var disconnectOptions = new MqttClientDisconnectOptionsBuilder()
                 .WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection)
@@ -132,8 +231,55 @@ namespace OrdureX.Mqtt
                 timeoutCts.CancelAfter(ConnectionTimeout);
                 await mqttClient.DisconnectAsync(disconnectOptions, timeoutCts.Token);
             }
+        }
 
-            Debug.Log("All done!");
+        private void SetStatus(string status)
+        {
+            ExecuteOnUnityThread(() =>
+            {
+                if (StatusDisplay != null)
+                {
+                    StatusDisplay.text = status;
+                }
+            });
+        }
+
+        private void ExecuteOnUnityThread(Action action)
+        {
+            UnityThreadExecutor.Execute(action);
+        }
+
+        private void ExecuteOnMqttThread(Func<IMqttClient, MqttFactory, Task> action)
+        {
+            mqttThreadActions.Enqueue(action);
+            mqttThreadActionsSignal.Set();
+        }
+    }
+
+    /// <summary>
+    /// A subscription handle for a topic.
+    /// </summary>
+    public class TopicSubscription
+    {
+        private readonly MqttController controller;
+        private readonly string topicFilter;
+        private readonly Action<MqttApplicationMessageReceivedEventArgs> handler;
+
+        internal TopicSubscription(MqttController controller, string topicFilter, Action<MqttApplicationMessageReceivedEventArgs> handler)
+        {
+            this.controller = controller;
+            this.topicFilter = topicFilter;
+            this.handler = handler;
+        }
+
+        public void Unsubscribe()
+        {
+            controller.Unsubscribe(topicFilter, this);
+        }
+
+        public void Invoke(MqttApplicationMessageReceivedEventArgs args)
+        {
+            handler(args);
         }
     }
 
