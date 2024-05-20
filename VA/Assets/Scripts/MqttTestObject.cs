@@ -16,8 +16,12 @@ namespace OrdureX
 
         private TopicSubscription subscription;
 
-        // Start is called before the first frame update
-        void Start()
+        void OnDestroy()
+        {
+            subscription?.Unsubscribe();
+        }
+
+        public void MqttConnected()
         {
             subscription = Controller.Subscribe("ordurex/test", (args) =>
             {
@@ -25,15 +29,15 @@ namespace OrdureX
             });
         }
 
-        void OnDestroy()
-        {
-            subscription.Unsubscribe();
-        }
-
         private int counter = 0;
 
         public void FixedUpdate()
         {
+            if (subscription == null)
+            {
+                return;
+            }
+
             ++counter;
             if (counter >= UpdateRate)
             {
