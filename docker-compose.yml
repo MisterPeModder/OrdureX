@@ -1,0 +1,14 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    volumes:
+      - "./mosquitto:/mosquitto/config"
+      - "mosquitto-data:/mosquitto/data"
+      - "mosquitto-log:/mosquitto/log"
+    ports:
+      - 9001:9001
+      - 1883:1883
+
+volumes:
+  mosquitto-data:
+  mosquitto-log:

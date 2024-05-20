@@ -1,2 +1,4 @@
 # Nix
 .direnv/
+
+mosquitto/mqtt_passwd
