@@ -187,9 +187,9 @@ namespace OrdureX.Mqtt
                 }
 
                 // Dispatch to Unity main thread
+                SetStatus($"Listening, last message: {message.ConvertPayloadToString()}");
                 ExecuteOnUnityThread(() =>
                 {
-                    StatusDisplay.text = $"Listening, last message: {message.ConvertPayloadToString()}";
                     foreach (var sub in toInvoke)
                     {
                         sub.Invoke(args);
