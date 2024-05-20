@@ -716,9 +716,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ServerUri: broker.hivemq.com:8000/mqtt
+  MaxConnectionAttempts: 3
+  DelayBetweenAttempts: 500
   ConnectionTimeout: 2000
-  ListenDuration: 2500
   StatusDisplay: {fileID: 1442803752}
+  OnConnected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 893044213}
+        m_TargetAssemblyTypeName: OrdureX.MqttTestObject, Assembly-CSharp
+        m_MethodName: MqttConnected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MqttConnected
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &2049606015
 Transform:
   m_ObjectHideFlags: 0
@@ -878,6 +894,6 @@ SceneRoots:
   - {fileID: 2083458970}
   - {fileID: 880881128}
   - {fileID: 2049606015}
+  - {fileID: 893044217}
   - {fileID: 1073900370}
   - {fileID: 489725976}
-  - {fileID: 893044217}

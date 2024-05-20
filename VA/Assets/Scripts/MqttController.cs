@@ -7,6 +7,8 @@ using System.Threading;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using UnityEngine.Events;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -29,14 +31,20 @@ namespace OrdureX.Mqtt
     {
         [Header("Connection Settings")]
         public string ServerUri = "broker.hivemq.com:8000/mqtt";
-        [Tooltip("Connection/disconnection timeout in milliseconds")]
-        public int ConnectionTimeout = 2000;
-        [Tooltip("Duration to listen for messages in milliseconds")]
-        public int ListenDuration = 2500;
+        [Tooltip("Maximum number of connection attempts before giving up")]
+        public int MaxConnectionAttempts = 3;
+        [Tooltip("Initial delay between connection attempts in milliseconds, will increase exponentially with each attempt")]
+        public int DelayBetweenAttempts = 500;
+        [Tooltip("Connection/Disconnection timeout in milliseconds")]
+        public int ConnectionTimeout = 1000;
 
         [Header("UI")]
         [Tooltip("Text field to display the connection status, optional")]
         public TextMeshProUGUI StatusDisplay;
+
+        [Header("Events")]
+        [Tooltip("Event triggered when the MQTT client is connected to the server")]
+        public UnityEvent OnConnected;
 
         /// <summary>
         /// Root cancellation token for the MQTT task.
@@ -157,16 +165,9 @@ namespace OrdureX.Mqtt
 
         private async Task StartMqttClient()
         {
-            SetStatus("Connecting");
-
             var mqttFactory = new MqttFactory();
 
             using var mqttClient = mqttFactory.CreateMqttClient();
-
-            // Connect to server using WebSocket because Unity rejects raw TCP for unknown reasons
-            var mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithWebSocketServer(o => o.WithUri(ServerUri))
-                .Build();
 
             // Setup message handler *before* connecting
             subscriptions.Clear();
@@ -198,11 +199,7 @@ namespace OrdureX.Mqtt
                 return Task.CompletedTask;
             };
 
-            using (var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token))
-            {
-                timeoutCts.CancelAfter(ConnectionTimeout);
-                await mqttClient.ConnectAsync(mqttClientOptions, timeoutCts.Token);
-            }
+            await ConnectToMqttServer(mqttClient);
 
             SetStatus("Listening");
 
@@ -231,6 +228,44 @@ namespace OrdureX.Mqtt
                 timeoutCts.CancelAfter(ConnectionTimeout);
                 await mqttClient.DisconnectAsync(disconnectOptions, timeoutCts.Token);
             }
+        }
+
+        private async Task ConnectToMqttServer(IMqttClient mqttClient)
+        {
+
+            // Connect to server using WebSocket because Unity rejects raw TCP for unknown reasons
+            var mqttClientOptions = new MqttClientOptionsBuilder()
+                .WithWebSocketServer(o => o.WithUri(ServerUri))
+                .Build();
+
+            var delay = DelayBetweenAttempts;
+
+            for (int i = 0; i < MaxConnectionAttempts; i++)
+            {
+                using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
+                timeoutCts.CancelAfter(ConnectionTimeout);
+
+                try
+                {
+                    SetStatus($"Connecting to MQTT server, attempt {i + 1}/{MaxConnectionAttempts}...");
+                    await mqttClient.ConnectAsync(mqttClientOptions, timeoutCts.Token);
+                    SetStatus("Connection established");
+                    ExecuteOnUnityThread(() => OnConnected.Invoke());
+                    return;
+                }
+                catch
+                {
+                    if (cts.Token.IsCancellationRequested)
+                    {
+                        // server is shutting down
+                        throw;
+                    }
+                    SetStatus($"Connection failed, retrying in {delay}ms...");
+                    await Task.Delay(delay, cts.Token);
+                    delay *= 2;
+                }
+            }
+
         }
 
         private void SetStatus(string status)
