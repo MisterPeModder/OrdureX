@@ -1,0 +1,740 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "dec54289-62e1-4237-b531-50e6d46074db")
+	(paper "A5")
+	(title_block
+		(title "Connexion entre Arduino Mega 2560 et ESP-01")
+		(date "2024-05-21")
+		(rev "0.0.1")
+	)
+	(lib_symbols
+		(symbol "ESP-01:Adaptateur_ESP-01"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "Adaptateur ESP-01"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" ""
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Adaptateur_ESP-01_0_1"
+				(rectangle
+					(start -15.24 10.16)
+					(end 13.97 -7.62)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Adaptateur_ESP-01_1_1"
+				(pin bidirectional line
+					(at -17.78 7.62 0)
+					(length 2.54)
+					(name "esp_RXD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -17.78 5.08 0)
+					(length 2.54)
+					(name "esp_TXD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at -17.78 -6.35 0)
+					(length 2.54)
+					(name "out_VCC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3.3V"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 16.51 7.62 180)
+					(length 2.54)
+					(name "ard_RXD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 16.51 5.08 180)
+					(length 2.54)
+					(name "ard_TXD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 16.51 -6.35 180)
+					(length 2.54)
+					(name "in_VCC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5V"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at -17.78 -3.81 0)
+					(length 2.54)
+					(name "out_GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "GND1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 16.51 -3.81 180)
+					(length 2.54)
+					(name "in_GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "GND2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ESP-01:ESP-01"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "ESP-01"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "ESP-01_0_1"
+				(rectangle
+					(start -12.7 12.7)
+					(end 12.7 -20.32)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "ESP-01_1_1"
+				(pin input line
+					(at -15.24 10.16 0)
+					(length 2.54)
+					(name "~{RST}"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -15.24 5.08 0)
+					(length 2.54)
+					(name "EN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 15.24 -8.89 180)
+					(length 2.54)
+					(name "VCC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3.3V"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 15.24 10.16 180)
+					(length 2.54)
+					(name "GPIO0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 15.24 7.62 180)
+					(length 2.54)
+					(name "GPIO1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 15.24 5.08 180)
+					(length 2.54)
+					(name "RXD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 15.24 2.54 180)
+					(length 2.54)
+					(name "TXD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 15.24 -6.35 180)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+	(no_connect
+		(at 78.74 49.53)
+		(uuid "57796d4e-d406-4159-8021-aa6bc11f5a2f")
+	)
+	(no_connect
+		(at 78.74 52.07)
+		(uuid "9a43612e-fb77-4be7-a50c-2784304e2eab")
+	)
+	(wire
+		(pts
+			(xy 78.74 54.61) (xy 93.98 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0c2b9dfb-8747-4cb7-a9f5-a6dc217d10fc")
+	)
+	(wire
+		(pts
+			(xy 128.27 57.15) (xy 147.32 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "44f6bf0a-b8da-4984-85dd-16bd5beb9f9c")
+	)
+	(wire
+		(pts
+			(xy 128.27 66.04) (xy 147.32 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "6ea3563f-c47b-481d-9518-bb4a01b7973d")
+	)
+	(wire
+		(pts
+			(xy 78.74 68.58) (xy 93.98 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "7e0babde-2bec-421d-b948-3b11fa045e71")
+	)
+	(wire
+		(pts
+			(xy 78.74 66.04) (xy 93.98 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "bf2a940f-47bc-43a6-ab70-437836bbf605")
+	)
+	(wire
+		(pts
+			(xy 78.74 57.15) (xy 93.98 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c65689ae-e559-4a99-8860-07c9ee07eb97")
+	)
+	(wire
+		(pts
+			(xy 128.27 68.58) (xy 147.32 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "d2edac9a-a06f-45b5-8aca-a884543b9239")
+	)
+	(wire
+		(pts
+			(xy 128.27 54.61) (xy 147.32 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fdde0e09-d053-4a44-b315-d75439bf92d2")
+	)
+	(hierarchical_label "TX"
+		(shape bidirectional)
+		(at 147.32 54.61 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "14203379-a6e1-4b17-af0d-8a8607d9863c")
+	)
+	(hierarchical_label "RX"
+		(shape bidirectional)
+		(at 147.32 57.15 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2cc347de-fd9a-498a-8045-d213d53f037c")
+	)
+	(hierarchical_label "GND"
+		(shape bidirectional)
+		(at 147.32 66.04 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3c47ee37-b097-4f00-bab0-b52b73de4311")
+	)
+	(hierarchical_label "5V"
+		(shape bidirectional)
+		(at 147.32 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8eedbc94-fce0-402f-8b3c-cf998b6b373d")
+	)
+	(symbol
+		(lib_id "ESP-01:Adaptateur_ESP-01")
+		(at 111.76 62.23 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "75479305-a7ad-489f-a8d3-bcf41ea801fd")
+		(property "Reference" "Adaptateur_ESP-01"
+			(at 111.125 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "~"
+			(at 111.125 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 111.76 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 111.76 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 111.76 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "GND2"
+			(uuid "68ce6074-7f3e-4b9b-8fa7-6187de3cfc2f")
+		)
+		(pin "5"
+			(uuid "6e4d21e3-00e4-42d9-900d-48f8f72bcadc")
+		)
+		(pin "4"
+			(uuid "3a33bf78-ceb4-47ba-a1ba-b5f8333587b6")
+		)
+		(pin "1"
+			(uuid "56455ff6-e432-4452-b4eb-977f8f1518f0")
+		)
+		(pin "0"
+			(uuid "2b68e637-a989-4525-be98-599c5da32b76")
+		)
+		(pin "3.3V"
+			(uuid "8bb50832-5336-46eb-aa12-404ddf6b898d")
+		)
+		(pin "5V"
+			(uuid "1e288f3e-a12e-42c6-b54b-5456f42e1df1")
+		)
+		(pin "GND1"
+			(uuid "445d524f-1a93-4a97-8bd9-09244b9edf79")
+		)
+		(instances
+			(project "ordurex-electronics"
+				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/0d29bbc1-7e1c-4b9b-ab2d-7352725ee314"
+					(reference "Adaptateur_ESP-01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ESP-01:ESP-01")
+		(at 63.5 59.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b054aa31-8200-411a-b2c2-2d6ce24260b0")
+		(property "Reference" "ESP-01"
+			(at 63.5 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "~"
+			(at 63.5 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 63.5 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 63.5 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 63.5 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "GND"
+			(uuid "18122f64-beb4-4550-9832-cec700ce4b0f")
+		)
+		(pin "1"
+			(uuid "78e64321-1459-4a07-b592-e35a03d42d32")
+		)
+		(pin "0"
+			(uuid "98ac232d-1703-43bc-bbe9-ab002a4de02e")
+		)
+		(pin "7"
+			(uuid "33072474-83e4-4583-aff9-835226c06730")
+		)
+		(pin "6"
+			(uuid "c1010070-a719-46d2-9550-1d343fac89b1")
+		)
+		(pin "3.3V"
+			(uuid "0b98d217-3294-49e0-86c7-e573f88e98fb")
+		)
+		(pin "4"
+			(uuid "1e6c9b05-c777-42e9-b1b9-e677d88395cb")
+		)
+		(pin "5"
+			(uuid "28be42bf-2752-44ae-8c0e-561747b0ec17")
+		)
+		(instances
+			(project "ordurex-electronics"
+				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/0d29bbc1-7e1c-4b9b-ab2d-7352725ee314"
+					(reference "ESP-01")
+					(unit 1)
+				)
+			)
+		)
+	)
+)
