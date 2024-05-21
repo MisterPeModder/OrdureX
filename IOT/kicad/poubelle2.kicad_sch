@@ -5,7 +5,7 @@
 	(uuid "376f4c9f-2676-45a8-beaa-cccc5a16ba9d")
 	(paper "A5")
 	(title_block
-		(title "Poubelle 2")
+		(title "Poubelle 1")
 		(rev "0.0.1")
 	)
 	(lib_symbols
