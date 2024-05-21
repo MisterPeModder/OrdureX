@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MQTT Testing.unity
     guid: 17ad6625de642f2d3aa389a122364748
+  - enabled: 1
+    path: Assets/Scenes/Main Scene.unity
+    guid: 71352b900dba15437a0d38654d1f7fd2
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ee72d15cf39dd748a13eac57397b9af,
       type: 2}

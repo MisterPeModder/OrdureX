@@ -45,6 +45,8 @@ namespace OrdureX.Mqtt
         [Header("Events")]
         [Tooltip("Event triggered when the MQTT client is connected to the server")]
         public UnityEvent OnConnected;
+        [Tooltip("Event triggered when the MQTT client is disconnected from the server")]
+        public UnityEvent OnDisconnected;
 
         /// <summary>
         /// Root cancellation token for the MQTT task.
@@ -92,6 +94,7 @@ namespace OrdureX.Mqtt
                     subscriptions.Clear();
                     mqttThreadActionsSignal.Set();
                     cts = null;
+                    OnDisconnected.Invoke();
                 }
             });
         }
@@ -187,7 +190,7 @@ namespace OrdureX.Mqtt
                 }
 
                 // Dispatch to Unity main thread
-                SetStatus($"Listening, last message: {message.ConvertPayloadToString()}");
+                SetStatus($"Listening, last topic: {message.Topic}");
                 ExecuteOnUnityThread(() =>
                 {
                     foreach (var sub in toInvoke)
