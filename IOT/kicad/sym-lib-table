@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "OrdureX")(type "KiCad")(uri "${KIPRJMOD}/ordurex.kicad_sym")(options "")(descr ""))
+)

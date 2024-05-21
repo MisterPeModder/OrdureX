@@ -1,0 +1,12 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "f9a7a5c1-85a4-4da9-9f1e-b99439506cc0")
+	(paper "A5")
+	(title_block
+		(title "Poubelle 3")
+		(rev "0.0.1")
+	)
+	(lib_symbols)
+)
