@@ -258,7 +258,7 @@ namespace OrdureX.Mqtt
                 }
                 catch
                 {
-                    if (cts.Token.IsCancellationRequested)
+                    if (cts.Token.IsCancellationRequested || i + 1 == MaxConnectionAttempts)
                     {
                         // server is shutting down
                         throw;
