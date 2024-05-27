@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 4755b35b590504809a7525fd2109c2e2
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MQTT Testing.unity
     guid: 17ad6625de642f2d3aa389a122364748
   - enabled: 1
