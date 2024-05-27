@@ -14,8 +14,8 @@ namespace OrdureX
         [Header("Runtime values (read-only)")]
         [Tooltip("Client UUID for this Unity instance, leave empty to generate a new one")]
         public string ClientId = "";
-        public SimulationStatus Status;
-        public bool Connected;
+        public SimulationStatus Status = SimulationStatus.Stopped;
+        public bool Connected = false;
 
         private Guid clientUuid;
 
