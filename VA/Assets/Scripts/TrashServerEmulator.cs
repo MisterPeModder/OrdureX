@@ -20,11 +20,23 @@ namespace OrdureX
         [Tooltip("Used to get the URL of the MQTT broker.")]
         public MqttController Controller;
 
+        [Tooltip("Whether to show logs in the Unity console.")]
+        public bool ShowLogs = true;
+
         /// <summary>
         /// Root cancellation token for the MQTT task.
         /// Cancelled when the object is destroyed or when the play mode is exited.
         /// </summary>
         private CancellationTokenSource cts;
+
+        // Simulation Variables //////////////////////////////////////////////
+        private SimulationStatus status;
+        private bool trash0LidOpen;
+        private bool trash2LidOpen;
+
+
+        private const string ACTION_NAMESPACE = "ordurex/action";
+        private const string STATUS_NAMESPACE = "ordurex/status";
 
         // Start is called before the first frame update
         void Start()
@@ -42,6 +54,7 @@ namespace OrdureX
 
                 try
                 {
+                    ResetSimulation();
                     await StartEmulator();
                 }
                 catch (OperationCanceledException)
@@ -71,10 +84,16 @@ namespace OrdureX
         }
 #endif
 
-        public void Update()
+        private void ResetSimulation()
         {
-
+            status = SimulationStatus.Stopped;
+            trash0LidOpen = false;
+            trash2LidOpen = false;
         }
+
+        // public void Update()
+        // {
+        // }
 
         private async Task StartEmulator()
         {
@@ -90,7 +109,7 @@ namespace OrdureX
             await ConnectToMqttServer(mqttClient);
 
             var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
-                .WithTopicFilter(f => f.WithTopic("ordurex/action/simulation"))
+                .WithTopicFilter(f => f.WithTopic($"{ACTION_NAMESPACE}/#"))
                 .Build();
 
             await mqttClient.SubscribeAsync(mqttSubscribeOptions, cts.Token);
@@ -137,28 +156,60 @@ namespace OrdureX
 
         }
 
+        private int GetTrashId(string topic)
+        {
+            var prefix = $"{ACTION_NAMESPACE}/trash-";
+            if (topic.StartsWith(prefix))
+            {
+                return int.Parse(topic.Substring(prefix.Length, 1));
+            }
+            return -1;
+        }
+
+        private void Log(string message)
+        {
+            if (ShowLogs)
+            {
+                Debug.Log("Emulator: " + message);
+            }
+        }
+
+        private void LogError(string message)
+        {
+            if (ShowLogs)
+            {
+                Debug.LogError("Emulator: " + message);
+            }
+        }
+
         private async Task OnMessageReceived(IMqttClient mqttClient, MqttApplicationMessageReceivedEventArgs args)
         {
             var message = args.ApplicationMessage;
+            var payload = message.PayloadSegment;
+            var trash = GetTrashId(message.Topic);
 
             // echo back the simulation status
-            if (message.Topic == "ordurex/action/simulation")
+            if (message.Topic == $"{ACTION_NAMESPACE}/simulation")
             {
-                var payload = message.PayloadSegment;
-
                 if (payload.Array == null)
                 {
-                    Debug.LogError("Received empty message payload for status change");
+                    LogError("Received empty message payload for status change");
                     return;
                 }
 
-                if (payload.Count < 17)
+                if (payload.Count != 17)
                 {
-                    Debug.LogError("Invalid payload length for simulation status change.");
+                    LogError($"Invalid payload length for simulation status change, expected 17 bytes, got {payload.Count}");
                     return;
                 }
 
                 var newStatus = (SimulationStatus)payload[0];
+
+                if (newStatus == status)
+                {
+                    return;
+                }
+                status = newStatus;
                 var clientUuid = new Guid(payload[1..17]);
 
                 // Send back the status change
@@ -168,10 +219,84 @@ namespace OrdureX
                 clientUuid.ToByteArray().CopyTo(payloadBytes, 1);
 
                 await mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
-                    .WithTopic("ordurex/status/simulation")
+                    .WithTopic($"{STATUS_NAMESPACE}/simulation")
                     .WithPayload(payloadBytes)
                     .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.ExactlyOnce)
                     .Build());
+            }
+
+
+            if (status != SimulationStatus.Running)
+            {
+                return;
+            }
+
+            if (message.Topic == $"{ACTION_NAMESPACE}/trash-0/lid" || message.Topic == $"{ACTION_NAMESPACE}/trash-2/lid")
+            {
+                if (payload.Array == null)
+                {
+                    LogError("Received empty code payload for trash collection request");
+                    return;
+                }
+                if (payload.Count != 1)
+                {
+                    LogError($"Invalid payload length for trash lid request, expected 1 byte, got {payload.Count}");
+                    return;
+                }
+                var open = payload[0] == 1;
+
+                if (trash == 0)
+                {
+                    trash0LidOpen = open;
+                }
+                else if (trash == 2)
+                {
+                    trash2LidOpen = open;
+                }
+                Log($"Received lid status for trash {trash}: {open}");
+            }
+
+            if (message.Topic == $"{ACTION_NAMESPACE}/trash-0/request-collect"
+                || message.Topic == $"{ACTION_NAMESPACE}/trash-1/request-collect"
+                || message.Topic == $"{ACTION_NAMESPACE}/trash-2/request-collect")
+            {
+                if (payload.Array == null)
+                {
+                    LogError("Received empty code payload for trash collection request");
+                    return;
+                }
+                var code = System.Text.Encoding.UTF8.GetString(payload.Array, payload.Offset, payload.Count);
+
+                Log($"Received trash {trash} collection request with code: {code}");
+            }
+
+            if (message.Topic == $"{ACTION_NAMESPACE}/trash-1/buzzer")
+            {
+                if (payload.Array == null)
+                {
+                    LogError("Received empty code payload for trash collection request");
+                    return;
+                }
+                if (payload.Count != 1)
+                {
+                    LogError($"Invalid payload length for trash buzzer request, expected 1 byte, got {payload.Count}");
+                    return;
+                }
+                var sound = payload[0];
+
+                Log($"Received buzzer request for trash {trash} with sound: {sound}");
+            }
+
+            if (message.Topic == $"{ACTION_NAMESPACE}/trash-2/display")
+            {
+                if (payload.Array == null)
+                {
+                    Debug.LogError("Received empty code payload for trash collection request");
+                    return;
+                }
+                var text = System.Text.Encoding.UTF8.GetString(payload.Array, payload.Offset, payload.Count);
+
+                Log($"Received display request for trash {trash} with text: {text}");
             }
         }
     }
