@@ -1,0 +1,27 @@
+{
+    "name": "ordurex-relay",
+    "version": "0.1.0",
+    "description": "brigdes raw TCP commands and MQTT",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node index.js",
+        "format": "prettier --write ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/MisterPeModder/OrdureX.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/MisterPeModder/OrdureX/issues"
+    },
+    "homepage": "https://github.com/MisterPeModder/OrdureX#readme",
+    "devDependencies": {
+        "prettier": "^3.3.0"
+    },
+    "dependencies": {
+        "uuid": "^9.0.1"
+    }
+}
