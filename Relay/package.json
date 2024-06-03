@@ -6,6 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "node index.js",
+        "test:mock": "node test/mock_client.js",
         "format": "prettier --write ."
     },
     "repository": {
@@ -22,6 +23,7 @@
         "prettier": "^3.3.0"
     },
     "dependencies": {
+        "mqtt": "^5.7.0",
         "uuid": "^9.0.1"
     }
 }

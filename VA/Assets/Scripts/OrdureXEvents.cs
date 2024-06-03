@@ -17,15 +17,15 @@ namespace OrdureX
         public SimulationStatus Status = SimulationStatus.Stopped;
         public bool Connected = false;
 
-        private Guid clientUuid;
+        public Guid ClientUuid;
 
 
         // Start is called before the first frame update
         public void Start()
         {
             Status = SimulationStatus.Stopped;
-            clientUuid = Guid.NewGuid();
-            ClientId = clientUuid.ToString();
+            ClientUuid = Guid.NewGuid();
+            ClientId = ClientUuid.ToString();
             Controller.OnConnected.AddListener(MqttConnected);
             Controller.OnDisconnected.AddListener(MqttDisconnected);
         }
@@ -71,7 +71,7 @@ namespace OrdureX
             var payloadBytes = new byte[17];
 
             payloadBytes[0] = (byte)newStatus;
-            clientUuid.ToByteArray().CopyTo(payloadBytes, 1);
+            ClientUuid.ToByteArray().CopyTo(payloadBytes, 1);
 
             Debug.Log("Publishing status change: " + newStatus);
 

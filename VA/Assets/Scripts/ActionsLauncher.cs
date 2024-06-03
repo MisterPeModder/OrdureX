@@ -164,10 +164,15 @@ namespace OrdureX.UI
 
         private void RequestCollectTrash2()
         {
+            List<byte> payload = new();
+
+            payload.AddRange(Events.ClientUuid.ToByteArray());
+            payload.AddRange(System.Text.Encoding.UTF8.GetBytes(LimitTo256Bytes(ActionInputField.text)));
+
             Debug.Log("Requesting collection of trash 2");
             MqttController.Publish(new MqttApplicationMessageBuilder()
                 .WithTopic($"{ACTION_NAMESPACE}/trash-2/request-collect")
-                .WithPayload(ActionInputField.text)
+                .WithPayload(payload.ToArray())
                 .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                 .Build());
         }
@@ -189,6 +194,23 @@ namespace OrdureX.UI
         private void HideActionInputField()
         {
             ActionInputField.gameObject.SetActive(false);
+        }
+
+        private string LimitTo256Bytes(string input)
+        {
+            int byteCount = 0;
+            int i = 0;
+            while (i < input.Length)
+            {
+                int charByteCount = System.Text.Encoding.UTF8.GetByteCount(new char[] { input[i] });
+                if (byteCount + charByteCount > 256)
+                {
+                    break;
+                }
+                byteCount += charByteCount;
+                i++;
+            }
+            return input.Substring(0, i);
         }
     }
 }
