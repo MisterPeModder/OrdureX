@@ -6,7 +6,7 @@
 /**
  * Status sent by the Arduino
  */
-enum topicStatus : unsigned char {
+enum TopicStatus : unsigned char {
   // collect requested
   trash_0_collect_requested = 0,
   trash_1_collect_requested,
@@ -26,7 +26,7 @@ enum topicStatus : unsigned char {
 /**
  * Requested actions by Android device
  */
-enum topicAction : unsigned char {
+enum TopicAction : unsigned char {
   // actuators
   trash_0_lid_a = 0,
   trash_2_lid_a,
@@ -48,7 +48,7 @@ public:
   void connectRelay();
   void connectWifi();
 
-  void addSendData(topicStatus topic, const byte* payload, const size_t payloadSize);
+  void addSendData(TopicStatus topic, const byte* payload, const size_t payloadSize);
   void send();
 
 
