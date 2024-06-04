@@ -37,6 +37,10 @@ namespace OrdureX.Mqtt
         public int DelayBetweenAttempts = 500;
         [Tooltip("Connection/Disconnection timeout in milliseconds")]
         public int ConnectionTimeout = 1000;
+        [Tooltip("MQTT broker username")]
+        public string Username = null;
+        [Tooltip("MQTT broker password")]
+        public string Password = null;
 
         [Header("UI")]
         [Tooltip("Text field to display the connection status, optional")]
@@ -237,9 +241,14 @@ namespace OrdureX.Mqtt
         {
 
             // Connect to server using WebSocket because Unity rejects raw TCP for unknown reasons
-            var mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithWebSocketServer(o => o.WithUri(ServerUri))
-                .Build();
+            var mqttClientBuilder = new MqttClientOptionsBuilder()
+                .WithWebSocketServer(o => o.WithUri(ServerUri));
+
+            if (!string.IsNullOrEmpty(Username))
+            {
+                mqttClientBuilder = mqttClientBuilder.WithCredentials(Username, Password);
+            }
+            var mqttClientOptions = mqttClientBuilder.Build();
 
             var delay = DelayBetweenAttempts;
 
