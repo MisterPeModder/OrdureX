@@ -6,7 +6,7 @@
 /**
  * Status sent by the Arduino
  */
-enum topicStatus {
+enum topicStatus : unsigned char {
   // collect requested
   trash_0_collect_requested = 0,
   trash_1_collect_requested,
@@ -26,7 +26,7 @@ enum topicStatus {
 /**
  * Requested actions by Android device
  */
-enum topicAction {
+enum topicAction : unsigned char {
   // actuators
   trash_0_lid_a = 0,
   trash_2_lid_a,
@@ -52,31 +52,11 @@ public:
   void send();
 
 
-  void dummySend() {
-    // byte status_simulation[] PROGMEM = {
-    //   0x01, 0x09, 0x01, 0x36, 0x73, 0x98, 0x9e, 0x8c, 0x85, 0x42, 0x71, 0x86, 0x85, 0x8a, 0xea, 0xc7,
-    //   0x98, 0x91, 0x47
-    // };
-
-    // array size is 35
-    byte invalid_code[] = {
-      0x02, 0x03, 0x36, 0x73, 0x98, 0x9e, 0x8c, 0x85, 0x42, 0x71, 0x86, 0x85, 0x8a, 0xea, 0xc7, 0x98,
-      0x91, 0x47, 0x05, 0x36, 0x73, 0x98, 0x9e, 0x8c, 0x85, 0x42, 0x71, 0x86, 0x85, 0x8a, 0xea, 0xc7,
-      0x98, 0x91, 0x47
-    };
-
-    this->serial->println();
-    this->serial->print("AT+CIPSEND=");
-    this->serial->println(35);
-    delay(100);
-    this->serial->write(invalid_code, 35);
-    Serial.write(invalid_code, 35);
-  }
-
 private:
   HardwareSerial* serial;
-  byte* request;
-  int requestSize;
+  unsigned char statusNumber;
+  unsigned char* request;
+  int offset;
 };
 
 #endif  // AT_H

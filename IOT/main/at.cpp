@@ -2,7 +2,35 @@
 #include "at.h"
 #include "config.h"
 
-At::At(HardwareSerial& serial) {
+#define REQUEST_SIZE 256
+
+#ifdef DEBUG
+#define DEBUG_PRINT_REQUEST() \
+  { \
+    Serial.print("Request size: "); \
+    Serial.println(offset); \
+    Serial.print("Request content: "); \
+    Serial.print(statusNumber); \
+    for (int i = 0; i < offset; i++) Serial.print(request[i], HEX); \
+    Serial.println(); \
+  }
+#define DEBUG_PRINT_ADD_REQUEST() Serial.println("Adding a request");
+#define DEBUG_PRINT_SEND_NOTHING() Serial.println("Nothing to send");
+#define DEBUG_PRINT_SEND_REQUEST() \
+  { \
+    Serial.print("Sending a request. Number of status: "); \
+    Serial.println(statusNumber); \
+  }
+#else
+#define DEBUG_PRINT_REQUEST()
+#define DEBUG_PRINT_ADD_REQUEST()
+#define DEBUG_PRINT_SEND_NOTHING()
+#define DEBUG_PRINT_SEND_REQUEST()
+#endif
+
+At::At(HardwareSerial& serial)
+  : statusNumber(0), offset(0) {
+  request = new unsigned char[REQUEST_SIZE]();
   this->serial = &serial;
 }
 
@@ -17,7 +45,7 @@ void At::connectRelay() {
 
 void At::connectWifi() {
   this->serial->println("AT+CWMODE=1");
-  delay(1000);
+  delay(500);
 
   this->serial->print("AT+CWJAP=\"");
   this->serial->print(WIFI_SSID);
@@ -27,40 +55,35 @@ void At::connectWifi() {
   delay(5000);
 }
 
-void At::addSendData(topicStatus topic, const byte* payload, const size_t payloadSize) {
-  if(request == nullptr) {
-    request = new byte[1 + payloadSize]();
+void At::addSendData(topicStatus topic, const unsigned char* payload, const size_t payloadSize) {
+  request[offset] = topic;
+  memcpy(request + 1 + offset, payload, payloadSize);  // 1 : topic size
 
-    request[0] = static_cast<byte>(topic);
-    memcpy(request + 1, payload, payloadSize);
-    requestSize = payloadSize +1;
-  } else {
-    // if request already exists, append the new payload
-    byte* temp = new byte[requestSize + 1 + payloadSize]();
-    memcpy(temp, request, requestSize);
-    temp[requestSize + 1] = static_cast<byte>(topic);
-    memcpy(temp + 1 + payloadSize, payload, payloadSize);
+  offset += payloadSize + 1;
+  statusNumber++;
 
-    delete request;
-    *request = *temp;
-    requestSize += payloadSize +1;
-  }
-
-  // debugging purpose
-  for (int i = 0; i < sizeof(request) / sizeof(byte); i++)
-    Serial.write(request[i]);
+  DEBUG_PRINT_ADD_REQUEST();
+  DEBUG_PRINT_REQUEST();
 }
 
 void At::send() {
-  size_t size = sizeof(request) / sizeof(byte);
-  this->serial->print("AT+CIPSEND=");
-  this->serial->println(size);
-
-  for (int i = 0; i < size; i++) {
-    this->serial->print(request[i], BIN);
-    // debugging purpose
-    //Serial.print(request[i], BIN);
+  if (statusNumber == 0) {
+    DEBUG_PRINT_SEND_NOTHING();
+    return;
   }
-  
-  delete request;
+
+  this->serial->print("AT+CIPSEND=");
+  this->serial->println(offset + 1);
+  delay(200);
+
+  this->serial->write(statusNumber);
+  this->serial->write(request, offset);
+
+  DEBUG_PRINT_SEND_REQUEST();
+  DEBUG_PRINT_REQUEST();
+
+  statusNumber = 0;
+  offset = 0;
+  // may be useless to reset the array
+  memset(request, 0x00, REQUEST_SIZE);
 }
