@@ -11,11 +11,10 @@ namespace OrdureX.AR
         [SerializeField] private GameObject m_Overlay;
         [SerializeField] private TMP_Text m_OverlayTitle;
 
-        [Header("Neighbor Detection")]
-        [SerializeField] private int m_MaxNeighbors = 4;
-        [SerializeField] private GameObject m_NeighborLinePrefab;
-        [SerializeField] private List<LineRenderer> m_NeighborLines = new();
-        [SerializeField] private float m_DistanceThreshold = 0.5f;
+        [Header("Connection Handling")]
+        [SerializeField] private List<TileConnector> m_Connectors = new();
+        [SerializeField] private GameObject m_ConnectionLinePrefab;
+        [SerializeField] private List<LineRenderer> m_ConnectionLines = new();
 
         private SurfaceTileManager m_Manager;
 
@@ -25,10 +24,10 @@ namespace OrdureX.AR
             m_Manager = manager;
             m_OverlayTitle.text = title;
 
-            for (int i = 0; i < m_MaxNeighbors; i++)
+            for (int i = 0; i < m_Connectors.Count; i++)
             {
-                var line = Instantiate(m_NeighborLinePrefab, transform).GetComponent<LineRenderer>();
-                m_NeighborLines.Add(line);
+                var line = Instantiate(m_ConnectionLinePrefab, transform).GetComponent<LineRenderer>();
+                m_ConnectionLines.Add(line);
             }
         }
 
@@ -36,8 +35,8 @@ namespace OrdureX.AR
         {
             if (!m_ShowOverlay)
             {
-                // When overlay is hidden, disable all neighbor lines
-                foreach (var line in m_NeighborLines)
+                // When overlay is hidden, disable all connection lines
+                foreach (var line in m_ConnectionLines)
                 {
                     line.enabled = false;
                 }
@@ -46,23 +45,25 @@ namespace OrdureX.AR
 
             // Snap overlay title to 90 degree increments
             m_OverlayTitle.transform.localRotation = Quaternion.Euler(90, GetHorizontalAngleToCamera(), 0);
+            UpdateConnectionLines();
+        }
 
-            var neighbors = FindNeighbors();
-            int i = 0;
-
-            for (; i < neighbors.Count; i++)
+        private void UpdateConnectionLines()
+        {
+            for (int i = 0; i < m_ConnectionLines.Count; i++)
             {
-                var line = m_NeighborLines[i];
-                var neighbor = neighbors[i];
-                line.enabled = false;
+                var line = m_ConnectionLines[i];
+                var connector = m_Connectors[i];
+
+                line.enabled = connector.ConnectedTile != null;
+                if (!line.enabled)
+                {
+                    continue;
+                }
+
                 line.positionCount = 2;
                 line.SetPosition(0, transform.position);
-                line.SetPosition(1, neighbor.transform.position);
-            }
-
-            for (; i < m_NeighborLines.Count; i++)
-            {
-                m_NeighborLines[i].enabled = false;
+                line.SetPosition(1, connector.ConnectedTile.transform.position);
             }
         }
 
@@ -77,40 +78,6 @@ namespace OrdureX.AR
             float angle = Vector3.SignedAngle(forwardOnPlane, directionToCamera, Vector3.up);
             angle = Mathf.Round((angle + 180) / 90) * 90;
             return angle;
-        }
-
-        private List<SurfaceTile> FindNeighbors()
-        {
-            List<Tuple<SurfaceTile, float>> tilesByDistance = new();
-
-            foreach (var tile in m_Manager.Tiles)
-            {
-                if (tile == this)
-                {
-                    continue;
-                }
-
-                tilesByDistance.Add(new(tile, Vector3.Distance(transform.position, tile.transform.position)));
-            }
-            List<SurfaceTile> neighbors = new(m_MaxNeighbors);
-
-            tilesByDistance.Sort((a, b) => a.Item2.CompareTo(b.Item2));
-
-            foreach (var (tile, distance) in tilesByDistance)
-            {
-                if (neighbors.Contains(tile) || distance > m_DistanceThreshold)
-                {
-                    continue;
-                }
-
-                neighbors.Add(tile);
-                if (neighbors.Count >= m_MaxNeighbors)
-                {
-                    break;
-                }
-            }
-
-            return neighbors;
         }
 
     }
