@@ -1,16 +1,9 @@
 #include "config.h"
 #include "at.h"
 
-void setup() {
-  // Communication with the computer
-  Serial.begin(9600);
-  // Communication with the ESP
-  Serial1.begin(115200);
-
+// Example request, will be deleted
+void exampleRequests() {
   At* at = new At(Serial1);
-
-  at->connectWifi();
-  at->connectRelay();
 
   // invalide code trash 0: array size is 16
   byte invalid_code0[] = {
@@ -27,10 +20,25 @@ void setup() {
   at->addSendData(trash_0_invalid_code, invalid_code0, 16);
   at->addSendData(trash_2_invalid_code, invalid_code2, 16);
   at->addSendData(trash_1_invalid_code, invalid_code2, 16);
-
+  // send 3 status
   at->send();
   at->addSendData(trash_1_invalid_code, invalid_code2, 16);
+  // send 1 status
   at->send();
+  // send nothing
+  at->send();
+}
+
+void setup() {
+  // Communication with the computer
+  Serial.begin(9600);
+  // Communication with the ESP
+  Serial1.begin(115200);
+
+  At* at = new At(Serial1);
+
+  at->connectWifi();
+  at->connectRelay();
 }
 
 void loop() {
