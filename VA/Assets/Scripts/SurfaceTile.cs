@@ -7,11 +7,11 @@ namespace OrdureX.AR
 {
     public class SurfaceTile : MonoBehaviour
     {
+        [SerializeField] private bool m_ShowOverlay = true;
         [SerializeField] private GameObject m_Overlay;
         [SerializeField] private TMP_Text m_OverlayTitle;
 
         [Header("Neighbor Detection")]
-        [SerializeField] private bool m_ShowNeighbors = true;
         [SerializeField] private int m_MaxNeighbors = 4;
         [SerializeField] private GameObject m_NeighborLinePrefab;
         [SerializeField] private List<LineRenderer> m_NeighborLines = new();
@@ -34,14 +34,19 @@ namespace OrdureX.AR
 
         private void Update()
         {
-            if (!m_ShowNeighbors)
+            if (!m_ShowOverlay)
             {
+                // When overlay is hidden, disable all neighbor lines
                 foreach (var line in m_NeighborLines)
                 {
                     line.enabled = false;
                 }
                 return;
             }
+
+            // Snap overlay title to 90 degree increments
+            m_OverlayTitle.transform.localRotation = Quaternion.Euler(90, GetHorizontalAngleToCamera(), 0);
+
             var neighbors = FindNeighbors();
             int i = 0;
 
@@ -59,6 +64,19 @@ namespace OrdureX.AR
             {
                 m_NeighborLines[i].enabled = false;
             }
+        }
+
+        private float GetHorizontalAngleToCamera()
+        {
+            Vector3 directionToCamera = Camera.main.transform.position - transform.position;
+            directionToCamera.y = 0; // Project onto horizontal plane
+
+            Vector3 forwardOnPlane = transform.forward;
+            forwardOnPlane.y = 0; // Project onto horizontal plane
+
+            float angle = Vector3.SignedAngle(forwardOnPlane, directionToCamera, Vector3.up);
+            angle = Mathf.Round((angle + 180) / 90) * 90;
+            return angle;
         }
 
         private List<SurfaceTile> FindNeighbors()

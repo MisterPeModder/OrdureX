@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68bf2c576efcbd938fe090918afca45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ShowOverlay: 1
   m_Overlay: {fileID: 7145553287237142232}
   m_OverlayTitle: {fileID: 5073324458306115263}
-  m_ShowNeighbors: 1
   m_MaxNeighbors: 4
   m_NeighborLinePrefab: {fileID: 3056566428905328149, guid: 2c2e1a95aa7952ea3bc244a968bd0d35,
     type: 3}
