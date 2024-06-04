@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
@@ -6,7 +7,14 @@ namespace OrdureX.AR
     [RequireComponent(typeof(ARTrackedImageManager))]
     public class SurfaceTileManager : MonoBehaviour
     {
-        ARTrackedImageManager m_TrackedImageManager;
+        public IReadOnlyList<SurfaceTile> Tiles { get; private set; }
+        private ARTrackedImageManager m_TrackedImageManager;
+        private readonly List<SurfaceTile> m_Tiles = new();
+
+        SurfaceTileManager()
+        {
+            Tiles = m_Tiles;
+        }
 
         void Awake()
         {
@@ -22,7 +30,14 @@ namespace OrdureX.AR
             foreach (var newImage in eventArgs.added)
             {
                 var newTile = newImage.GetComponent<SurfaceTile>();
-                newTile.Activate(newImage.referenceImage.name);
+                newTile.Activate(this, newImage.referenceImage.name);
+                m_Tiles.Add(newTile);
+            }
+
+            foreach (var removedImage in eventArgs.removed)
+            {
+                var removedTile = removedImage.GetComponent<SurfaceTile>();
+                m_Tiles.Remove(removedTile);
             }
         }
     }

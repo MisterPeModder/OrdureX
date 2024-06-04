@@ -47,6 +47,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Overlay: {fileID: 7145553287237142232}
   m_OverlayTitle: {fileID: 5073324458306115263}
+  m_ShowNeighbors: 1
+  m_MaxNeighbors: 4
+  m_NeighborLinePrefab: {fileID: 3056566428905328149, guid: 2c2e1a95aa7952ea3bc244a968bd0d35,
+    type: 3}
+  m_NeighborLines: []
+  m_DistanceThreshold: 0.5
 --- !u!1 &6776487801687164790
 GameObject:
   m_ObjectHideFlags: 0
