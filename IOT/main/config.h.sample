@@ -1,0 +1,13 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// Comment this to disable debug logs 
+#define DEBUG 1
+
+#define WIFI_SSID "ssid"
+#define WIFI_PASSWORD "password"
+
+#define RELAY_HOST "192.168.0.10"
+#define RELAY_PORT 7070
+
+#endif // CONFIG_H
