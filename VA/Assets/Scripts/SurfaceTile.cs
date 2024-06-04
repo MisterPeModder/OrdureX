@@ -54,7 +54,7 @@ namespace OrdureX.AR
             {
                 var line = m_NeighborLines[i];
                 var neighbor = neighbors[i];
-                line.enabled = true;
+                line.enabled = false;
                 line.positionCount = 2;
                 line.SetPosition(0, transform.position);
                 line.SetPosition(1, neighbor.transform.position);
