@@ -4420,8 +4420,8 @@ MonoBehaviour:
   MaxConnectionAttempts: 3
   DelayBetweenAttempts: 500
   ConnectionTimeout: 1000
-  Username:
-  Password:
+  Username: 
+  Password: 
   StatusDisplay: {fileID: 1215330285}
   OnConnected:
     m_PersistentCalls:
