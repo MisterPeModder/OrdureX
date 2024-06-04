@@ -52,11 +52,14 @@ MonoBehaviour:
   m_ShowOverlay: 1
   m_Overlay: {fileID: 7145553287237142232}
   m_OverlayTitle: {fileID: 5073324458306115263}
-  m_MaxNeighbors: 4
-  m_NeighborLinePrefab: {fileID: 3056566428905328149, guid: 2c2e1a95aa7952ea3bc244a968bd0d35,
+  m_Connectors:
+  - {fileID: 7015365284671691117}
+  - {fileID: 6486857458495940320}
+  - {fileID: 5217994692391339135}
+  - {fileID: 5974270792669542048}
+  m_ConnectionLinePrefab: {fileID: 3056566428905328149, guid: 2c2e1a95aa7952ea3bc244a968bd0d35,
     type: 3}
-  m_NeighborLines: []
-  m_DistanceThreshold: 0.5
+  m_ConnectionLines: []
 --- !u!1 &6776487801687164790
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,6 +378,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile Connector (Top)
       objectReference: {fileID: 0}
+    - target: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+        type: 3}
+      propertyPath: Tile
+      value: 
+      objectReference: {fileID: 7554358236332776210}
+    - target: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+        type: 3}
+      propertyPath: OwnTile
+      value: 
+      objectReference: {fileID: 7554358236332776210}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -386,6 +399,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 448347950209692935}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7015365284671691117 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 448347950209692935}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a18a4b38c2171fda596160f4a13f03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3389316188276221973
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -449,6 +474,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile Connector (Left)
       objectReference: {fileID: 0}
+    - target: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+        type: 3}
+      propertyPath: Tile
+      value: 
+      objectReference: {fileID: 7554358236332776210}
+    - target: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+        type: 3}
+      propertyPath: OwnTile
+      value: 
+      objectReference: {fileID: 7554358236332776210}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -460,6 +495,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3389316188276221973}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5217994692391339135 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 3389316188276221973}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a18a4b38c2171fda596160f4a13f03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3858336081929591498
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -523,6 +570,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile Connector (Right)
       objectReference: {fileID: 0}
+    - target: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+        type: 3}
+      propertyPath: Tile
+      value: 
+      objectReference: {fileID: 7554358236332776210}
+    - target: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+        type: 3}
+      propertyPath: OwnTile
+      value: 
+      objectReference: {fileID: 7554358236332776210}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -534,6 +591,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3858336081929591498}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5974270792669542048 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 3858336081929591498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a18a4b38c2171fda596160f4a13f03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4424432480489900682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -597,6 +666,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile Connector (Bottom)
       objectReference: {fileID: 0}
+    - target: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+        type: 3}
+      propertyPath: Tile
+      value: 
+      objectReference: {fileID: 7554358236332776210}
+    - target: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+        type: 3}
+      propertyPath: OwnTile
+      value: 
+      objectReference: {fileID: 7554358236332776210}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -608,3 +687,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4424432480489900682}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6486857458495940320 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7449885737458297962, guid: 36137b97dc382237d9d51e3acc44a8fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 4424432480489900682}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a18a4b38c2171fda596160f4a13f03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
