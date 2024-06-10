@@ -15,7 +15,7 @@ public:
 
   void addSendData(const unsigned char* payload, const size_t payloadSize);
   void send();
-
+  void receive();
 
 private:
   HardwareSerial* serial;
