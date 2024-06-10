@@ -34,7 +34,12 @@ namespace OrdureX.Grid
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("Clicked on " + name);
+            CreateGrid();
+        }
+
+        public void CreateGrid()
+        {
+            Debug.Log($"Creating grid from origin {name}");
             GridManager.CreateGrid(this);
         }
 
