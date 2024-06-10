@@ -53,8 +53,6 @@ void exampleRequests(At* at) {
   client_id[5] = 0xff;
   at->addSendData(simulationS(true, client_id), 18);
 
-  delete client_id;
-
   at->send();
 }
 

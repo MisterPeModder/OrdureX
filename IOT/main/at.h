@@ -1,6 +1,8 @@
 #ifndef AT_H
 #define AT_H
 
+#define REQUEST_SIZE 256
+
 #include "Arduino.h"
 
 class At {
@@ -18,7 +20,7 @@ public:
 private:
   HardwareSerial* serial;
   unsigned char statusNumber;
-  unsigned char* request;
+  unsigned char request[REQUEST_SIZE];
   int offset;
 };
 
