@@ -55,11 +55,10 @@ void At::connectWifi() {
   delay(5000);
 }
 
-void At::addSendData(TopicStatus topic, const unsigned char* payload, const size_t payloadSize) {
-  request[offset] = topic;
-  memcpy(request + 1 + offset, payload, payloadSize);  // 1 : topic size
+void At::addSendData(const unsigned char* payload, const size_t payloadSize) {
+  memcpy(request + offset, payload, payloadSize);
 
-  offset += payloadSize + 1;
+  offset += payloadSize;
   statusNumber++;
 
   DEBUG_PRINT_ADD_REQUEST();
