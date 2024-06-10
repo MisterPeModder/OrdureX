@@ -1,5 +1,6 @@
 #include "Print.h"
 #include "at.h"
+#include "binary.h"
 #include "config.h"
 
 
@@ -10,10 +11,18 @@
     Serial.println(offset); \
     Serial.print("Request content: "); \
     Serial.print(statusNumber); \
-    for (int i = 0; i < offset; i++) Serial.print(request[i], HEX); \
+    for (int i(0); i < offset; i++) Serial.print(request[i], HEX); \
     Serial.println(); \
   }
 #define DEBUG_PRINT_ADD_REQUEST() Serial.println("Adding a request");
+#define DEBUG_PRINT_RECEIVE(index, data, size) \
+  { \
+    Serial.print("Data received. Length: "); \
+    Serial.print(index); \
+    Serial.print(", content: "); \
+    for (int i(0); i < size; i++) Serial.print(request[i], HEX); \
+    Serial.println(); \
+  }
 #define DEBUG_PRINT_SEND_NOTHING() Serial.println("Nothing to send");
 #define DEBUG_PRINT_SEND_REQUEST() \
   { \
@@ -23,6 +32,7 @@
 #else
 #define DEBUG_PRINT_REQUEST()
 #define DEBUG_PRINT_ADD_REQUEST()
+#define DEBUG_PRINT_RECEIVE(index, data, size)
 #define DEBUG_PRINT_SEND_NOTHING()
 #define DEBUG_PRINT_SEND_REQUEST()
 #endif
@@ -42,6 +52,10 @@ void At::connectRelay() {
 }
 
 void At::connectWifi() {
+  // disable AT commands echoing
+  this->serial->println("ATE0");
+  delay(500);
+  // wifi client mode
   this->serial->println("AT+CWMODE=1");
   delay(500);
 
