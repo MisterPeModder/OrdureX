@@ -2,7 +2,6 @@
 #include "at.h"
 #include "config.h"
 
-#define REQUEST_SIZE 256
 
 #ifdef DEBUG
 #define DEBUG_PRINT_REQUEST() \
@@ -30,7 +29,6 @@
 
 At::At(HardwareSerial& serial)
   : statusNumber(0), offset(0) {
-  request = new unsigned char[REQUEST_SIZE]();
   this->serial = &serial;
 }
 
