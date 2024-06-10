@@ -1,70 +1,110 @@
-using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using OrdureX.Grid;
+using System.Xml.Serialization;
 
 namespace OrdureX.AR
 {
+    [RequireComponent(typeof(Connectable))]
     public class SurfaceTile : MonoBehaviour
     {
         [SerializeField] private bool m_ShowOverlay = true;
-        [SerializeField] private GameObject m_Overlay;
+        [SerializeField] private Renderer m_Overlay;
         [SerializeField] private TMP_Text m_OverlayTitle;
 
-        [Header("Connection Handling")]
-        [SerializeField] private List<TileConnector> m_Connectors = new();
-        [SerializeField] private GameObject m_ConnectionLinePrefab;
-        [SerializeField] private List<LineRenderer> m_ConnectionLines = new();
+        private Connectable m_Connectable;
 
-        private SurfaceTileManager m_Manager;
+        public void FirstHoverEntered()
+        {
+            Debug.Log("First hover entered");
+        }
+
+        public void LastHoverExited()
+        {
+            Debug.Log("Last hover exited");
+        }
+
+        public void HoverEntered()
+        {
+            Debug.Log("Hover entered");
+        }
+
+        public void HoverExited()
+        {
+            Debug.Log("Hover exited");
+        }
+
+        public void FirstSelectEntered()
+        {
+            Debug.Log("First select entered");
+        }
+
+        public void LastSelectExited()
+        {
+            Debug.Log("Last select exited");
+        }
+
+        public void SelectEntered()
+        {
+            Debug.Log("Select entered");
+        }
+
+        public void SelectExited()
+        {
+            Debug.Log("Select exited");
+        }
+
+        public void FirstFocusEntered()
+        {
+            Debug.Log("First focus entered");
+        }
+
+        public void LastFocusExited()
+        {
+            Debug.Log("Last focus exited");
+        }
+
+        public void FocusEntered()
+        {
+            Debug.Log("Focus entered");
+        }
+
+        public void FocusExited()
+        {
+            Debug.Log("Focus exited");
+        }
+
+        public void Activated()
+        {
+            Debug.Log("Activated");
+        }
+
+        public void Deactivated()
+        {
+            Debug.Log("Deactivated");
+        }
+
+        private void Start()
+        {
+            m_Connectable = GetComponent<Connectable>();
+        }
 
         public void Activate(SurfaceTileManager manager, string title)
         {
             Debug.Log($"Activating tile with title: {title}");
-            m_Manager = manager;
             m_OverlayTitle.text = title;
-
-            for (int i = 0; i < m_Connectors.Count; i++)
-            {
-                var line = Instantiate(m_ConnectionLinePrefab, transform).GetComponent<LineRenderer>();
-                m_ConnectionLines.Add(line);
-            }
         }
 
         private void Update()
         {
             if (!m_ShowOverlay)
             {
-                // When overlay is hidden, disable all connection lines
-                foreach (var line in m_ConnectionLines)
-                {
-                    line.enabled = false;
-                }
                 return;
             }
 
             // Snap overlay title to 90 degree increments
             m_OverlayTitle.transform.localRotation = Quaternion.Euler(90, GetHorizontalAngleToCamera(), 0);
-            UpdateConnectionLines();
-        }
-
-        private void UpdateConnectionLines()
-        {
-            for (int i = 0; i < m_ConnectionLines.Count; i++)
-            {
-                var line = m_ConnectionLines[i];
-                var connector = m_Connectors[i];
-
-                line.enabled = connector.ConnectedTile != null;
-                if (!line.enabled)
-                {
-                    continue;
-                }
-
-                line.positionCount = 2;
-                line.SetPosition(0, transform.position);
-                line.SetPosition(1, connector.ConnectedTile.transform.position);
-            }
+            m_Overlay.material.color = m_Connectable.HighlightColor;
         }
 
         private float GetHorizontalAngleToCamera()
