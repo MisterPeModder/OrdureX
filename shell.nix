@@ -8,5 +8,8 @@ pkgs.mkShell {
     dotnet-sdk_8
     unityhub
     kicad
+    cmake
+    gcc
+    gcovr
   ];
 }
