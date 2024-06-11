@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace OrdureX.Grid
@@ -11,14 +12,35 @@ namespace OrdureX.Grid
 
         [SerializeField]
         private GameObject m_GridTilePrefab;
+        [SerializeField]
+        private GameObject m_GridInstancePrefab;
+
+        public GameObject GridTilePrefab
+        {
+            get => m_GridTilePrefab;
+            set => m_GridTilePrefab = value;
+        }
 
         [SerializeField]
         private GridInstance m_GridInstance;
+
+        [SerializeField]
+        private float m_TileSpacing = 1f;
+
+        public float TileSpacing
+        {
+            get => m_TileSpacing;
+            set => m_TileSpacing = value;
+        }
 
 
         private void Start()
         {
             m_GridInstance = null;
+            if (m_GridInstancePrefab == null)
+            {
+                m_GridInstancePrefab = new GameObject("GridInstance");
+            }
             StartCoroutine(SearchForGrids());
         }
 
@@ -115,9 +137,10 @@ namespace OrdureX.Grid
                 return;
             }
 
-            m_GridInstance = new GameObject("GridInstance").AddComponent<GridInstance>();
+            m_GridInstance = Instantiate(m_GridInstancePrefab, transform).AddComponent<GridInstance>();
             m_GridInstance.transform.SetParent(transform);
-            m_GridInstance.Initialize(this, origin, m_GridTilePrefab);
+            m_GridInstance.transform.localPosition = Vector3.zero;
+            m_GridInstance.Initialize(this, origin);
         }
 
         public void OnGridDestroyed(GridInstance grid)
