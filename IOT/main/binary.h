@@ -141,14 +141,14 @@ TopicAction getActionType(const unsigned char* data);
 bool trashLidA(const unsigned char* data);
 
 /**
- * Trash 1 buzzer action
+ * Trash buzzer action
  * @param data binary data of the action (2 byte)
  * @return music played by the buzzer
  */
 int trashBuzzer(const unsigned char* data);
 
 /**
- * Trash 2 display action
+ * Trash display action
  * @param data binary data of the action (1 + x byte)
  * @param size size of the returned string
  * @return string displayed on the screen (/!\ must be deleted)
@@ -156,7 +156,7 @@ int trashBuzzer(const unsigned char* data);
 unsigned char* trashDisplay(const unsigned char* data, size_t& size);
 
 /**
- * Trash 0 request collect action
+ * Trash request collect action
  * @param data binary data of the action (1 + 16 + x byte)
  * @param clientId UUID (16 bytes)
  * @param size size of the returned code
