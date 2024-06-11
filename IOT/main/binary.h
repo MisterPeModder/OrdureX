@@ -3,6 +3,12 @@
 
 #include <stdbool.h>
 
+#ifndef ARDUINO
+#include <stddef.h>
+#else
+#include "Arduino.h"
+#endif
+
 /**
  * Status sent by the Arduino
  */
@@ -39,6 +45,17 @@ enum TopicAction : unsigned char {
 
   simulation_a
 };
+
+/**
+ * Simutation actions requested by Android device
+ */
+enum SimulationAction : unsigned char {
+  simulation_stop = 0,
+  simulation_launch,
+  simulation_pause
+};
+
+//------------------ Status ------------------
 
 /**
  * Collect requested on trash 0
@@ -106,5 +123,53 @@ unsigned char* trash2LidS(bool opened);
  * @return unsigned char* (18 bytes)
  */
 unsigned char* simulationS(bool ready, const unsigned char* clientId);
+
+//------------------ Actions ------------------
+
+/**
+ * Get the action type
+ * @param data binary data of the action
+ * @return TopicAction
+ */
+TopicAction getActionType(const unsigned char* data);
+
+/**
+ * Trash lid action
+ * @param data binary data of the action (2 bytes)
+ * @return open or close the lid
+ */
+bool trashLidA(const unsigned char* data);
+
+/**
+ * Trash 1 buzzer action
+ * @param data binary data of the action (2 byte)
+ * @return music played by the buzzer
+ */
+int trashBuzzer(const unsigned char* data);
+
+/**
+ * Trash 2 display action
+ * @param data binary data of the action (1 + x byte)
+ * @param size size of the returned string
+ * @return string displayed on the screen (/!\ must be deleted)
+ */
+unsigned char* trashDisplay(const unsigned char* data, size_t& size);
+
+/**
+ * Trash 0 request collect action
+ * @param data binary data of the action (1 + 16 + x byte)
+ * @param clientId UUID (16 bytes)
+ * @param size size of the returned code
+ * @return code to open the trash (x bytes)
+ */
+unsigned char* trashRequestCollect(const unsigned char* data, unsigned char* clientId, size_t& size);
+
+/**
+ * Simulation action
+ * @param data binary data of the action (1 + 1 + 16 bytes)
+ * @param clientId UUID (16 bytes)
+ * @return SimulationAction
+ */
+SimulationAction simulationA(const unsigned char* data, unsigned char* clientId);
 
 #endif // BINARY_H
