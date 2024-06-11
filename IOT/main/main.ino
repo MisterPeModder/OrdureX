@@ -2,6 +2,8 @@
 #include "at.h"
 #include "binary.h"
 
+At* at;
+
 // Example request, will be deleted
 void exampleRequestsRaw(At* at) {
   // invalide code trash 0: array size is 17
@@ -62,7 +64,7 @@ void setup() {
   // Communication with the ESP
   Serial1.begin(115200);
 
-  At* at = new At(Serial1);
+  at = new At(Serial1);
 
   at->connectWifi();
   at->connectRelay();
@@ -78,4 +80,10 @@ void loop() {
   if (Serial1.available()) {  // Data from the ESP-01 to the computer
     Serial.write(Serial1.read());
   }
+
+
+  // at->receive();
+  // delay(8000);
+  // exampleRequests(at);
+  // delay(2000);
 }

@@ -172,4 +172,4 @@ unsigned char* trashRequestCollect(const unsigned char* data, unsigned char* cli
  */
 SimulationAction simulationA(const unsigned char* data, unsigned char* clientId);
 
-#endif // BINARY_H
+#endif  // BINARY_H
