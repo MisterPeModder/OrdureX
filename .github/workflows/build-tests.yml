@@ -1,0 +1,51 @@
+name: Build-Testing
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake gcovr
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Configure CMake
+      working-directory: ./IOT
+      run: cmake -B ${{github.workspace}}/IOT/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TEST_SUITE=TRUE -DENABLE_TEST_COVERAGE=TRUE
+
+    - name: Build
+      working-directory: ./IOT
+      run: cmake --build ${{github.workspace}}/IOT/build --config ${{env.BUILD_TYPE}} -j
+
+    - name: Run Unit Tests
+      working-directory: ./IOT
+      run: cd ${{github.workspace}}/IOT/build && ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+
+    - name: Collect Coverage Files
+      working-directory: ./IOT
+      run: |
+        find build -iname "*.gcda" -or -iname "*.gcno" -exec cp {} . \;
+        gcovr . --exclude-unreachable-branches --exclude-throw-branches --xml --output ./coverage.xml --exclude main/tests/ --exclude build/_deps
+      
+    - name: Upload Coverage Data
+      uses: codecov/codecov-action@v4
+      with:
+        fail_ci_if_error: true
+        files: ./IOT/coverage.xml
+        token: ${{ secrets.CODECOV_TOKEN }}
+      env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
