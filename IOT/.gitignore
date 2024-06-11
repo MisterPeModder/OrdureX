@@ -1,1 +1,8 @@
 main/config.h
+build/
+
+# Coverage
+*.gcno
+*.gcda
+coverage.html
+coverage.xml

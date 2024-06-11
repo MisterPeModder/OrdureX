@@ -97,7 +97,7 @@ unsigned char* trashRequestCollect(const unsigned char* data, unsigned char* cli
   size_t i(0);
 
   // client id
-  for (i; i < 16; i++) {
+  for (; i < 16; i++) {
     clientId[i] = data[i + 1];  // plus 1: skip action type
   }
 
