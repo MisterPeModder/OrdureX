@@ -137,7 +137,7 @@ void test_trashBuzzer() {
 }
 
 void test_trashDisplay() {
-  unsigned char action[10] = { TopicAction::trash_2_display, 0x00, 80 };
+  unsigned char action[10] = { TopicAction::trash_2_display, 0x00, 0x80 }; // 0x80 will be overwritten
   size_t size(0);
 
   unsigned char* value = trashDisplay(action, size);
@@ -154,7 +154,7 @@ void test_trashDisplay() {
 
   value = trashDisplay(action, size);
   assert(size == 0x05);
-  std::cout << "Values requested to display: ";
+  std::cout << "Values requested to display(size: " << size << "): ";
   for (size_t i = 0; i < size; i++) {
     assert(value[i] == action[i+2]);
     std::cout << value[i];
@@ -176,7 +176,7 @@ void test_trashDisplay() {
 
   value = trashDisplay(action, size);
   assert(size == 0x08);
-  std::cout << "Values requested to display: ";
+  std::cout << "Values requested to display(size: " << size << "): ";
   for (size_t i = 0; i < size; i++) {
     assert(value[i] == action[i+2]);
     std::cout << value[i];
@@ -185,7 +185,7 @@ void test_trashDisplay() {
 }
 
 void test_trashRequestCollect() {
-  unsigned char action[21] = { TopicAction::trash_0_request_collect,
+  unsigned char action[30] = { TopicAction::trash_0_request_collect,
                                 // client id
                                 0x41, 0x42, 0x43, 0x44, 0x45, 0x46,
                                 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C,
@@ -209,15 +209,43 @@ void test_trashRequestCollect() {
   }
   // verify code
   assert(size == 0x03);
-  std::cout << ", associated code (size: ";
-  std::cout << size;
-  std::cout << "): ";
+  std::cout << ", associated code (size: " << size << "): ";
   for (size_t i = 0; i < size; i++)
   {
     assert(code[i] == action[i + 18]);
     std::cout << code[i];
   }
   std::cout << std::endl;
+}
+
+void test_simulationA() {
+  unsigned char action[30] = { TopicAction::trash_0_request_collect,
+                                SimulationAction::simulation_stop,
+                                // client id
+                                0x41, 0x42, 0x43, 0x44, 0x45, 0x46,
+                                0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C,
+                                0x4D, 0x4E, 0x4F, 0x50 };
+  unsigned char clientId[16];
+  SimulationAction simAction;
+  
+  // stop requested
+  simAction = simulationA(action, clientId);
+  assert(simAction == 0x00);
+  std::cout << "Action on the simulation requested: " << (int)simAction << ", client id: ";
+  for (size_t i = 0; i < 16; i++)
+  {
+    assert(clientId[i] == action[i + 2]);
+    std::cout << clientId[i];
+  }
+  std::cout << std::endl;
+
+  
+  action[1] = SimulationAction::simulation_launch;
+  action[2] = 0x00;
+  simAction = simulationA(action, clientId);
+  assert(simAction == 0x01);
+  assert(clientId[0] != 0x00);// testing if client id is not overwritten
+  std::cout << "Action on the simulation requested: " << (int)simAction << ", no client id" << std::endl;
 }
 
 //------------------ Main ------------------
@@ -250,6 +278,8 @@ int main() {
   test_trashDisplay();
 
   test_trashRequestCollect();
+
+  test_simulationA();
 
   std::cout << "All tests passed!" << std::endl;
 
