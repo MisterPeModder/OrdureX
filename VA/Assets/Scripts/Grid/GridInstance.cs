@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 namespace OrdureX.Grid
@@ -9,12 +10,23 @@ namespace OrdureX.Grid
         private GridManager m_Manager;
 
         [SerializeField]
-        private GameObject m_GridTilePrefab;
+        private NavMeshSurface m_NavMeshSurface;
 
-        public void Initialize(GridManager manager, Connectable origin, GameObject gridTilePrefab)
+        public GameObject GridTilePrefab
+        {
+            get => m_Manager.GridTilePrefab;
+            set => m_Manager.GridTilePrefab = value;
+        }
+
+        public float TileSpacing
+        {
+            get => m_Manager.TileSpacing;
+            set => m_Manager.TileSpacing = value;
+        }
+
+        public void Initialize(GridManager manager, Connectable origin)
         {
             m_Manager = manager;
-            m_GridTilePrefab = gridTilePrefab;
 
             List<Connectable> toVisit = new() { origin };
             Dictionary<Connectable, GridTile> tiles = new() { { origin, CreateTile(origin, Vector3Int.zero, 0) } };
@@ -30,12 +42,30 @@ namespace OrdureX.Grid
                 SpawnNeighborTile(current, currentTile, Side.Right, toVisit, tiles);
                 SpawnNeighborTile(current, currentTile, Side.Left, toVisit, tiles);
             }
+
+            Debug.Log("Grid fully created!");
+        }
+
+        private void Start()
+        {
+            Debug.Log("Start() called");
+
+            if (m_NavMeshSurface != null || TryGetComponent(out m_NavMeshSurface))
+            {
+                Debug.Log("Found NavMeshSurface component");
+                m_NavMeshSurface.BuildNavMesh();
+                Debug.Log("Built NavMesh");
+            }
         }
 
         private GridTile CreateTile(Connectable original, Vector3Int pos, float angle)
         {
+            Vector3 scaledPos = pos;
+            scaledPos.x *= TileSpacing;
+            scaledPos.z *= TileSpacing;
             Quaternion rotation = Quaternion.Euler(0, angle, 0);
-            GameObject tileObject = Instantiate(m_GridTilePrefab, pos, rotation, transform);
+            GameObject tileObject = Instantiate(GridTilePrefab, Vector3.zero, rotation, transform);
+            tileObject.transform.localPosition = scaledPos;
             tileObject.name = "GridTile (" + original.name + ")";
             GridTile tile = tileObject.AddComponent<GridTile>();
             tile.GridPos = pos;
