@@ -1,5 +1,7 @@
 #include "binary.h"
 
+//------------------ Status ------------------
+
 unsigned char* trash0CollectRequested() {
   static unsigned char data[] = { trash_0_collect_requested };
   return data;
@@ -67,4 +69,54 @@ unsigned char* simulationS(bool ready, const unsigned char* clientId) {
     data[i + 2] = clientId[i];
   }
   return data;
+}
+
+//------------------ Actions ------------------
+
+TopicAction getActionType(const unsigned char* data) {
+  return static_cast<TopicAction>(data[0]);
+}
+
+bool trashLidA(const unsigned char* data) {
+  return data[1] == 0x01;
+}
+
+int trashBuzzer(const unsigned char* data) {
+  return data[1];
+}
+
+unsigned char* trashDisplay(const unsigned char* data, size_t& size) {
+  size = data[1];
+  static unsigned char* value = new unsigned char[size];
+  for (size_t i = 0; i < size; i++) {
+    value[i] = data[i+2];// plus 2: skip action type and string size
+  }
+  return value;
+}
+
+unsigned char* trashRequestCollect(const unsigned char* data, unsigned char* clientId, size_t& size) {
+  size_t i(0);
+
+  // client id
+  if(clientId == nullptr) {
+    clientId = new unsigned char[16];
+  }
+  for (i; i < 16; i++)
+  {
+    clientId[i] = data[i + 1];// plus 1: skip action type
+  }
+
+  // secret code
+  size = data[++i];
+  static unsigned char* code = new unsigned char[size];
+  for (size_t j = 0; j < size; j++) {
+    code[j] = data[i + j + 1];
+  }
+
+  return code;
+}
+
+SimulationAction simulationA(const unsigned char* data, unsigned char* clientId) {
+  //TODO!
+  return SimulationAction();
 }
