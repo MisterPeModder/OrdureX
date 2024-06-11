@@ -1,147 +1,151 @@
-#include <cassert>
+#include <gtest/gtest.h>
+
 #include <iostream>
 #include "../binary.h"
 
+// For reference on assertions, see:
+// See https://google.github.io/googletest/reference/assertions.html
+
 //------------------ Status ------------------
 
-void test_trash0CollectRequested() {
+TEST(BinaryTests, trash0CollectRequested) {
   unsigned char* data = trash0CollectRequested();
-  assert(data[0] == 0x00);
+  EXPECT_EQ(data[0], 0x00);
 }
 
-void test_trash1CollectRequested() {
+TEST(BinaryTests, trash1CollectRequested) {
   unsigned char* data = trash1CollectRequested();
-  assert(data[0] == 0x01);
+  EXPECT_EQ(data[0], 0x01);
 }
 
-void test_trash2CollectRequested() {
+TEST(BinaryTests, trash2CollectRequested) {
   unsigned char* data = trash2CollectRequested();
-  assert(data[0] == 0x02);
+  EXPECT_EQ(data[0], 0x02);
 }
 
-void test_trash0InvalidCode() {
+TEST(BinaryTests, trash0InvalidCode) {
   unsigned char clientId[16] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
                                  0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,
                                  0x0E, 0x0F };
   unsigned char* data = trash0InvalidCode(clientId);
-  assert(data[0] == 0x03);
+  EXPECT_EQ(data[0], 0x03);
   for (int i = 0; i < 16; i++) {
-    assert(data[i + 1] == clientId[i]);
+    EXPECT_EQ(data[i + 1], clientId[i]);
   }
 }
 
-void test_trash1invalidCode() {
+TEST(BinaryTests, trash1invalidCode) {
   unsigned char clientId[16] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
                                  0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,
                                  0x0E, 0x0F };
   unsigned char* data = trash1InvalidCode(clientId);
-  assert(data[0] == 0x04);
+  EXPECT_EQ(data[0], 0x04);
   for (int i = 0; i < 16; i++) {
-    assert(data[i + 1] == clientId[i]);
+    EXPECT_EQ(data[i + 1], clientId[i]);
   }
 }
 
-void test_trash2invalidCode() {
+TEST(BinaryTests, trash2invalidCode) {
   unsigned char clientId[16] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
                                  0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,
                                  0x0E, 0x0F };
   unsigned char* data = trash2InvalidCode(clientId);
-  assert(data[0] == 0x05);
+  EXPECT_EQ(data[0], 0x05);
   for (int i = 0; i < 16; i++) {
-    assert(data[i + 1] == clientId[i]);
+    EXPECT_EQ(data[i + 1], clientId[i]);
   }
 }
 
-void test_trash1Burning() {
+TEST(BinaryTests, trash1Burning) {
   unsigned char* data = trash1Burning();
-  assert(data[0] == 0x06);
+  EXPECT_EQ(data[0], 0x06);
 }
 
-void test_trash0LidS_open() {
+TEST(BinaryTests, trash0LidS_open) {
   unsigned char* data = trash0LidS(true);
-  assert(data[0] == 0x07);
-  assert(data[1] == 0x01);
+  EXPECT_EQ(data[0], 0x07);
+  EXPECT_EQ(data[1], 0x01);
 }
 
-void test_trash0LidS_close() {
+TEST(BinaryTests, trash0LidS_close) {
   unsigned char* data = trash0LidS(false);
-  assert(data[0] == 0x07);
-  assert(data[1] == 0x00);
+  EXPECT_EQ(data[0], 0x07);
+  EXPECT_EQ(data[1], 0x00);
 }
 
-void test_trash2LidS_open() {
+TEST(BinaryTests, trash2LidS_open) {
   unsigned char* data = trash2LidS(true);
-  assert(data[0] == 0x08);
-  assert(data[1] == 0x01);
+  EXPECT_EQ(data[0], 0x08);
+  EXPECT_EQ(data[1], 0x01);
 }
 
-void test_trash2LidS_close() {
+TEST(BinaryTests, trash2LidS_close) {
   unsigned char* data = trash2LidS(false);
-  assert(data[0] == 0x08);
-  assert(data[1] == 0x00);
+  EXPECT_EQ(data[0], 0x08);
+  EXPECT_EQ(data[1], 0x00);
 }
 
-void test_simulationS() {
+TEST(BinaryTests, simulationS) {
   unsigned char clientId[16] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
                                  0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,
                                  0x0E, 0x0F };
   unsigned char* data = simulationS(true, clientId);
-  assert(data[0] == 0x09);
-  assert(data[1] == 0x01);
+  EXPECT_EQ(data[0], 0x09);
+  EXPECT_EQ(data[1], 0x01);
   for (int i = 0; i < 16; i++) {
-    assert(data[i + 2] == clientId[i]);
+    EXPECT_EQ(data[i + 2], clientId[i]);
   }
 }
 
 //------------------ Actions ------------------
 
-void test_getActionType() {
+TEST(BinaryTests, getActionType) {
   unsigned char action[1] = { 0x00 };
-  assert(getActionType(action) == TopicAction::trash_0_lid_a);
+  EXPECT_EQ(getActionType(action), TopicAction::trash_0_lid_a);
 
   action[0] = 0x01;
-  assert(getActionType(action) == TopicAction::trash_2_lid_a);
+  EXPECT_EQ(getActionType(action), TopicAction::trash_2_lid_a);
 
   action[0] = 0x02;
-  assert(getActionType(action) == TopicAction::trash_1_buzzer);
+  EXPECT_EQ(getActionType(action), TopicAction::trash_1_buzzer);
 
   action[0] = 0x03;
-  assert(getActionType(action) == TopicAction::trash_2_display);
+  EXPECT_EQ(getActionType(action), TopicAction::trash_2_display);
 
   action[0] = 0x04;
-  assert(getActionType(action) == TopicAction::trash_0_request_collect);
+  EXPECT_EQ(getActionType(action), TopicAction::trash_0_request_collect);
 
   action[0] = 0x05;
-  assert(getActionType(action) == TopicAction::trash_1_request_collect);
+  EXPECT_EQ(getActionType(action), TopicAction::trash_1_request_collect);
 
   action[0] = 0x06;
-  assert(getActionType(action) == TopicAction::trash_2_request_collect);
+  EXPECT_EQ(getActionType(action), TopicAction::trash_2_request_collect);
 
   action[0] = 0x07;
-  assert(getActionType(action) == TopicAction::simulation_a);
+  EXPECT_EQ(getActionType(action), TopicAction::simulation_a);
 }
 
-void test_trashLidA() {
+TEST(BinaryTests, trashLidA) {
   // open
   unsigned char action[2] = { TopicAction::trash_0_lid_a, 0x01 };
-  assert(trashLidA(action));
+  EXPECT_TRUE(trashLidA(action));
 
   // close
   action[1] = 0x00;
-  assert(!trashLidA(action));
+  EXPECT_FALSE(trashLidA(action));
 }
 
-void test_trashBuzzer() {
+TEST(BinaryTests, trashBuzzer) {
   unsigned char action[2] = { TopicAction::trash_1_buzzer, 0x00 };
-  assert(trashBuzzer(action) == 0x00);
+  EXPECT_EQ(trashBuzzer(action), 0x00);
 }
 
-void test_trashDisplay() {
+TEST(BinaryTests, trashDisplay) {
   unsigned char action[10] = { TopicAction::trash_2_display, 0x00, 0x80 }; // 0x80 will be overwritten
   size_t size(0);
 
   unsigned char* value = trashDisplay(action, size);
-  assert(size == 0x00);
+  EXPECT_EQ(size, 0x00);
 
   // string of 5 characters
   action[1] = 0x05;
@@ -153,10 +157,10 @@ void test_trashDisplay() {
   action[6] = 0x35;
 
   value = trashDisplay(action, size);
-  assert(size == 0x05);
+  EXPECT_EQ(size, 0x05);
   std::cout << "Values requested to display(size: " << size << "): ";
   for (size_t i = 0; i < size; i++) {
-    assert(value[i] == action[i+2]);
+    EXPECT_EQ(value[i], action[i+2]);
     std::cout << value[i];
   }
   std::cout << std::endl;
@@ -175,16 +179,16 @@ void test_trashDisplay() {
   action[9] = 0x48;
 
   value = trashDisplay(action, size);
-  assert(size == 0x08);
+  EXPECT_EQ(size, 0x08);
   std::cout << "Values requested to display(size: " << size << "): ";
   for (size_t i = 0; i < size; i++) {
-    assert(value[i] == action[i+2]);
+    EXPECT_EQ(value[i], action[i+2]);
     std::cout << value[i];
   }
   std::cout << std::endl;
 }
 
-void test_trashRequestCollect() {
+TEST(BinaryTests, trashRequestCollect) {
   unsigned char action[30] = { TopicAction::trash_0_request_collect,
                                 // client id
                                 0x41, 0x42, 0x43, 0x44, 0x45, 0x46,
@@ -204,21 +208,21 @@ void test_trashRequestCollect() {
   std::cout << "Client id that requested trash collect: ";
   for (int i = 0; i < 16; i++)
   {
-    assert(clientId[i] == action[i + 1]);
+    EXPECT_EQ(clientId[i], action[i + 1]);
     std::cout << clientId[i];
   }
   // verify code
-  assert(size == 0x03);
+  EXPECT_EQ(size, 0x03);
   std::cout << ", associated code (size: " << size << "): ";
   for (size_t i = 0; i < size; i++)
   {
-    assert(code[i] == action[i + 18]);
+    EXPECT_EQ(code[i], action[i + 18]);
     std::cout << code[i];
   }
   std::cout << std::endl;
 }
 
-void test_simulationA() {
+TEST(BinaryTests, simulationA) {
   unsigned char action[30] = { TopicAction::trash_0_request_collect,
                                 SimulationAction::simulation_stop,
                                 // client id
@@ -230,11 +234,11 @@ void test_simulationA() {
   
   // stop requested
   simAction = simulationA(action, clientId);
-  assert(simAction == 0x00);
+  EXPECT_EQ(simAction, 0x00);
   std::cout << "Action on the simulation requested: " << (int)simAction << ", client id: ";
   for (size_t i = 0; i < 16; i++)
   {
-    assert(clientId[i] == action[i + 2]);
+    EXPECT_EQ(clientId[i], action[i + 2]);
     std::cout << clientId[i];
   }
   std::cout << std::endl;
@@ -243,45 +247,7 @@ void test_simulationA() {
   action[1] = SimulationAction::simulation_launch;
   action[2] = 0x00;
   simAction = simulationA(action, clientId);
-  assert(simAction == 0x01);
-  assert(clientId[0] != 0x00);// testing if client id is not overwritten
+  EXPECT_EQ(simAction, 0x01);
+  EXPECT_NE(clientId[0], 0x00);// testing if client id is not overwritten
   std::cout << "Action on the simulation requested: " << (int)simAction << ", no client id" << std::endl;
-}
-
-//------------------ Main ------------------
-
-int main() {
-  std::cout << "Running status tests..." << std::endl;
-
-  test_trash0CollectRequested();
-  test_trash1CollectRequested();
-  test_trash2CollectRequested();
-
-  test_trash0InvalidCode();
-  test_trash1invalidCode();
-  test_trash2invalidCode();
-
-  test_trash1Burning();
-  test_trash0LidS_open();
-  test_trash0LidS_close();
-  test_trash2LidS_open();
-  test_trash2LidS_close();
-
-  test_simulationS();
-
-  std::cout << "Running actions tests..." << std::endl;
-
-  test_getActionType();
-
-  test_trashLidA();
-  test_trashBuzzer();
-  test_trashDisplay();
-
-  test_trashRequestCollect();
-
-  test_simulationA();
-
-  std::cout << "All tests passed!" << std::endl;
-
-  return 0;
 }
