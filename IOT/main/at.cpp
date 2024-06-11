@@ -98,3 +98,58 @@ void At::send() {
   // may be useless to reset the array
   memset(request, 0x00, REQUEST_SIZE);
 }
+
+void At::receive() {
+  while (this->serial->available() > 0) {  // Data from the ESP-01 to the computer
+    String request = this->serial->readString();
+
+    Serial.println("before");
+    Serial.println(request);
+    Serial.println("after");
+
+    int index(0);
+    // while loop because there may be several responses in the string
+    while ((index = request.indexOf("+IPD,", index)) >= 0) {
+      // this is ugly, length must be 2 characters max
+      int size(request.substring(index + 5, index + 5 + 2).toInt());
+      unsigned char data[size];
+      request.substring(index + 7, index + 7).getBytes(data, size);
+      DEBUG_PRINT_RECEIVE(size, data, size);
+
+      // data is valid
+      if (size > 1) {
+        int offset(1);
+        for (int i(0); i < data[0]; i++) {
+          // TODO: handle this
+          switch (getActionType(data)) {
+            case trash_0_lid_a:
+              Serial.print("Trash 0 lid action: ");
+              Serial.println(data[offset++]);
+              break;
+            case trash_2_lid_a:
+              break;
+            case trash_1_buzzer:
+              break;
+            case trash_2_display:
+              break;
+            case trash_0_request_collect:
+              break;
+            case trash_1_request_collect:
+              break;
+            case trash_2_request_collect:
+              break;
+            case simulation_a:
+              break;
+            default:
+              Serial.println("unknown action");
+          }
+        }
+      }
+
+      // next
+      if (index >= 0) {
+        index++;
+      }
+    }
+  }
+}

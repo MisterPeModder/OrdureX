@@ -1,5 +1,4 @@
 #include "binary.h"
-#include <iostream>
 //------------------ Status ------------------
 
 unsigned char* trash0CollectRequested() {
@@ -89,7 +88,7 @@ unsigned char* trashDisplay(const unsigned char* data, size_t& size) {
   size = data[1];
   static unsigned char* value = new unsigned char[size];
   for (size_t i = 0; i < size; i++) {
-    value[i] = data[i+2];// plus 2: skip action type and string size
+    value[i] = data[i + 2];  // plus 2: skip action type and string size
   }
   return value;
 }
@@ -98,9 +97,8 @@ unsigned char* trashRequestCollect(const unsigned char* data, unsigned char* cli
   size_t i(0);
 
   // client id
-  for (i; i < 16; i++)
-  {
-    clientId[i] = data[i + 1];// plus 1: skip action type
+  for (i; i < 16; i++) {
+    clientId[i] = data[i + 1];  // plus 1: skip action type
   }
 
   // secret code
@@ -115,8 +113,8 @@ unsigned char* trashRequestCollect(const unsigned char* data, unsigned char* cli
 
 SimulationAction simulationA(const unsigned char* data, unsigned char* clientId) {
   SimulationAction action(static_cast<SimulationAction>(data[1]));
-  
-  if(action == SimulationAction::simulation_stop) {
+
+  if (action == SimulationAction::simulation_stop) {
     for (int i = 0; i < 16; i++) {
       clientId[i] = data[i + 2];
     }
