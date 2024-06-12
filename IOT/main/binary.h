@@ -129,47 +129,53 @@ unsigned char* simulationS(bool ready, const unsigned char* clientId);
 /**
  * Get the action type
  * @param data binary data of the action
+ * @param offset data start offset
  * @return TopicAction
  */
-TopicAction getActionType(const unsigned char* data);
+TopicAction getActionType(const unsigned char* data, const int& offset);
 
 /**
  * Trash lid action
  * @param data binary data of the action (2 bytes)
+ * @param offset data start offset
  * @return open or close the lid
  */
-bool trashLidA(const unsigned char* data);
+bool trashLidA(const unsigned char* data, const int& offset);
 
 /**
  * Trash buzzer action
  * @param data binary data of the action (2 byte)
+ * @param offset data start offset
  * @return music played by the buzzer
  */
-int trashBuzzer(const unsigned char* data);
+int trashBuzzer(const unsigned char* data, const int& offset);
 
 /**
  * Trash display action
  * @param data binary data of the action (1 + x byte)
+ * @param offset data start offset
  * @param size size of the returned string
  * @return string displayed on the screen (/!\ must be deleted)
  */
-unsigned char* trashDisplay(const unsigned char* data, size_t& size);
+unsigned char* trashDisplay(const unsigned char* data, const int& offset, size_t& size);
 
 /**
  * Trash request collect action
  * @param data binary data of the action (1 + 16 + x byte)
+ * @param offset data start offset
  * @param clientId UUID (16 bytes)
  * @param size size of the returned code
  * @return code to open the trash (x bytes)
  */
-unsigned char* trashRequestCollect(const unsigned char* data, unsigned char* clientId, size_t& size);
+unsigned char* trashRequestCollect(const unsigned char* data, const int& offset, unsigned char* clientId, size_t& size);
 
 /**
  * Simulation action
  * @param data binary data of the action (1 + 1 + 16 bytes)
+ * @param offset data start offset
  * @param clientId UUID (16 bytes)
  * @return SimulationAction
  */
-SimulationAction simulationA(const unsigned char* data, unsigned char* clientId);
+SimulationAction simulationA(const unsigned char* data, const int& offset, unsigned char* clientId);
 
 #endif  // BINARY_H
