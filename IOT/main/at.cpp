@@ -20,7 +20,7 @@
     Serial.print("Data received. Length: "); \
     Serial.print(index); \
     Serial.print(", content: "); \
-    for (int i(0); i < size; i++) Serial.print(request[i], HEX); \
+    for (int i(0); i < size; i++) Serial.print(data[i], HEX); \
     Serial.println(); \
   }
 #define DEBUG_PRINT_SEND_NOTHING() Serial.println("Nothing to send");
@@ -74,7 +74,7 @@ void At::addSendData(const unsigned char* payload, const size_t payloadSize) {
   statusNumber++;
 
   DEBUG_PRINT_ADD_REQUEST();
-  DEBUG_PRINT_REQUEST();
+  //DEBUG_PRINT_REQUEST();
 }
 
 void At::send() {
@@ -103,9 +103,9 @@ void At::receive() {
   while (this->serial->available() > 0) {  // Data from the ESP-01 to the computer
     String request = this->serial->readString();
 
-    Serial.println("before");
-    Serial.println(request);
-    Serial.println("after");
+    // Serial.println("before");
+    // Serial.println(request);
+    // Serial.println("after");
 
     int index(0);
     // while loop because there may be several responses in the string
@@ -113,24 +113,39 @@ void At::receive() {
       // this is ugly, length must be 2 characters max
       int size(request.substring(index + 5, index + 5 + 2).toInt());
       unsigned char data[size];
-      request.substring(index + 7, index + 7).getBytes(data, size);
+      request.substring(index + 7, index + 7 + size).getBytes(data, size);
       DEBUG_PRINT_RECEIVE(size, data, size);
 
       // data is valid
       if (size > 1) {
         int offset(1);
+        Serial.println("Received data");
         for (int i(0); i < data[0]; i++) {
           // TODO: handle this
-          switch (getActionType(data)) {
+          Serial.print("Received data ");
+          Serial.println(i);
+          switch (data[offset++]) {
             case trash_0_lid_a:
+              bool openLid0 = trashLidA(data, ++offset);
               Serial.print("Trash 0 lid action: ");
-              Serial.println(data[offset++]);
+              Serial.println(openLid0 ? "open" : "close");
               break;
             case trash_2_lid_a:
+              bool openLid2 = trashLidA(data, ++offset);
+              Serial.print("Trash 2 lid action: ");
+              Serial.println(openLid2 ? "open" : "close");
               break;
             case trash_1_buzzer:
+              int music = trashBuzzer(data, ++offset);
+              Serial.print("Trash 1 music to play: ");
+              Serial.println(music);
               break;
             case trash_2_display:
+              size_t size(0);
+              unsigned char* text = trashDisplay(data, size, ++offset);
+              Serial.print("Trash 2 text to display(size: ): ");
+              Serial.print(size);
+              Serial.println(text);
               break;
             case trash_0_request_collect:
               break;

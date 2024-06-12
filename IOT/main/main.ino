@@ -41,26 +41,26 @@ void exampleRequests(At* at) {
   };
 
   at->addSendData(trash0CollectRequested(), 1);
-  at->addSendData(trash1CollectRequested(), 1);
-  at->addSendData(trash2CollectRequested(), 1);
+  //at->addSendData(trash1CollectRequested(), 1);
+  //at->addSendData(trash2CollectRequested(), 1);
 
-  at->addSendData(trash0InvalidCode(client_id), 17);
-  at->addSendData(trash1InvalidCode(client_id), 17);
-  at->addSendData(trash2InvalidCode(client_id), 17);
+  //at->addSendData(trash0InvalidCode(client_id), 17);
+  //at->addSendData(trash1InvalidCode(client_id), 17);
+  //at->addSendData(trash2InvalidCode(client_id), 17);
 
-  at->addSendData(trash1Burning(), 1);
-  at->addSendData(trash0LidS(true), 2);
-  at->addSendData(trash2LidS(false), 2);
+  //at->addSendData(trash1Burning(), 1);
+  //at->addSendData(trash0LidS(true), 2);
+  //at->addSendData(trash2LidS(false), 2);
 
   client_id[5] = 0xff;
-  at->addSendData(simulationS(true, client_id), 18);
+  //at->addSendData(simulationS(true, client_id), 18);
 
   at->send();
 }
 
 void setup() {
   // Communication with the computer
-  Serial.begin(9600);
+  Serial.begin(115200);
   // Communication with the ESP
   Serial1.begin(115200);
 
@@ -69,7 +69,7 @@ void setup() {
   at->connectWifi();
   at->connectRelay();
 
-  exampleRequests(at);
+  //exampleRequests(at);
   //exampleRequestsRaw(at);
 }
 
@@ -77,13 +77,13 @@ void loop() {
   if (Serial.available()) {  // Data from the computer to the ESP-01
     Serial1.write(Serial.read());
   }
-  if (Serial1.available()) {  // Data from the ESP-01 to the computer
-    Serial.write(Serial1.read());
-  }
+  // if (Serial1.available()) {  // Data from the ESP-01 to the computer
+  //   Serial.write(Serial1.read());
+  // }
 
 
-  // at->receive();
-  // delay(8000);
-  // exampleRequests(at);
-  // delay(2000);
+  at->receive();
+  delay(9000);
+  exampleRequests(at);
+  delay(1000);
 }
