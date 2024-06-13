@@ -1,4 +1,5 @@
 #include "binary.h"
+
 //------------------ Status ------------------
 
 unsigned char* trash0CollectRequested() {
