@@ -2,10 +2,13 @@ name: Build-Testing
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
-    paths: [ 'IOT/**' ]
+    branches:
+      - main
+    paths:
+      - 'IOT/**'
 
 env:
   BUILD_TYPE: Release
@@ -13,30 +16,39 @@ env:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: IOT
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Arduino CLI
+      uses: arduino/setup-arduino-cli@v1
+    
+    - name: Compile for Arduino Mega 2560
+      run: |
+        cp main/config.h.sample main/config.h
+        arduino-cli core update-index 1>/dev/null
+        arduino-cli core install arduino:avr 1>/dev/null
+        arduino-cli compile --fqbn arduino:avr:mega main
+
     - name: Install Dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake gcovr
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
     - name: Configure CMake
-      working-directory: ./IOT
-      run: cmake -B ${{github.workspace}}/IOT/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TEST_SUITE=TRUE -DENABLE_TEST_COVERAGE=TRUE
+      run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TEST_SUITE=TRUE -DENABLE_TEST_COVERAGE=TRUE
 
     - name: Build
-      working-directory: ./IOT
-      run: cmake --build ${{github.workspace}}/IOT/build --config ${{env.BUILD_TYPE}} -j
+      run: cmake --build build --config ${{env.BUILD_TYPE}} -j$(nproc)
 
     - name: Run Unit Tests
-      working-directory: ./IOT
-      run: cd ${{github.workspace}}/IOT/build && ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+      run: cd build && ctest -C ${{env.BUILD_TYPE}} --output-on-failure
 
     - name: Collect Coverage Files
-      working-directory: ./IOT
       run: |
         find build -iname "*.gcda" -or -iname "*.gcno" -exec cp {} . \;
         gcovr . --exclude-unreachable-branches --exclude-throw-branches --xml --output ./coverage.xml --exclude main/tests/ --exclude build/_deps
