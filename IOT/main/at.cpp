@@ -100,14 +100,11 @@ void At::send() {
 }
 
 void At::receive() {
-  while (this->serial->available() > 0) {  // Data from the ESP-01 to the computer
+  while (this->serial->available() > 0) {  // Data from the ESP-01 to the Arduino
     String request = this->serial->readString();
 
-    // Serial.println("before");
-    // Serial.println(request);
-    // Serial.println("after");
-
     int index(0);
+
     // while loop because there may be several responses in the string
     while ((index = request.indexOf("+IPD,", index)) >= 0) {
       // this is ugly, length must be 2 characters max
@@ -119,44 +116,115 @@ void At::receive() {
       // data is valid
       if (size > 1) {
         int offset(1);
-        Serial.println("Received data");
-        for (int i(0); i < data[0]; i++) {
-          // TODO: handle this
+        for (int i(0); i < getActionType(data, offset); i++) {
+          #ifdef DEBUG
           Serial.print("Received data ");
           Serial.println(i);
+          #endif
+
           switch (data[offset++]) {
             case trash_0_lid_a:
-              bool openLid0 = trashLidA(data, ++offset);
+              bool openLid0 = trashLidA(data, offset);
+              #ifdef DEBUG
               Serial.print("Trash 0 lid action: ");
               Serial.println(openLid0 ? "open" : "close");
+              #endif
+              offset += 2;
+
+              // handle here
               break;
             case trash_2_lid_a:
-              bool openLid2 = trashLidA(data, ++offset);
+              bool openLid2 = trashLidA(data, offset);
+              #ifdef DEBUG
               Serial.print("Trash 2 lid action: ");
               Serial.println(openLid2 ? "open" : "close");
+              #endif
+              offset += 2;
+
+              // handle here
               break;
             case trash_1_buzzer:
-              int music = trashBuzzer(data, ++offset);
+              int music = trashBuzzer(data, offset);
+              #ifdef DEBUG
               Serial.print("Trash 1 music to play: ");
               Serial.println(music);
+              #endif
+              offset += 2;
+
+              // handle here
               break;
             case trash_2_display:
-              size_t size(0);
-              unsigned char* text = trashDisplay(data, size, ++offset);
-              Serial.print("Trash 2 text to display(size: ): ");
+              size_t size(0); // size of string
+              unsigned char* text = trashDisplay(data, offset, size);
+              #ifdef DEBUG
+              Serial.print("Trash 2 text to display(size: ");
               Serial.print(size);
-              Serial.println(text);
+              Serial.print("): ");
+              //Serial.println(text);
+              #endif
+              offset += 2 + size;
+
+              // handle here
               break;
             case trash_0_request_collect:
+              unsigned char clientId[16]; // UUID received
+              unsigned char* code = trashRequestCollect(data, offset, clientId, size);
+              #ifdef DEBUG
+              Serial.print("Trash 0 request collect: ");
+              for (int i(0); i < size; i++) {
+                Serial.print(code[i], HEX);
+              }
+              Serial.println();
+              #endif
+              offset += 16 + 1 + 1 + size; // UUID + type + length
+
+              // handle here
+
+              delete[] code;
               break;
             case trash_1_request_collect:
+              code = trashRequestCollect(data, offset, clientId, size);
+              #ifdef DEBUG
+              Serial.print("Trash 1 request collect: ");
+              for (int i(0); i < size; i++) {
+                Serial.print(code[i], HEX);
+              }
+              Serial.println();
+              #endif
+              offset += 16 + 1 + 1 + size;
+
+              // handle here
+
+              delete[] code;
               break;
             case trash_2_request_collect:
+              code = trashRequestCollect(data, offset, clientId, size);
+              #ifdef DEBUG
+              Serial.print("Trash 2 request collect: ");
+              for (int i(0); i < size; i++) {
+                Serial.print(code[i], HEX);
+              }
+              Serial.println();
+              #endif
+              offset += 16 + 1 + 1 + size;
+
+              // handle here
+
+              delete[] code;
               break;
             case simulation_a:
+              SimulationAction action = simulationA(data, offset, clientId);
+              #ifdef DEBUG
+              Serial.print("Simulation action: ");
+              Serial.println(action);
+              #endif
+              offset += 1 + 1 + 16;
+
               break;
             default:
-              Serial.println("unknown action");
+              #ifdef DEBUG
+              Serial.println("Unknown action");
+              #endif
           }
         }
       }
