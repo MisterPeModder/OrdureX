@@ -11,6 +11,8 @@ endif()
 set(SRC
     ${SRCROOT}/binary.cpp
     ${SRCROOT}/binary.h
+    ${SRCROOT}/scheduler.cpp
+    ${SRCROOT}/scheduler.h
 )
 set(INCDIRS ${INCROOT})
 
