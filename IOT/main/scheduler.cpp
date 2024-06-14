@@ -33,11 +33,11 @@ bool scheduler::addTask(task_t task) {
 void scheduler::run() {
   for (int i = 0; i < MAX_TASKS; i++) {
     if (tasks[i].task != nullptr && GET_TIME >= tasks[i].lastRun + tasks[i].delay) {
-      tasks[i].task();
+      tasks[i].task(tasks[i].context);
       if (!tasks[i].loop) {
         tasks[i].task = nullptr;
       } else {
-        tasks[i].lastRun = GET_TIME; // before or after task?
+        tasks[i].lastRun = GET_TIME;
       }
     }
   }
