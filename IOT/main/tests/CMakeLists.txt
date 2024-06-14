@@ -3,6 +3,7 @@ set(INCROOT ${INCROOT}/tests)
 
 set(SRC
     ${SRCROOT}/binary_tests.cpp
+    ${SRCROOT}/scheduler_tests.cpp
 )
 
 set(INCDIRS ${SRCROOT}/../include)
