@@ -11,7 +11,9 @@ struct task_t {
   // Function must be called indefinitely
   bool loop;
   // Function to be executed
-  void (*task)();
+  void (*task)(void* context);
+  // Context for the task
+  void* context;
 };
 
 class scheduler {
