@@ -42,6 +42,13 @@
     Serial.print(" lid action: "); \
     Serial.println(state ? "open" : "close"); \
   }
+#define DEBUG_PRINT_RECEIVE_MUSIC(trash, music) \
+  { \
+    Serial.print("Trash "); \
+    Serial.print(trash); \
+    Serial.print(" music to play: "); \
+    Serial.println(music); \
+  }
 #define DEBUG_PRINT_RECEIVE_DISPLAY(trash, text, size) \
   { \
     Serial.print("Trash "); \
@@ -72,6 +79,7 @@
 #define DEBUG_PRINT_SEND_REQUEST()
 //
 #define DEBUG_PRINT_RECEIVE_LID(lid, state)
+#define DEBUG_PRINT_RECEIVE_MUSIC(trash, music)
 #define DEBUG_PRINT_RECEIVE_DISPLAY(trash, text, size)
 #define DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(trash, code, size)
 #endif
@@ -146,10 +154,7 @@ void receive(void* context) {
 
     if (prefix != nullptr) {
       size_t dataOffset = (char*)prefix - (char*)request + 5;
-      int dataSize = atoi(request + dataOffset);
-
-      //Serial.print("Data size ");
-      //Serial.println(dataSize);
+      int dataSize = atoi(reinterpret_cast<const char *>(request) + dataOffset);
 
       if (dataSize > 1) {
         if (dataSize < 10) {
@@ -190,10 +195,7 @@ void receive(void* context) {
             case TopicAction::trash_1_buzzer:
               {
                 int music = trashBuzzer(request, index);
-#ifdef DEBUG
-                Serial.print("Trash 1 music to play: ");
-                Serial.println(music);
-#endif
+                DEBUG_PRINT_RECEIVE_MUSIC(1, music);
                 index += 2;
 
                 // handle here
@@ -214,7 +216,7 @@ void receive(void* context) {
                 size_t size(0);              // size of string
                 unsigned char clientId[16];  // UUID received
                 unsigned char* code = trashRequestCollect(request, index, clientId, size);
-                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(0, code, size)
+                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(0, code, size);
                 index += 16 + 1 + 1 + size;  // UUID + type + length
 
                 // handle here
@@ -225,7 +227,7 @@ void receive(void* context) {
                 size_t size(0);              // size of string
                 unsigned char clientId[16];  // UUID received
                 unsigned char* code = trashRequestCollect(request, index, clientId, size);
-                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(1, code, size)
+                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(1, code, size);
                 index += 16 + 1 + 1 + size;
 
                 // handle here
@@ -236,7 +238,7 @@ void receive(void* context) {
                 size_t size(0);              // size of string
                 unsigned char clientId[16];  // UUID received
                 unsigned char* code = trashRequestCollect(request, index, clientId, size);
-                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(2, code, size)
+                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(2, code, size);
                 index += 16 + 1 + 1 + size;
 
                 // handle here
@@ -251,10 +253,12 @@ void receive(void* context) {
                 Serial.println(action);
 #endif
                 index += 1 + 1 + 16;
+
+                // handle here
               }
               break;
-            default:
 #ifdef DEBUG
+            default:
               Serial.println("Unknown action");
 #endif
           }
