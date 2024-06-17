@@ -1,5 +1,7 @@
 #include "binary.h"
 
+#define STRING_MAX_LENGTH 20
+
 //------------------ Status ------------------
 
 unsigned char* trash0CollectRequested() {
@@ -87,7 +89,7 @@ int trashBuzzer(const unsigned char* data, const int& offset) {
 
 unsigned char* trashDisplay(const unsigned char* data, const int& offset, size_t& size) {
   size = data[offset + 1];
-  static unsigned char* value = new unsigned char[size];
+  static unsigned char* value = new unsigned char[STRING_MAX_LENGTH];
   for (size_t i = 0; i < size; i++) {
     value[i] = data[offset + i + 2];  // plus 2: skip action type and string size
   }
@@ -104,7 +106,7 @@ unsigned char* trashRequestCollect(const unsigned char* data, const int& offset,
 
   // secret code
   size = data[offset + ++i];
-  static unsigned char* code = new unsigned char[size];
+  static unsigned char* code = new unsigned char[STRING_MAX_LENGTH];
   for (size_t j = 0; j < size; j++) {
     code[j] = data[offset + i + j + 1];
   }

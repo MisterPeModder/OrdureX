@@ -294,7 +294,6 @@ TEST(BinaryTests, severalActions) {
         for (i = 0; i < (int)size; i++) {
           EXPECT_EQ(value[i], actions[offset+i+2]);
         }
-        delete value;
         offset += size + 2;
         break;
       case trash_0_request_collect:
