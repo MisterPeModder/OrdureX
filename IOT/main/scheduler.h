@@ -16,10 +16,10 @@ struct task_t {
   void* context;
 };
 
-class scheduler {
+class Scheduler {
 public:
-  scheduler();
-  ~scheduler();
+  Scheduler();
+  ~Scheduler();
 
   bool addTask(task_t task);
   void run();

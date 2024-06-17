@@ -26,7 +26,7 @@ void testArgumentTask(void* context) {
 
 TEST(SchedulerTests, addTask) {
   task_t task = { 1000UL, 0UL, false, testTask, nullptr };
-  scheduler s;
+  Scheduler s;
   for (int i = 0; i < MAX_TASKS; i++)
   {
     EXPECT_TRUE(s.addTask(task));
@@ -37,7 +37,7 @@ TEST(SchedulerTests, addTask) {
 
 TEST(SchedulerTests, run) {
   task_t task = { 0UL, 0UL, false, testSleepTask, nullptr };
-  scheduler s;
+  Scheduler s;
   s.addTask(task);
   s.run();
 }
@@ -45,7 +45,7 @@ TEST(SchedulerTests, run) {
 TEST(SchedulerTests, runWithArgument) {
   SomeContext c = { ARGUMENT_TASK };
   task_t task = { 0UL, 0UL, false, testArgumentTask, &c };
-  scheduler s;
+  Scheduler s;
   s.addTask(task);
   s.run();
 }
