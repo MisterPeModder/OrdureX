@@ -17,6 +17,9 @@ namespace OrdureX.Grid
         private GridInstance m_GridInstance;
 
         [SerializeField]
+        private List<GridOverlay> m_GridOverlays = new();
+
+        [SerializeField]
         private float m_TileSpacing = 1f;
 
         [Header("Simulation Objects")]
@@ -38,6 +41,15 @@ namespace OrdureX.Grid
         [SerializeField]
         private ScaledProjection m_TrashCanProjectionInstance;
 
+        [SerializeField]
+        private Material m_GridOverlayMaterial;
+
+        public Material GridOverlayMaterial
+        {
+            get => m_GridOverlayMaterial;
+            set => m_GridOverlayMaterial = value;
+        }
+
         public float TileSpacing
         {
             get => m_TileSpacing;
@@ -48,6 +60,7 @@ namespace OrdureX.Grid
         private void Start()
         {
             m_GridInstance = null;
+            DestroyOverlays();
             if (m_GridInstancePrefab == null)
             {
                 m_GridInstancePrefab = new GameObject("GridInstance");
@@ -93,11 +106,24 @@ namespace OrdureX.Grid
                 NeighborConnect(local, local.LeftConnector.Touching);
             }
 
+            List<ISet<Connectable>> connectedGrids = new();
+
             foreach (Connectable connectable in toConnect)
             {
                 connectable.AllTouching = connectable.NextAllTouching;
                 connectable.NextAllTouching = null;
+                if (!connectedGrids.Exists(grid => ReferenceEquals(grid, connectable.AllTouching)))
+                {
+                    connectedGrids.Add(connectable.AllTouching);
+                }
             }
+
+            DestroyOverlays();
+            foreach (ISet<Connectable> connectedGrid in connectedGrids)
+            {
+                AddOverlay(connectedGrid.First());
+            }
+
         }
 
         /// <summary>
@@ -143,10 +169,11 @@ namespace OrdureX.Grid
 
         public void CreateGrid(Connectable origin)
         {
-            if (m_GridInstance != null)
+            if (m_GridInstance != null || origin.AllTouching == null || origin.AllTouching.Count == 0)
             {
                 return;
             }
+            origin = origin.AllTouching.First();
 
             m_GridInstance = Instantiate(m_GridInstancePrefab, transform).AddComponent<GridInstance>();
             m_GridInstance.transform.SetParent(transform);
@@ -158,6 +185,16 @@ namespace OrdureX.Grid
             RespawnTrashCan(spawnPoints);
             SpawnTruckProjection(origin);
             SpawnTrashCanProjection(origin);
+            DestroyOverlays();
+        }
+
+        private void AddOverlay(Connectable origin)
+        {
+            var gridOverlay = new GameObject("Grid Overlay").AddComponent<GridOverlay>();
+            gridOverlay.transform.SetParent(transform);
+            gridOverlay.transform.localPosition = Vector3.zero;
+            gridOverlay.Initialize(this, origin);
+            m_GridOverlays.Add(gridOverlay);
         }
 
         public void OnGridDestroyed(GridInstance grid)
@@ -269,5 +306,13 @@ namespace OrdureX.Grid
             m_TrashCanProjectionInstance.Initialize(transform, origin.transform, m_TrashCanInstance.transform);
         }
 
+        private void DestroyOverlays()
+        {
+            foreach (GridOverlay overlay in m_GridOverlays)
+            {
+                Destroy(overlay.gameObject);
+            }
+            m_GridOverlays.Clear();
+        }
     }
 }
