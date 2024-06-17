@@ -255,7 +255,7 @@ function flushActionQueue(sock) {
         console.log('type: ', action.type);
 
         if (action.type === 'lid') {
-            actionBuf = Buffer.from([action.trashId === 0 ? 0 : 2, action.lidState]);
+            actionBuf = Buffer.from([action.trashId === 0 ? 0 : 1, action.lidState]);
         } else if (action.type === 'buzzer') {
             actionBuf = Buffer.from([2, action.buzzerState]);
         } else if (action.type === 'display') {
