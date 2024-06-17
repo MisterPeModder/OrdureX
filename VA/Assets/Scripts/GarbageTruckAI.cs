@@ -10,6 +10,12 @@ namespace OrdureX
         [Tooltip("The AI Agent to control, defaults to this GameObject's NavMeshAgent component.")]
         [SerializeField] private NavMeshAgent m_Agent;
 
+        public Transform Target
+        {
+            get => m_Target;
+            set => m_Target = value;
+        }
+
         void Start()
         {
             m_Agent = GetComponent<NavMeshAgent>();
