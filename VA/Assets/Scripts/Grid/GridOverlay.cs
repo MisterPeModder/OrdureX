@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace OrdureX.Grid
 {
-    public class GridInstance : MonoBehaviour
+    public class GridOverlay : MonoBehaviour
     {
         [SerializeField]
         private GridManager m_Manager;
@@ -13,7 +13,10 @@ namespace OrdureX.Grid
         private Connectable m_Origin;
 
         [SerializeField]
-        private NavMeshSurface m_NavMeshSurface;
+        private GameObject m_Overlay;
+
+        [SerializeField]
+        private Vector3 m_TileScale = new Vector3(0.305f * 0.9021875f, 0.305f * 0.9021875f, 0.305f * 0.9021875f);
 
         public float TileSpacing
         {
@@ -21,9 +24,18 @@ namespace OrdureX.Grid
             set => m_Manager.TileSpacing = value;
         }
 
+        [SerializeField]
+        private List<Vector3> m_Vertices = new();
+
+        [SerializeField]
+        private List<Vector2> m_UVs = new();
+        [SerializeField]
+        private List<int> m_Triangles = new();
+
         public void Initialize(GridManager manager, Connectable origin)
         {
             m_Manager = manager;
+            m_Vertices.Clear();
             m_Origin = origin;
 
             List<Connectable> toVisit = new() { origin };
@@ -41,17 +53,22 @@ namespace OrdureX.Grid
                 SpawnNeighborTile(current, currentTile, Side.Left, toVisit, tiles);
             }
 
-            Debug.Log("Grid fully created!");
-        }
+            m_Overlay = new GameObject("Grid Overlay Mesh", typeof(MeshFilter), typeof(MeshRenderer));
+            var mesh = m_Overlay.GetComponent<MeshFilter>().mesh;
+            var renderer = m_Overlay.GetComponent<MeshRenderer>();
 
-        private void Start()
-        {
-            if (m_NavMeshSurface != null || TryGetComponent(out m_NavMeshSurface))
-            {
-                Debug.Log("Found NavMeshSurface component");
-                m_NavMeshSurface.BuildNavMesh();
-                Debug.Log("Built NavMesh");
-            }
+            renderer.material = manager.GridOverlayMaterial;
+            renderer.material.color = new Color(origin.HighlightColor.r, origin.HighlightColor.g, origin.HighlightColor.b, 0.5f);
+
+            mesh.vertices = m_Vertices.ToArray();
+            mesh.uv = m_UVs.ToArray();
+            mesh.triangles = m_Triangles.ToArray();
+
+            m_Overlay.transform.SetParent(origin.transform, false);
+            m_Overlay.transform.localPosition += new Vector3(0, 0.005f, 0);
+            m_Overlay.transform.localEulerAngles = new Vector3(0, 180, 0);
+
+            m_Overlay.transform.localScale = m_TileScale;
         }
 
         private GridTile CreateTile(Connectable original, Vector3Int pos, float angle)
@@ -60,12 +77,32 @@ namespace OrdureX.Grid
             scaledPos.x *= TileSpacing;
             scaledPos.z *= TileSpacing;
             Quaternion rotation = Quaternion.Euler(0, angle, 0);
-            GameObject tileObject = Instantiate(original.PathPrefab, Vector3.zero, rotation, transform);
+            GameObject tileObject = new();
+            tileObject.SetActive(false);
+            tileObject.transform.SetParent(transform);
+            tileObject.transform.rotation = rotation;
             tileObject.transform.localPosition = scaledPos;
-            tileObject.name = "GridTile (" + original.name + ")";
+            tileObject.name = "Overlay Marker (" + original.name + ")";
             GridTile tile = tileObject.AddComponent<GridTile>();
             tile.GridPos = pos;
             tile.Angle = angle;
+
+            m_Triangles.Add(m_Vertices.Count);
+            m_Triangles.Add(m_Vertices.Count + 1);
+            m_Triangles.Add(m_Vertices.Count + 2);
+            m_Triangles.Add(m_Vertices.Count);
+            m_Triangles.Add(m_Vertices.Count + 2);
+            m_Triangles.Add(m_Vertices.Count + 3);
+
+            m_Vertices.Add(pos + new Vector3(-0.5f, 0, -0.5f));
+            m_Vertices.Add(pos + new Vector3(-0.5f, 0, 0.5f));
+            m_Vertices.Add(pos + new Vector3(0.5f, 0, 0.5f));
+            m_Vertices.Add(pos + new Vector3(0.5f, 0, -0.5f));
+
+            m_UVs.Add(new Vector2(0, 0));
+            m_UVs.Add(new Vector2(0, 1));
+            m_UVs.Add(new Vector2(1, 1));
+            m_UVs.Add(new Vector2(1, 0));
             return tile;
         }
 
@@ -90,7 +127,11 @@ namespace OrdureX.Grid
 
         private void OnDestroy()
         {
-            m_Manager.OnGridDestroyed(this);
+            if (m_Overlay != null)
+            {
+                Destroy(m_Overlay);
+                m_Overlay = null;
+            }
         }
     }
 }

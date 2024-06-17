@@ -949,7 +949,7 @@ GameObject:
   - component: {fileID: 4365528357719543085}
   - component: {fileID: 7618165371811446966}
   m_Layer: 31
-  m_Name: Simulation Environment
+  m_Name: Simulation - Separate Tiles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
