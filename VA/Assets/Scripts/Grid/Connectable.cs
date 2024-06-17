@@ -13,6 +13,16 @@ namespace OrdureX.Grid
         public ISet<Connectable> NextAllTouching;
         public Color HighlightColor;
 
+        [SerializeField]
+        private GameObject m_PathPrefab;
+
+        public GameObject PathPrefab
+        {
+            get => m_PathPrefab;
+            set => m_PathPrefab = value;
+        }
+
+
         [Header("Connectors")]
         public Connector TopConnector;
         public Connector BottomConnector;

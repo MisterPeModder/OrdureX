@@ -14,20 +14,17 @@ namespace OrdureX.AR
 
         private Connectable m_Connectable;
 
-        private void Start()
-        {
-            m_Connectable = GetComponent<Connectable>();
-        }
-
-        public void Activate(SurfaceTileManager manager, string title)
+        public void Activate(SurfaceTileManager manager, string title, GameObject pathPrefab)
         {
             Debug.Log($"Activating tile with title: {title}");
             m_OverlayTitle.text = title;
+            m_Connectable = GetComponent<Connectable>();
+            m_Connectable.PathPrefab = pathPrefab;
         }
 
         private void Update()
         {
-            if (!m_ShowOverlay)
+            if (m_Connectable == null || !m_ShowOverlay)
             {
                 return;
             }

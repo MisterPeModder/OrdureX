@@ -12,12 +12,6 @@ namespace OrdureX.Grid
         [SerializeField]
         private NavMeshSurface m_NavMeshSurface;
 
-        public GameObject GridTilePrefab
-        {
-            get => m_Manager.GridTilePrefab;
-            set => m_Manager.GridTilePrefab = value;
-        }
-
         public float TileSpacing
         {
             get => m_Manager.TileSpacing;
@@ -64,7 +58,7 @@ namespace OrdureX.Grid
             scaledPos.x *= TileSpacing;
             scaledPos.z *= TileSpacing;
             Quaternion rotation = Quaternion.Euler(0, angle, 0);
-            GameObject tileObject = Instantiate(GridTilePrefab, Vector3.zero, rotation, transform);
+            GameObject tileObject = Instantiate(original.PathPrefab, Vector3.zero, rotation, transform);
             tileObject.transform.localPosition = scaledPos;
             tileObject.name = "GridTile (" + original.name + ")";
             GridTile tile = tileObject.AddComponent<GridTile>();

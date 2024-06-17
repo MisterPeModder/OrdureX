@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -11,6 +12,11 @@ namespace OrdureX.AR
         private ARTrackedImageManager m_TrackedImageManager;
         private readonly List<SurfaceTile> m_Tiles = new();
 
+        [SerializeField]
+        private TileNameToPathPrefab[] m_TileNameToPathPrefab;
+
+        private Dictionary<string, GameObject> m_NameToPrefab;
+
         SurfaceTileManager()
         {
             Tiles = m_Tiles;
@@ -19,6 +25,11 @@ namespace OrdureX.AR
         void Awake()
         {
             m_TrackedImageManager = GetComponent<ARTrackedImageManager>();
+            m_NameToPrefab = new Dictionary<string, GameObject>();
+            foreach (var pair in m_TileNameToPathPrefab)
+            {
+                m_NameToPrefab[pair.Name] = pair.Prefab;
+            }
         }
 
         void OnEnable() => m_TrackedImageManager.trackedImagesChanged += OnChanged;
@@ -30,7 +41,13 @@ namespace OrdureX.AR
             foreach (var newImage in eventArgs.added)
             {
                 var newTile = newImage.GetComponent<SurfaceTile>();
-                newTile.Activate(this, newImage.referenceImage.name);
+
+                if (!m_NameToPrefab.TryGetValue(newImage.referenceImage.name, out var pathPrefab))
+                {
+                    Debug.LogError($"No path prefab found for image '{newImage.referenceImage.name}'");
+                    continue;
+                }
+                newTile.Activate(this, newImage.referenceImage.name, pathPrefab);
                 m_Tiles.Add(newTile);
             }
 
@@ -40,5 +57,12 @@ namespace OrdureX.AR
                 m_Tiles.Remove(removedTile);
             }
         }
+    }
+
+    [Serializable]
+    public struct TileNameToPathPrefab
+    {
+        public string Name;
+        public GameObject Prefab;
     }
 }

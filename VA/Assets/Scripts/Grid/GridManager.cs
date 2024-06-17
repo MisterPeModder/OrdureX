@@ -11,15 +11,7 @@ namespace OrdureX.Grid
         private float m_GridSearchUpdateInterval = 1f;
 
         [SerializeField]
-        private GameObject m_GridTilePrefab;
-        [SerializeField]
         private GameObject m_GridInstancePrefab;
-
-        public GameObject GridTilePrefab
-        {
-            get => m_GridTilePrefab;
-            set => m_GridTilePrefab = value;
-        }
 
         [SerializeField]
         private GridInstance m_GridInstance;
