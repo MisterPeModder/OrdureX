@@ -1,11 +1,12 @@
 #include "config.h"
 #include "at.h"
 #include "binary.h"
+#include "scheduler.h"
 
-At* at;
+Scheduler scheduler;
 
 // Example request, will be deleted
-void exampleRequestsRaw(At* at) {
+void exampleRequestsRaw() {
   // invalide code trash 0: array size is 17
   byte invalid_code0[] = {
     0x03, 0x36, 0x73, 0x98, 0x9e, 0x8c, 0x85, 0x42, 0x71, 0x86, 0x85, 0x8a, 0xea, 0xc7, 0x98,
@@ -18,33 +19,33 @@ void exampleRequestsRaw(At* at) {
     0x98, 0x91, 0x47
   };
 
-  at->addSendData(invalid_code0, 17);
-  at->addSendData(invalid_code2, 17);
-  at->addSendData(invalid_code2, 17);
+  addSendData(invalid_code0, 17);
+  addSendData(invalid_code2, 17);
+  addSendData(invalid_code2, 17);
   // send 3 status
-  at->send();
-  at->addSendData(invalid_code0, 17);
+  send(nullptr);
+  addSendData(invalid_code0, 17);
   // send 1 status
-  at->send();
+  send(nullptr);
   // send nothing
-  at->send();
+  send(nullptr);
 }
 
 /**
  * Example requests with 
  */
-void exampleRequests(At* at) {
+void exampleRequests(void* context) {
   // invalide code trash 0: array size is 16
-  byte client_id[] = {
-    0x36, 0x73, 0x98, 0x9e, 0x8c, 0x85, 0x42, 0x71, 0x86, 0x85, 0x8a, 0xea, 0xc7, 0x98,
-    0x91, 0x47
-  };
+  // byte client_id[] = {
+  //   0x36, 0x73, 0x98, 0x9e, 0x8c, 0x85, 0x42, 0x71, 0x86, 0x85, 0x8a, 0xea, 0xc7, 0x98,
+  //   0x91, 0x47
+  // };
 
-  at->addSendData(trash0CollectRequested(), 1);
-  //at->addSendData(trash1CollectRequested(), 1);
-  //at->addSendData(trash2CollectRequested(), 1);
+  addSendData(trash0CollectRequested(), 1);
+  //addSendData(trash1CollectRequested(), 1);
+  //addSendData(trash2CollectRequested(), 1);
 
-  //at->addSendData(trash0InvalidCode(client_id), 17);
+  //addSendData(trash0InvalidCode(client_id), 17);
   //at->addSendData(trash1InvalidCode(client_id), 17);
   //at->addSendData(trash2InvalidCode(client_id), 17);
 
@@ -52,10 +53,10 @@ void exampleRequests(At* at) {
   //at->addSendData(trash0LidS(true), 2);
   //at->addSendData(trash2LidS(false), 2);
 
-  client_id[5] = 0xff;
+  // client_id[5] = 0xff;
   //at->addSendData(simulationS(true, client_id), 18);
 
-  at->send();
+  send(nullptr);
 }
 
 void setup() {
@@ -64,13 +65,23 @@ void setup() {
   // Communication with the ESP
   Serial1.begin(115200);
 
-  at = new At(Serial1);
+  connectWifi();
+  connectRelay();
 
-  at->connectWifi();
-  at->connectRelay();
+  task_t task = { .delay = 8000, .lastRun = millis(), .loop = true, .task = exampleRequests, .context = nullptr };
+  if (!scheduler.addTask(task)) {
+#ifdef DEBUG
+    Serial.println("Send to ESP task not added");
+#endif
+  }
 
-  //exampleRequests(at);
-  //exampleRequestsRaw(at);
+  task.task = receive;
+  task.delay = 1000;
+  if (!scheduler.addTask(task)) {
+#ifdef DEBUG
+    Serial.println("Receive from ESP task not added");
+#endif
+  }
 }
 
 void loop() {
@@ -81,9 +92,5 @@ void loop() {
   //   Serial.write(Serial1.read());
   // }
 
-
-  at->receive();
-  delay(9000);
-  exampleRequests(at);
-  delay(1000);
+  scheduler.run();
 }
