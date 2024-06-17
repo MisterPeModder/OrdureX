@@ -1406,6 +1406,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ab41ed9c8d21e0783b2fdf81afdb76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_TileNameToPathPrefab:
+  - Name: surface_0
+    Prefab: {fileID: 5455290369131768822, guid: 80c6073e210e3035da57603cdca0145b,
+      type: 3}
+  - Name: surface_1
+    Prefab: {fileID: 5455290369131768822, guid: 80c6073e210e3035da57603cdca0145b,
+      type: 3}
+  - Name: surface_2
+    Prefab: {fileID: 5455290369131768822, guid: 80c6073e210e3035da57603cdca0145b,
+      type: 3}
+  - Name: surface_3
+    Prefab: {fileID: 5455290369131768822, guid: 80c6073e210e3035da57603cdca0145b,
+      type: 3}
+  - Name: surface_4
+    Prefab: {fileID: 5455290369131768822, guid: 80c6073e210e3035da57603cdca0145b,
+      type: 3}
+  - Name: surface_5
+    Prefab: {fileID: 5455290369131768822, guid: 853d64130488eaedebbf285f7a5ab815,
+      type: 3}
 --- !u!1 &437204124
 GameObject:
   m_ObjectHideFlags: 0
@@ -1586,8 +1605,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_GridSearchUpdateInterval: 1
-  m_GridTilePrefab: {fileID: 5455290369131768822, guid: 80c6073e210e3035da57603cdca0145b,
-    type: 3}
   m_GridInstancePrefab: {fileID: 6840792291251583192, guid: 21ba411d0604316c2891ca6f5f193c31,
     type: 3}
   m_GridInstance: {fileID: 0}

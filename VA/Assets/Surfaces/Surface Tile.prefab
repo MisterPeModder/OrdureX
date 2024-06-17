@@ -71,6 +71,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridManager: {fileID: 0}
   HighlightColor: {r: 0, g: 0, b: 0, a: 0}
+  m_PathPrefab: {fileID: 0}
   TopConnector: {fileID: 7817769017522467440}
   BottomConnector: {fileID: 6278066755691859453}
   RightConnector: {fileID: 6903175646336425405}
