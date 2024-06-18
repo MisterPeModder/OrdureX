@@ -28,7 +28,14 @@ namespace OrdureX.UI
         private readonly List<Action> onSelectActions = new();
         private readonly List<Action> onDeselectActions = new();
 
+        private SimulationStateManager m_SimulationStateManager;
+
         private const string ACTION_NAMESPACE = "ordurex/action";
+
+        private void Awake()
+        {
+            m_SimulationStateManager = FindObjectOfType<SimulationStateManager>();
+        }
 
         void Start()
         {
@@ -54,11 +61,14 @@ namespace OrdureX.UI
         // Update is called once per frame
         void Update()
         {
-            StartButton.interactable = Events.Connected;
-            RunActionButton.interactable = Events.Connected;
-            Dropdown.interactable = Events.Connected;
-            ActionInputField.interactable = Events.Connected;
-            var isOn = !(Events.Status == SimulationStatus.Paused || Events.Status == SimulationStatus.Stopped);
+            var interactable = m_SimulationStateManager.Status == SimulationStatus.Running
+                || m_SimulationStateManager.Status == SimulationStatus.Paused
+                || m_SimulationStateManager.Status == SimulationStatus.Stopped;
+            StartButton.interactable = interactable;
+            RunActionButton.interactable = interactable;
+            Dropdown.interactable = interactable;
+            ActionInputField.interactable = interactable;
+            var isOn = !(m_SimulationStateManager.Status == SimulationStatus.Paused || m_SimulationStateManager.Status == SimulationStatus.Stopped);
             StartButton.SetIsOnWithoutNotify(isOn);
             StartButton.GetComponent<PlayPauseButton>().UpdateGraphic(isOn);
 

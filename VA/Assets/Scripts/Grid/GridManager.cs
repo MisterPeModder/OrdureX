@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace OrdureX.Grid
@@ -48,6 +49,9 @@ namespace OrdureX.Grid
         [SerializeField]
         private int m_TrashCansToSpawn = 3;
 
+        private SimulationStateManager m_SimulationStateManager;
+        private OrdureXEvents m_Events;
+
         public Material[] GridOverlayMaterials
         {
             get => m_GridOverlayMaterials;
@@ -61,6 +65,13 @@ namespace OrdureX.Grid
         }
 
 
+        private void Awake()
+        {
+            m_SimulationStateManager = FindObjectOfType<SimulationStateManager>();
+            m_Events = FindObjectOfType<OrdureXEvents>();
+        }
+
+
         private void Start()
         {
             m_GridInstance = null;
@@ -70,6 +81,16 @@ namespace OrdureX.Grid
                 m_GridInstancePrefab = new GameObject("GridInstance");
             }
             StartCoroutine(SearchForGrids());
+        }
+
+        private void OnEnable()
+        {
+            m_SimulationStateManager.OnStatusChanged += OnStatusChanged;
+        }
+
+        private void OnDisable()
+        {
+            m_SimulationStateManager.OnStatusChanged -= OnStatusChanged;
         }
 
         private IEnumerator SearchForGrids()
@@ -177,6 +198,9 @@ namespace OrdureX.Grid
             {
                 return;
             }
+
+            m_Events.OnStartOrStop();
+
             DestroyOverlays();
             origin = origin.AllTouching.First();
 
@@ -279,11 +303,7 @@ namespace OrdureX.Grid
                 return;
             }
 
-            if (m_TruckProjectionInstance != null)
-            {
-                Destroy(m_TruckProjectionInstance.gameObject);
-                m_TruckProjectionInstance = null;
-            }
+            DestroyTruckProjection();
 
             m_TruckProjectionInstance = Instantiate(m_TruckProjectionPrefab, origin.transform.position, origin.transform.rotation);
             m_TruckProjectionInstance.transform.SetParent(origin.transform);
@@ -298,11 +318,7 @@ namespace OrdureX.Grid
                 return;
             }
 
-            foreach (var trashCanProjection in m_TrashCanProjectionInstances)
-            {
-                Destroy(trashCanProjection.gameObject);
-            }
-            m_TrashCanProjectionInstances.Clear();
+            DestroyTrashCanProjections();
 
             foreach (var trashCan in m_TrashCanInstances)
             {
@@ -318,23 +334,60 @@ namespace OrdureX.Grid
         {
             foreach (GridOverlayMesh overlay in m_GridOverlays)
             {
-                Destroy(overlay.gameObject);
+                if (overlay != null)
+                {
+                    Destroy(overlay.gameObject);
+                }
             }
             m_GridOverlays.Clear();
         }
 
-        private void OnDestroy()
+        private void DestroyGrid()
+        {
+            if (m_GridInstance != null)
+            {
+                Destroy(m_GridInstance.gameObject);
+                m_GridInstance = null;
+            }
+        }
+
+        private void DestroyTruckProjection()
         {
             if (m_TruckProjectionInstance != null)
             {
                 Destroy(m_TruckProjectionInstance.gameObject);
                 m_TruckProjectionInstance = null;
             }
+        }
+
+        private void DestroyTrashCanProjections()
+        {
             foreach (var trashCanProjection in m_TrashCanProjectionInstances)
             {
-                Destroy(trashCanProjection.gameObject);
+                if (trashCanProjection != null)
+                {
+                    Destroy(trashCanProjection.gameObject);
+                }
             }
-            m_TrashCanInstances.Clear();
+            m_TrashCanProjectionInstances.Clear();
+        }
+
+        private void OnDestroy()
+        {
+            DestroyTruckProjection();
+            DestroyTrashCanProjections();
+            DestroyOverlays();
+        }
+
+        private void OnStatusChanged(SimulationStatus prevStatus, SimulationStatus newStatus)
+        {
+            if (newStatus == SimulationStatus.Stopped)
+            {
+                DestroyGrid();
+                DestroyTruckProjection();
+                DestroyTrashCanProjections();
+                DestroyOverlays();
+            }
         }
     }
 }

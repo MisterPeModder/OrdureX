@@ -21,11 +21,14 @@ namespace OrdureX.UI
 
         private Toggle m_Button;
 
+        private SimulationStateManager m_SimulationStateManager;
+
         private bool m_IsLoading = false;
 
         private void Awake()
         {
             m_Button = GetComponent<Toggle>();
+            m_SimulationStateManager = FindObjectOfType<SimulationStateManager>();
         }
 
         private void OnEnable()
@@ -52,7 +55,7 @@ namespace OrdureX.UI
 
         public void UpdateGraphic(bool value)
         {
-            m_IsLoading = !m_Button.IsInteractable();
+            m_IsLoading = m_SimulationStateManager.Status == SimulationStatus.Connecting;
             if (m_IsLoading)
             {
                 m_TargetGraphic.sprite = m_LoaderSprite;
