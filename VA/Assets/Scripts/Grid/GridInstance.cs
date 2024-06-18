@@ -15,6 +15,9 @@ namespace OrdureX.Grid
         [SerializeField]
         private NavMeshSurface m_NavMeshSurface;
 
+        [SerializeField]
+        private GridOverlayMesh m_GridOverlayMesh;
+
         public float TileSpacing
         {
             get => m_Manager.TileSpacing;
@@ -25,6 +28,9 @@ namespace OrdureX.Grid
         {
             m_Manager = manager;
             m_Origin = origin;
+
+            m_GridOverlayMesh = new GameObject("Selected Grid Overlay").AddComponent<GridOverlayMesh>();
+            m_GridOverlayMesh.Initialize(m_Manager, origin);
 
             List<Connectable> toVisit = new() { origin };
             Dictionary<Connectable, GridTile> tiles = new() { { origin, CreateTile(origin, Vector3Int.zero, 0) } };
@@ -91,6 +97,10 @@ namespace OrdureX.Grid
         private void OnDestroy()
         {
             m_Manager.OnGridDestroyed(this);
+            if (m_GridOverlayMesh != null)
+            {
+                Destroy(m_GridOverlayMesh.gameObject);
+            }
         }
     }
 }

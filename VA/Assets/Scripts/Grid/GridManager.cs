@@ -17,7 +17,7 @@ namespace OrdureX.Grid
         private GridInstance m_GridInstance;
 
         [SerializeField]
-        private List<GridOverlay> m_GridOverlays = new();
+        private List<GridOverlayMesh> m_GridOverlays = new();
 
         [SerializeField]
         private float m_TileSpacing = 1f;
@@ -42,12 +42,12 @@ namespace OrdureX.Grid
         private ScaledProjection m_TrashCanProjectionInstance;
 
         [SerializeField]
-        private Material m_GridOverlayMaterial;
+        private Material[] m_GridOverlayMaterials;
 
-        public Material GridOverlayMaterial
+        public Material[] GridOverlayMaterials
         {
-            get => m_GridOverlayMaterial;
-            set => m_GridOverlayMaterial = value;
+            get => m_GridOverlayMaterials;
+            set => m_GridOverlayMaterials = value;
         }
 
         public float TileSpacing
@@ -173,6 +173,7 @@ namespace OrdureX.Grid
             {
                 return;
             }
+            DestroyOverlays();
             origin = origin.AllTouching.First();
 
             m_GridInstance = Instantiate(m_GridInstancePrefab, transform).AddComponent<GridInstance>();
@@ -185,14 +186,11 @@ namespace OrdureX.Grid
             RespawnTrashCan(spawnPoints);
             SpawnTruckProjection(origin);
             SpawnTrashCanProjection(origin);
-            DestroyOverlays();
         }
 
         private void AddOverlay(Connectable origin)
         {
-            var gridOverlay = new GameObject("Grid Overlay").AddComponent<GridOverlay>();
-            gridOverlay.transform.SetParent(transform);
-            gridOverlay.transform.localPosition = Vector3.zero;
+            var gridOverlay = new GameObject("Candidate Grid Overlay").AddComponent<GridOverlayMesh>();
             gridOverlay.Initialize(this, origin);
             m_GridOverlays.Add(gridOverlay);
         }
@@ -308,7 +306,7 @@ namespace OrdureX.Grid
 
         private void DestroyOverlays()
         {
-            foreach (GridOverlay overlay in m_GridOverlays)
+            foreach (GridOverlayMesh overlay in m_GridOverlays)
             {
                 Destroy(overlay.gameObject);
             }

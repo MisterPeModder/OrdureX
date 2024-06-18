@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 3986829850551681876}
   - component: {fileID: 1511842860382298969}
   m_Layer: 0
-  m_Name: Overlay
+  m_Name: Debug Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
