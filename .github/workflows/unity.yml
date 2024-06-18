@@ -1,0 +1,61 @@
+name: Unity
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'VA/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - uses: actions/cache@v4
+      with:
+        path: VA/Library
+        key: VA-Library-${{ hashFiles('VA/Assets/**', 'VA/Packages/**', 'VA/ProjectSettings/**') }}
+        restore-keys: |
+          VA-Library-
+    
+    - name: Build project
+      uses: game-ci/unity-builder@v4
+      env:
+        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      with:
+        targetPlatform: Android
+        projectPath: VA
+        buildsPath: VA/build
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Android.apk
+        path: VA/build/Android/Android.apk
+
+    # Create a tag and release
+    - uses: rickstaa/action-create-tag@v1
+      if: github.event_name == 'push'
+      with:
+        tag: apk-${{ github.run_number }}
+        tag_exists_error: false
+        message: Built apk from continuous integration
+    - uses: softprops/action-gh-release@v2
+      if: github.event_name == 'push'
+      with:
+        tag_name: apk-${{ github.run_number }}
+        files: VA/build/Android/Android.apk
+        token: ${{ secrets.GITHUB_TOKEN }}
+        draft: false
+        prerelease: true
