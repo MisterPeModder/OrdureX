@@ -120,6 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Target: {fileID: 0}
   m_Agent: {fileID: 0}
+  m_TrashCollectDistance: 1.5
 --- !u!1001 &3626830406821318925
 PrefabInstance:
   m_ObjectHideFlags: 0

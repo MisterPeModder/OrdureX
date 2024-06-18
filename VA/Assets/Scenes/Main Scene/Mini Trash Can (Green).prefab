@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6476822576208535577}
   - component: {fileID: 3220560173377027960}
   m_Layer: 0
-  m_Name: Mini Trash Can
+  m_Name: Mini Trash Can (Green)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

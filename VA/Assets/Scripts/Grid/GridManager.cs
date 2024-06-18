@@ -20,6 +20,9 @@ namespace OrdureX.Grid
         private List<GridOverlayMesh> m_GridOverlays = new();
 
         [SerializeField]
+        private Material[] m_GridOverlayMaterials;
+
+        [SerializeField]
         private float m_TileSpacing = 1f;
 
         [Header("Simulation Objects")]
@@ -30,19 +33,20 @@ namespace OrdureX.Grid
         [SerializeField]
         private GameObject m_TrashCanPrefab;
         [SerializeField]
-        private ScaledProjection m_TrashCanProjectionPrefab;
-
+        private List<ScaledProjection> m_TrashCanProjectionPrefabs = new();
+        private int m_TrackCanPrefabIndex = -1;
         [SerializeField]
         private GameObject m_TruckInstance;
         [SerializeField]
         private ScaledProjection m_TruckProjectionInstance;
         [SerializeField]
-        private GameObject m_TrashCanInstance;
+        private List<GameObject> m_TrashCanInstances = new();
         [SerializeField]
-        private ScaledProjection m_TrashCanProjectionInstance;
-
+        private List<ScaledProjection> m_TrashCanProjectionInstances = new();
         [SerializeField]
-        private Material[] m_GridOverlayMaterials;
+        private float m_MinimumTruckToTrashCanDistance = 3.0f;
+        [SerializeField]
+        private int m_TrashCansToSpawn = 3;
 
         public Material[] GridOverlayMaterials
         {
@@ -183,9 +187,9 @@ namespace OrdureX.Grid
 
             var spawnPoints = GameObject.FindGameObjectsWithTag("Spawn Point");
             RespawnTruck(spawnPoints);
-            RespawnTrashCan(spawnPoints);
+            RespawnTrashCans(spawnPoints);
             SpawnTruckProjection(origin);
-            SpawnTrashCanProjection(origin);
+            SpawnTrashCanProjections(origin);
         }
 
         private void AddOverlay(Connectable origin)
@@ -228,42 +232,43 @@ namespace OrdureX.Grid
             m_TruckInstance.transform.SetParent(transform);
         }
 
-        private void RespawnTrashCan(GameObject[] spawnPoints)
+        private void RespawnTrashCans(GameObject[] spawnPoints)
         {
             if (m_TrashCanPrefab == null)
             {
-                Debug.LogWarning("Trash prefab not set, cannot spawn");
+                Debug.LogWarning("No trash can prefabs set, cannot spawn");
                 return;
             }
 
-            if (m_TrashCanInstance != null)
+            foreach (var trashCan in m_TrashCanInstances)
             {
-                Destroy(m_TrashCanInstance);
-                m_TrashCanInstance = null;
+                Destroy(trashCan);
             }
+            m_TrashCanInstances.Clear();
 
-            if (spawnPoints.Length == 0)
+            var remainingSpawnPoints = new List<GameObject>(spawnPoints);
+            var trashCansToSpawn = m_TrashCansToSpawn;
+
+            remainingSpawnPoints.RemoveAll(spawnPoint => Vector3.Distance(spawnPoint.transform.position, m_TruckInstance.transform.position) < m_MinimumTruckToTrashCanDistance);
+
+            if (remainingSpawnPoints.Count == 0)
             {
-                Debug.LogWarning("No spawn points found, cannot spawn truck");
+                Debug.LogWarning("No spawn points found, cannot spawn trash can");
                 return;
             }
 
-            var truckPos = m_TruckInstance.transform.position;
-            var spawnPoint = spawnPoints
-                .OrderByDescending(sp => Vector3.Distance(sp.transform.position, truckPos))
-                .FirstOrDefault();
-
-            if (spawnPoint != null)
+            while (trashCansToSpawn > 0 && remainingSpawnPoints.Count > 0)
             {
-                m_TrashCanInstance = Instantiate(m_TrashCanPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                m_TrashCanInstance.transform.SetParent(transform);
+                var spawnPoint = remainingSpawnPoints[Random.Range(0, remainingSpawnPoints.Count)];
+                remainingSpawnPoints.Remove(spawnPoint);
 
-                m_TruckInstance.GetComponent<GarbageTruckAI>().Target = m_TrashCanInstance.transform;
+                var trashCanInstance = Instantiate(m_TrashCanPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                trashCanInstance.transform.SetParent(transform);
+                m_TrashCanInstances.Add(trashCanInstance);
+                trashCansToSpawn--;
             }
-            else
-            {
-                Debug.LogWarning("No other spawn points found, cannot spawn trash can");
-            }
+
+            m_TruckInstance.GetComponent<GarbageTruckAI>().Targets = m_TrashCanInstances.Select(trashCan => trashCan.transform).ToList();
         }
 
         private void SpawnTruckProjection(Connectable origin)
@@ -285,23 +290,28 @@ namespace OrdureX.Grid
             m_TruckProjectionInstance.Initialize(transform, origin.transform, m_TruckInstance.transform);
         }
 
-        private void SpawnTrashCanProjection(Connectable origin)
+        private void SpawnTrashCanProjections(Connectable origin)
         {
-            if (m_TrashCanProjectionPrefab == null)
+            if (m_TrashCanProjectionPrefabs.Count == 0)
             {
-                Debug.LogWarning("Mini truck prefab not set, cannot spawn");
+                Debug.LogWarning("Trash can projection not set, cannot spawn");
                 return;
             }
 
-            if (m_TrashCanProjectionInstance != null)
+            foreach (var trashCanProjection in m_TrashCanProjectionInstances)
             {
-                Destroy(m_TrashCanProjectionInstance.gameObject);
-                m_TrashCanProjectionInstance = null;
+                Destroy(trashCanProjection.gameObject);
             }
+            m_TrashCanProjectionInstances.Clear();
 
-            m_TrashCanProjectionInstance = Instantiate(m_TrashCanProjectionPrefab, origin.transform.position, origin.transform.rotation);
-            m_TrashCanProjectionInstance.transform.SetParent(origin.transform);
-            m_TrashCanProjectionInstance.Initialize(transform, origin.transform, m_TrashCanInstance.transform);
+            foreach (var trashCan in m_TrashCanInstances)
+            {
+                m_TrackCanPrefabIndex = (m_TrackCanPrefabIndex + 1) % m_TrashCanProjectionPrefabs.Count;
+                var trashCanProjectionInstance = Instantiate(m_TrashCanProjectionPrefabs[m_TrackCanPrefabIndex], origin.transform.position, origin.transform.rotation);
+                trashCanProjectionInstance.transform.SetParent(origin.transform);
+                trashCanProjectionInstance.Initialize(transform, origin.transform, trashCan.transform);
+                m_TrashCanProjectionInstances.Add(trashCanProjectionInstance);
+            }
         }
 
         private void DestroyOverlays()
@@ -311,6 +321,20 @@ namespace OrdureX.Grid
                 Destroy(overlay.gameObject);
             }
             m_GridOverlays.Clear();
+        }
+
+        private void OnDestroy()
+        {
+            if (m_TruckProjectionInstance != null)
+            {
+                Destroy(m_TruckProjectionInstance.gameObject);
+                m_TruckProjectionInstance = null;
+            }
+            foreach (var trashCanProjection in m_TrashCanProjectionInstances)
+            {
+                Destroy(trashCanProjection.gameObject);
+            }
+            m_TrashCanInstances.Clear();
         }
     }
 }
