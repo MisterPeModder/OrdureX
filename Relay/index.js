@@ -1,8 +1,8 @@
 // @ts-check
 
 import net from 'net';
-import { stringify as uuidStringify, parse as uuidParse } from 'uuid';
 import mqtt from 'mqtt';
+import { unsafeStringify, uuidParse } from './uuid.js';
 
 const PORT = 7070;
 const HOST = '0.0.0.0';
@@ -121,7 +121,7 @@ mqttClient.on('message', (topic, message) => {
             message: messageStr,
         });
     } else if (topic === 'ordurex/action/trash-0/request-collect') {
-        const clientId = uuidStringify(message.subarray(0, 16));
+        const clientId = unsafeStringify(message.subarray(0, 16));
         const code = message.toString('utf-8', 16);
         console.log(`> Displaying collect of trash-0: client = ${clientId}, code = ${'*'.repeat(code.length)}`);
         actionsQueue.push({
@@ -131,7 +131,7 @@ mqttClient.on('message', (topic, message) => {
             code,
         });
     } else if (topic === 'ordurex/action/trash-1/request-collect') {
-        const clientId = uuidStringify(message.subarray(0, 16));
+        const clientId = unsafeStringify(message.subarray(0, 16));
         const code = message.toString('utf-8', 16);
         console.log(`> Displaying collect of trash-1: client = ${clientId}, code = ${'*'.repeat(code.length)}`);
         actionsQueue.push({
@@ -141,7 +141,7 @@ mqttClient.on('message', (topic, message) => {
             code,
         });
     } else if (topic === 'ordurex/action/trash-2/request-collect') {
-        const clientId = uuidStringify(message.subarray(0, 16));
+        const clientId = unsafeStringify(message.subarray(0, 16));
         const code = message.toString('utf-8', 16);
         console.log(`> Displaying collect of trash-2: client = ${clientId}, code = ${'*'.repeat(code.length)}`);
         actionsQueue.push({
@@ -153,7 +153,7 @@ mqttClient.on('message', (topic, message) => {
     } else if (topic === 'ordurex/action/simulation') {
         const simulationState = message.readUInt8(0);
         console.log(message.subarray(1, 17));
-        const clientId = uuidStringify(message.subarray(1, 17));
+        const clientId = unsafeStringify(message.subarray(1, 17));
         console.log(
             `> ${simulationState === 0 ? 'Stopping' : simulationState === 1 ? 'Starting' : 'Pausing'} simulation, from client ${clientId}`
         );
@@ -194,7 +194,7 @@ function decodePackedData(buf) {
             const trashId = statusId - 3;
             console.log(`#${s} status name: ordurex/status/trash-${trashId}/invalid-code`);
             const rawClientId = buf.subarray(offset, offset + 16);
-            const clientId = uuidStringify(rawClientId);
+            const clientId = unsafeStringify(rawClientId);
             offset += 16;
             console.log(`#${s} client UUID: ${clientId}`);
 
@@ -219,7 +219,7 @@ function decodePackedData(buf) {
             console.log(`#${s} simulation status: ${status === 0 ? 'ready/inactive' : 'busy/active'}`);
             if (status === 1) {
                 const rawClientId = buf.subarray(offset, offset + 16);
-                const clientId = uuidStringify(rawClientId);
+                const clientId = unsafeStringify(rawClientId);
                 offset += 16;
                 console.log(`#${s} client UUID: ${clientId}`);
 
