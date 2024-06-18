@@ -1,0 +1,682 @@
+<html><head><title>Protocole MQTT</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body class="pdf fr-FR" lang="fr-FR"><article id="6251c129-83cd-4551-a1c2-afee950e0861" class="page sans"><header><div class="page-header-icon undefined"><img class="icon" src="https://www.notion.so/icons/wifi_gray.svg"/></div><h1 class="page-title">Protocole MQTT</h1><p class="page-description"></p></header><div class="page-body"><p id="80cb49b1-5f12-40f5-bdc3-c9ab3590f998" class="">
+</p><p id="305d8b6c-290f-44a9-88ca-f4a93f3fe61d" class=""><em>Cette page liste la manière dont se connecte l’application mobile avec l’Arduino via des sujets MQTT</em></p><p id="78a69881-47e8-4e27-916c-5dacafa7a058" class="">
+</p><h1 id="7a16f09d-83aa-4a39-b540-a7b4226814ee" class="">Topics MQTT</h1><h2 id="50438482-2d16-48b6-abb3-be353342ee34" class="">Statut</h2><p id="6b54ad9d-cc4a-4107-a24a-aaa43d00885c" class=""><em>État des capteurs/actionneurs </em></p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="d6717dcf-8ac7-410c-8668-09ff1d398b20"><div style="font-size:1.5em"><img class="icon" src="https://www.notion.so/icons/wifi_yellow.svg"/></div><div style="width:100%"><strong>Les sujets (</strong><strong><em>topics</em></strong><strong>) sont prefixés de </strong><strong><code>ordurex/</code></strong><strong> , (ex: </strong><code><strong>status/trash-0/collect-requested</strong></code><strong> devient </strong><code><strong>ordurex/status/trash-0/collect-requested</strong></code>)</div></figure><table id="bdc6c056-fd55-4fb3-b7de-be33adc17843" class="simple-table"><thead class="simple-table-header"><tr id="5830f530-c94b-4630-988f-2b259674ea62"><th id="JrH`" class="simple-table-header-color simple-table-header" style="width:217px"><strong>Sujet</strong></th><th id="qQKZ" class="simple-table-header-color simple-table-header"><strong>Publicateur</strong></th><th id="V=iH" class="simple-table-header-color simple-table-header"><strong>Abonné</strong></th><th id="lxIp" class="simple-table-header-color simple-table-header" style="width:207px"><strong>Commentaire</strong></th><th id="X^@M" class="simple-table-header-color simple-table-header" style="width:138px"><strong>Type de donnée</strong></th><th id="mXgd" class="simple-table-header-color simple-table-header" style="width:70.99224853515625px"><strong>QoS*</strong></th><th id="xUq[" class="simple-table-header-color simple-table-header">Rétention</th><th id="Ay:[" class="simple-table-header-color simple-table-header" style="width:101px">Implémenté (Publicateur)</th><th id="B&lt;F?" class="simple-table-header-color simple-table-header">Implémenté (Abonné)</th></tr></thead><tbody><tr id="c2355318-fe7a-4486-a8db-e7a04fd08a69"><td id="JrH`" class="" style="width:217px">status/trash-0/collect-requested</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">En cas de demande de ramassage**</td><td id="X^@M" class="" style="width:138px">N/A</td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">N</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="a917698f-31ee-48e2-8b23-f83d0934e8ab"><td id="JrH`" class="" style="width:217px">status/trash-1/collect-requested</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">En cas de demande de ramassage**</td><td id="X^@M" class="" style="width:138px">N/A</td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">N</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="1f9d5e75-82f3-44ab-a7bc-4a18087ce832"><td id="JrH`" class="" style="width:217px">status/trash-2/collect-requested</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">En cas de demande de ramassage**</td><td id="X^@M" class="" style="width:138px">N/A</td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">N</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="29576095-460d-41b3-8aa2-20ef1abc127e"><td id="JrH`" class="" style="width:217px">status/trash-0/invalid-code</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">Saisie du mauvais code de ramassage</td><td id="X^@M" class="" style="width:138px">client_id</td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">N</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="defc1fbd-c4e8-431b-ab52-d0cc657e5df3"><td id="JrH`" class="" style="width:217px">status/trash-1/invalid-code</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">Saisie du mauvais code de ramassage</td><td id="X^@M" class="" style="width:138px">client_id</td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">N</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="ffbc2390-8539-416a-be28-746ea7e0302b"><td id="JrH`" class="" style="width:217px">status/trash-2/invalid-code</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">Saisie du mauvais code de ramassage</td><td id="X^@M" class="" style="width:138px">client_id</td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">N</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="aca4c1f1-54bf-43a2-bcc9-c4a7a75834d4"><td id="JrH`" class="" style="width:217px">status/trash-1/burning</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">État du capteur de flammes</td><td id="X^@M" class="" style="width:138px">N/A</td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">N</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="15cba361-2db9-4f1c-a531-626e5646073c"><td id="JrH`" class="" style="width:217px">status/trash-0/lid</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">Statut du couvercle</td><td id="X^@M" class="" style="width:138px">Bool<br/>0 : fermé<br/>1 : ouvert<br/></td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">O</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="7bd82e0b-0ff2-47f4-958a-8941696afb5a"><td id="JrH`" class="" style="width:217px">status/trash-2/lid</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">Statut du couvercle</td><td id="X^@M" class="" style="width:138px">Bool<br/>0 : fermé<br/>1 : ouvert<br/></td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">O</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="b0cc5d15-2f9e-43b3-91c1-9391efd82fe6"><td id="JrH`" class="" style="width:217px">status/simulation</td><td id="qQKZ" class="">Arduino</td><td id="V=iH" class="">Android</td><td id="lxIp" class="" style="width:207px">La simulation est initiée par le client donné</td><td id="X^@M" class="" style="width:138px">Statut<br/>0 : Prêt (inactif)<br/>1 : Occupé (actif)<br/>Client (si statut = 0)<br/>UUIDv4 <br/><br/></td><td id="mXgd" class="" style="width:70.99224853515625px">1</td><td id="xUq[" class="">O</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">✅</mark></td></tr><tr id="9981d2d0-303a-455c-9349-38579fd352f7"><td id="JrH`" class="" style="width:217px">status/truck</td><td id="qQKZ" class="">Android (maître)</td><td id="V=iH" class="">Android (autres)</td><td id="lxIp" class="" style="width:207px">Position en 2D du camion poubelle</td><td id="X^@M" class="" style="width:138px">Position X<br/>Position Y<br/></td><td id="mXgd" class="" style="width:70.99224853515625px">0</td><td id="xUq[" class="">N</td><td id="Ay:[" class="" style="width:101px"><mark class="highlight-gray_background">❌</mark></td><td id="B&lt;F?" class=""><mark class="highlight-gray_background">❌</mark></td></tr></tbody></table><h3 id="3e313e8f-ab17-4bcc-aa1d-e9202f1f27ce" class="">QoS* (Q<em>uality of Service</em>) :</h3><p id="03cf9ff9-49bb-46d3-bfc3-8910d351b599" class="">0 : Au mieux 1 fois (risque de non réception - connexion stable)<br/>1 : Au moins 1 fois (abonné peut recevoir plusieurs fois - connexion instable)<br/>2 : Exactement 1 fois<br/></p><p id="b22ab327-db4a-4215-ba08-877f49954a9a" class="">
+</p><h3 id="58ef5ee0-50b1-41ce-961b-2d824adead17" class="">En cas de demande de ramassage** :</h3><p id="d0cb8866-c857-453d-bae4-65af1954e465" class="">Le status <code>status/trash-x/collect-requested</code> existe suite à une demande de ramassage dans les cas suivants</p><p id="585988e4-825a-40ba-b3b8-2f73dada3c19" class="">Pour la poubelle 0 :</p><ul id="1a0b5147-9a46-48f0-bcb5-9c2013608a92" class="bulleted-list"><li style="list-style-type:disc">Requête de ramassage via l’application et le bon code (<code>action/trash-0/request-collect</code>)</li></ul><p id="f173b8b3-03f6-4c15-9c7d-d114e6682e72" class="">Pour la poubelle 1 :</p><ul id="5f2a2878-7e10-430d-af14-0df027de98d0" class="bulleted-list"><li style="list-style-type:disc">TRequête de ramassage via l’application et le bon code (<code>action/trash-1/request-collect</code>)</li></ul><ul id="24c2d837-78c6-4742-86ce-998cabe545b7" class="bulleted-list"><li style="list-style-type:disc">Saisie du bon code via le pavé numérique de la poubelle</li></ul><p id="155a4976-58ae-41ee-b051-a5544d526593" class="">Pour la poubelle 2 :</p><ul id="1d59db6e-47a5-41df-ac03-73d789fd4273" class="bulleted-list"><li style="list-style-type:disc">Requête de ramassage via l’application et le bon code (<code>action/trash-2/request-collect</code>)</li></ul><ul id="429ee0e7-0541-4114-a296-c30307aa788e" class="bulleted-list"><li style="list-style-type:disc">Passage d’une carte valide sur le lecteur RFID</li></ul><p id="f0866279-2796-4b25-a3af-48bed62a6a92" class="">
+</p><h2 id="5bc623ff-1580-41de-a15e-cc5f9bf15150" class="">Actions</h2><p id="88d4f19c-ac40-402f-8418-63f7575eb639" class=""><em>Actions contrôlées par l’application mobile</em></p><table id="7cd6f548-4a4e-4b1f-9f77-9c60fae61264" class="simple-table"><tbody><tr id="fbabee0c-f71e-435e-8fd3-fcdd001ca5c2"><td id="juL]" class="" style="width:177px"><strong>Sujet</strong></td><td id="qdR:" class="" style="width:102px"><strong>Publicateur</strong></td><td id="oAyR" class="" style="width:77px"><strong>Abonné</strong></td><td id="O=:\" class="" style="width:176px"><strong>Commentaire</strong></td><td id="dAdm" class="" style="width:125px"><strong>Type de donnée</strong></td><td id="I;HB" class="" style="width:60.97271728515625px"><strong>QoS*</strong></td><td id="tnKG" class="">Rétention</td><td id="wkO&lt;" class="">Implémenté (Publicateur)</td><td id="Jn~]" class="">Implémenté (Abonné)</td></tr><tr id="0c03842b-04e5-4ab6-9a0f-57560e65a298"><td id="juL]" class="" style="width:177px">action/trash-0/lid</td><td id="qdR:" class="" style="width:102px">Android</td><td id="oAyR" class="" style="width:77px">Arduino</td><td id="O=:\" class="" style="width:176px">Contrôle l’ouverture ou fermeture du couvercle</td><td id="dAdm" class="" style="width:125px">Bool<br/>0 : fermeture<br/>1 : ouverture<br/></td><td id="I;HB" class="" style="width:60.97271728515625px">1</td><td id="tnKG" class="">N</td><td id="wkO&lt;" class=""><mark class="highlight-gray_background">✅</mark></td><td id="Jn~]" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="ce1de57d-d496-4217-9fc8-9eaca685fb04"><td id="juL]" class="" style="width:177px">action/trash-2/lid</td><td id="qdR:" class="" style="width:102px">Android</td><td id="oAyR" class="" style="width:77px">Arduino</td><td id="O=:\" class="" style="width:176px">Contrôle l’ouverture ou fermeture du couvercle</td><td id="dAdm" class="" style="width:125px">Bool<br/>0 : fermeture<br/>1 : ouverture<br/></td><td id="I;HB" class="" style="width:60.97271728515625px">1</td><td id="tnKG" class="">N</td><td id="wkO&lt;" class=""><mark class="highlight-gray_background">✅</mark></td><td id="Jn~]" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="c54f3be8-4c2e-452c-997c-aa8221fbddaa"><td id="juL]" class="" style="width:177px">action/trash-1/buzzer</td><td id="qdR:" class="" style="width:102px">Android</td><td id="oAyR" class="" style="width:77px">Arduino</td><td id="O=:\" class="" style="width:176px">Joue une musique</td><td id="dAdm" class="" style="width:125px">Int<br/>0 : Musique 1<br/>1 : Musique 2<br/>2 : …<br/></td><td id="I;HB" class="" style="width:60.97271728515625px">2</td><td id="tnKG" class="">N</td><td id="wkO&lt;" class=""><mark class="highlight-gray_background">✅</mark></td><td id="Jn~]" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="bd4fd7bd-b24e-48d5-af60-eeeade201e78"><td id="juL]" class="" style="width:177px">action/trash-2/display</td><td id="qdR:" class="" style="width:102px">Android</td><td id="oAyR" class="" style="width:77px">Arduino</td><td id="O=:\" class="" style="width:176px">Affiche du texte sur le LCD</td><td id="dAdm" class="" style="width:125px">String</td><td id="I;HB" class="" style="width:60.97271728515625px">2</td><td id="tnKG" class="">N</td><td id="wkO&lt;" class=""><mark class="highlight-gray_background">✅</mark></td><td id="Jn~]" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="1a2cab79-524d-488c-a42e-2c5dba33f6e1"><td id="juL]" class="" style="width:177px">action/trash-0/request-collect</td><td id="qdR:" class="" style="width:102px">Android</td><td id="oAyR" class="" style="width:77px">Arduino</td><td id="O=:\" class="" style="width:176px">Demande de ramassage de la poubelle 0.<br/><br/></td><td id="dAdm" class="" style="width:125px">client_id<br/><br/>code secret (String)<br/></td><td id="I;HB" class="" style="width:60.97271728515625px">1</td><td id="tnKG" class="">N</td><td id="wkO&lt;" class=""><mark class="highlight-gray_background">✅</mark></td><td id="Jn~]" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="f2dbff73-52b2-43ae-9cf5-bc8472749f31"><td id="juL]" class="" style="width:177px">action/trash-1/request-collect</td><td id="qdR:" class="" style="width:102px">Android</td><td id="oAyR" class="" style="width:77px">Arduino</td><td id="O=:\" class="" style="width:176px">Demande de ramassage de la poubelle 1</td><td id="dAdm" class="" style="width:125px">client_id<br/><br/>code secret (String)<br/></td><td id="I;HB" class="" style="width:60.97271728515625px">1</td><td id="tnKG" class="">N</td><td id="wkO&lt;" class=""><mark class="highlight-gray_background">✅</mark></td><td id="Jn~]" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="b3c4589b-890d-4ccd-b0d6-444425c6f15a"><td id="juL]" class="" style="width:177px">action/trash-2/request-collect</td><td id="qdR:" class="" style="width:102px">Android</td><td id="oAyR" class="" style="width:77px">Arduino</td><td id="O=:\" class="" style="width:176px">Demande de ramassage de la poubelle 2</td><td id="dAdm" class="" style="width:125px">client_id<br/><br/>code secret (String)<br/></td><td id="I;HB" class="" style="width:60.97271728515625px">1</td><td id="tnKG" class="">N</td><td id="wkO&lt;" class=""><mark class="highlight-gray_background">✅</mark></td><td id="Jn~]" class=""><mark class="highlight-gray_background">❌</mark></td></tr><tr id="7dab1b05-2b68-4e0c-b71a-541c71c4970d"><td id="juL]" class="" style="width:177px">action/simulation</td><td id="qdR:" class="" style="width:102px">Android</td><td id="oAyR" class="" style="width:77px">Arduino</td><td id="O=:\" class="" style="width:176px">Demande de connexion</td><td id="dAdm" class="" style="width:125px">Action<br/>0 : arrêter<br/>1 : lancer<br/>2 : pauser<br/>ID Client (si action=0)<br/>UUIDv4<br/></td><td id="I;HB" class="" style="width:60.97271728515625px">2</td><td id="tnKG" class="">N</td><td id="wkO&lt;" class=""><mark class="highlight-gray_background">✅</mark></td><td id="Jn~]" class=""><mark class="highlight-gray_background">❌</mark></td></tr></tbody></table><h3 id="68675a78-3d67-4354-9b42-f5b6ba5dcd0d" class="">QoS* (Q<em>uality of Service</em>) :</h3><p id="1b21b66c-3ffe-41f8-9a1d-c0d713ac82e6" class="">0 : Au mieux 1 fois (risque de non réception - connexion stable)<br/>1 : Au moins 1 fois (abonné peut recevoir plusieurs fois - connexion instable)<br/>2 : Exactement 1 fois<br/></p><h1 id="b2cef205-2df3-4b6e-b680-9eff57e8a777" class="">Échanges TCP/IP</h1><p id="284eb97c-4d36-4b38-b4af-ff0ba7ac23d2" class="">L’arduino envoie l’état des capteurs tous les x ms.</p><p id="438f494c-14f5-4792-b2cf-23c7cc326e83" class="">Côté technique pour l’arduino :</p><ul id="c898e68a-671d-4f63-bcf7-5bccccd3be0b" class="bulleted-list"><li style="list-style-type:disc">nombre d’octets envoyés/reçus est précisé dans les commandes AT<ul id="d1ba0d20-4709-4f40-84d1-ca6d960adf7b" class="bulleted-list"><li style="list-style-type:circle">Requette d’envoi <code>AT+CIPSEND=__longueur_chaîne__</code> <ul id="862cc17f-7f4a-45e2-8b05-4447e27c7690" class="bulleted-list"><li style="list-style-type:square">Retour de commande : </li></ul><p id="f249296f-20c0-4a91-b4fd-dfdc5604c38f" class=""><code>Recv __longueur_chaîne__ bytes</code></p><p id="3d4e2d02-6ee6-4e02-aab0-3fb5cd20090b" class=""><code>SEND OK</code></p></li></ul><ul id="d4a76802-5f54-4213-9c5d-17b5c52d760f" class="bulleted-list"><li style="list-style-type:circle">Réception : <code>+IPD,__longueur_chaîne__:__contenu__</code></li></ul></li></ul><ul id="a1596f59-9b61-4931-acc4-e3022cff5f7a" class="bulleted-list"><li style="list-style-type:disc">Utiliser exceptionnellement Serial.print plutôt que Serial.println pour omettre \r\n contrairement aux autres commandes AT</li></ul><p id="381c88b7-e314-440f-a39c-490f7e420c21" class="">Format de données :</p><table id="25693951-4f19-491c-927e-f5cca6ed1ee3" class="simple-table"><thead class="simple-table-header"><tr id="59e066e9-5813-4b73-b293-21245853a77f"><th id="~n_P" class="simple-table-header-color simple-table-header"><strong>Ordre</strong></th><th id=":a&gt;}" class="simple-table-header-color simple-table-header"><strong>Commentaire</strong></th><th id="QgFV" class="simple-table-header-color simple-table-header" style="width:277.75px"><strong>Type de donnée</strong></th></tr></thead><tbody><tr id="3e85059e-8912-4d7e-911d-abb67d35837a"><td id="~n_P" class="">1</td><td id=":a&gt;}" class="">Nombre de status à envoyer</td><td id="QgFV" class="" style="width:277.75px">octet</td></tr><tr id="c2990ad2-55be-4913-be6d-7b95a508cdff"><td id="~n_P" class="">3</td><td id=":a&gt;}" class="">Liste de status</td><td id="QgFV" class="" style="width:277.75px">status[]</td></tr></tbody></table><p id="87174223-961e-45e4-840b-aa05fe6f0ac1" class="">Type status :</p><table id="a535b5dd-7f21-40b2-aea5-56e32920f34f" class="simple-table"><tbody><tr id="d3d05c9c-0980-4452-a563-681908ceb1a9"><td id=":xW:" class=""><strong>Ordre</strong></td><td id="RYsn" class=""><strong>Commentaire</strong></td><td id="&gt;qv`" class="" style="width:361px"><strong>Type de donnée</strong></td></tr><tr id="835108b7-6b70-42db-81ac-07df5aabd40a"><td id=":xW:" class="">1</td><td id="RYsn" class="">Id de requêtes mqtt</td><td id="&gt;qv`" class="" style="width:361px">Enum de status :<br/>0 : status/trash-0/collect-requested <br/>1 : status/trash-1/collect-requested<br/>2 : status/trash-2/collect-requested<br/>3 : status/trash-0/invalid-code<br/>4 : status/trash-1/invalid-code<br/>5 : status/trash-2/invalid-code<br/>6 : status/trash-1/burning<br/>7 : status/trash-0/lid<br/>8 : status/trash-2/lid<br/>9 : status/simulation<br/><br/>Enum d’actions :<br/>0 : action/trash-0/lid<br/>1 : action/trash-2/lid<br/>2 : action/trash-1/buzzer<br/>3 : action/trash-2/display<br/>4 : action/trash-0/request-collect<br/>5 : action/trash-1/request-collect<br/>6 : action/trash-2/request-collect<br/>7 : action/simulation<br/></td></tr><tr id="9cb1c301-d9f5-455a-8061-1921f86f0564"><td id=":xW:" class="">2 (optionnel)</td><td id="RYsn" class="">Longueur de chaîne de caractère si type chaîne de caractère </td><td id="&gt;qv`" class="" style="width:361px">octet</td></tr><tr id="47ee54ee-4bad-4719-bf60-b5b8234efa63"><td id=":xW:" class="">3</td><td id="RYsn" class="">Contenu de la requête</td><td id="&gt;qv`" class="" style="width:361px">Dépend de l’id de la requête mqtt</td></tr></tbody></table><p id="2edca05b-4535-4874-a890-249042919d0e" class="">Exemples :</p><ul id="215c4f01-ec0b-4dd5-98e7-44cad8c15c6d" class="bulleted-list"><li style="list-style-type:disc">Arduino envoi (en binaire)  : <mark class="highlight-default">3</mark><mark class="highlight-teal_background">2</mark><mark class="highlight-red_background">3112233445566778899aabbccddeeff00</mark><mark class="highlight-blue_background">70</mark><ul id="42cf9e91-04af-4b6d-a173-2218b7fa51de" class="bulleted-list"><li style="list-style-type:circle">3 : 3 status à envoyer</li></ul><ul id="b41dd39e-ffad-401c-a984-c2e38b6bd216" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-teal_background">1er status</mark><ul id="07fa32be-7fc9-439f-8684-0cc4e8946fb4" class="bulleted-list"><li style="list-style-type:square">Sujet 2 : status/trash-2/collect-requested</li></ul><ul id="0e221b3f-f83d-478e-a1b2-4859cd9ed71f" class="bulleted-list"><li style="list-style-type:square">Donnée : aucune</li></ul></li></ul><ul id="a27afa1d-0b6c-456a-879d-1431d596f7fe" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-brown_background">2ème status</mark><ul id="8bc72304-5f01-46f5-a5e2-a275ac4dc7de" class="bulleted-list"><li style="list-style-type:square">Sujet 3 : status/trash-0/invalid-code</li></ul><ul id="bdc5ff93-257c-420a-b5a0-eac8acfe6219" class="bulleted-list"><li style="list-style-type:square">Donnée : client_id (16 octets)</li></ul></li></ul><ul id="1c904401-a265-4fed-893d-0dbf03783ae3" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-blue_background">3ème status</mark><ul id="2fec1cb1-d099-4c71-ab80-d828a2cb800f" class="bulleted-list"><li style="list-style-type:square">Sujet 7 : status/trash-0/lid</li></ul><ul id="d11e0065-40a8-4bef-be4d-83f6cc1df879" class="bulleted-list"><li style="list-style-type:square">Donnée : bool (1 octet)</li></ul></li></ul></li></ul><ul id="4aa4f7e6-5429-47f1-8c39-4888bc58b452" class="bulleted-list"><li style="list-style-type:disc">Android envoi (en binaire) : 3<mark class="highlight-brown_background">01</mark><mark class="highlight-blue_background">35salut</mark><mark class="highlight-yellow_background">69112233445566778899aabbccddeeff00motdepass</mark><ul id="6fd2b161-218f-4e09-8427-b860b24e530c" class="bulleted-list"><li style="list-style-type:circle">3 : 3 status à envoyer</li></ul><ul id="553fcd79-ce1a-43ae-8e74-1a170fb0511a" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-brown_background">1er status</mark><ul id="1a78fe89-9f9c-4514-9c24-a1912fb00718" class="bulleted-list"><li style="list-style-type:square">Sujet 0 :  action/trash-0/lid</li></ul><ul id="ad77fcff-346e-4c11-a72c-7a7ee233bfc2" class="bulleted-list"><li style="list-style-type:square">Donnée : bool (1 octet)</li></ul></li></ul><ul id="b43b3256-e068-4720-b158-de059621e437" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-blue_background">2ème status</mark><ul id="ad7baf88-bc9c-4ed0-83bf-137b8ed054e6" class="bulleted-list"><li style="list-style-type:square">Sujet 3 : action/trash-2/display</li></ul><ul id="5036d990-f6bd-4dcb-a994-a5675e94a7bc" class="bulleted-list"><li style="list-style-type:square">Longueur de chaîne de caractère : 5 (octet)</li></ul><ul id="5cd43717-f15a-4d3b-b4ec-9766e2ecec42" class="bulleted-list"><li style="list-style-type:square">Donnée : chaîne de caractères</li></ul></li></ul><ul id="17155be6-8c87-439a-9417-16c117d61247" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-yellow_background">3ème status</mark><ul id="915e0513-b1f9-42f8-b625-6f67e6da7a2c" class="bulleted-list"><li style="list-style-type:square">Sujet 6 : action/trash-2/request-collect</li></ul><ul id="86910c4e-c3c3-4bc5-a6b8-8c5a2b6aff28" class="bulleted-list"><li style="list-style-type:square">Longueur de chaîne de caractère : 9 (octet)</li></ul><ul id="b0c34268-9dac-4b7a-a5ae-121e29d43f51" class="bulleted-list"><li style="list-style-type:square">Donnée : client_id (16 octet), chaîne de caractères</li></ul></li></ul></li></ul><p id="022bf0c2-ea67-43ac-a6cd-567df549bbb5" class="">
+</p></div></article></body></html>
