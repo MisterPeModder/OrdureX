@@ -17,9 +17,9 @@ namespace OrdureX.UI
         public OrdureXEvents Events;
         public TMP_Dropdown Dropdown;
 
-        public TMP_Text StartButtonText;
-        public Button StartButton;
+        public Toggle StartButton;
         public Button RunActionButton;
+        public GameObject Settings;
         public TMP_InputField ActionInputField;
         public MqttController MqttController;
 
@@ -48,6 +48,7 @@ namespace OrdureX.UI
             Dropdown.value = 0;
             selectedAction = 0;
             Dropdown.RefreshShownValue();
+            Settings.SetActive(false);
         }
 
         // Update is called once per frame
@@ -57,14 +58,9 @@ namespace OrdureX.UI
             RunActionButton.interactable = Events.Connected;
             Dropdown.interactable = Events.Connected;
             ActionInputField.interactable = Events.Connected;
-            if (Events.Status == SimulationStatus.Paused || Events.Status == SimulationStatus.Stopped)
-            {
-                StartButtonText.text = "Start";
-            }
-            else
-            {
-                StartButtonText.text = "Stop";
-            }
+            var isOn = !(Events.Status == SimulationStatus.Paused || Events.Status == SimulationStatus.Stopped);
+            StartButton.SetIsOnWithoutNotify(isOn);
+            StartButton.GetComponent<PlayPauseButton>().UpdateGraphic(isOn);
 
             if (ActionInputField.interactable && EventSystem.current.currentSelectedGameObject == ActionInputField.gameObject && Keyboard.current.enterKey.wasPressedThisFrame)
             {
@@ -221,6 +217,11 @@ namespace OrdureX.UI
                 i++;
             }
             return input.Substring(0, i);
+        }
+
+        public void OnSettingsButtonClicked()
+        {
+            Settings.SetActive(!Settings.activeSelf);
         }
     }
 }
