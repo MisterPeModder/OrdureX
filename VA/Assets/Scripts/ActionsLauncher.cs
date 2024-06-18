@@ -114,10 +114,15 @@ namespace OrdureX.UI
 
         private void RequestCollectTrash0()
         {
+            List<byte> payload = new();
+
+            payload.AddRange(Events.ClientUuid.ToByteArray());
+            payload.AddRange(System.Text.Encoding.UTF8.GetBytes(LimitTo256Bytes(ActionInputField.text)));
+
             Debug.Log("Requesting collection of trash 0");
             MqttController.Publish(new MqttApplicationMessageBuilder()
                 .WithTopic($"{ACTION_NAMESPACE}/trash-0/request-collect")
-                .WithPayload(ActionInputField.text)
+                .WithPayload(payload.ToArray())
                 .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                 .Build());
         }
@@ -134,10 +139,15 @@ namespace OrdureX.UI
 
         private void RequestCollectTrash1()
         {
+            List<byte> payload = new();
+
+            payload.AddRange(Events.ClientUuid.ToByteArray());
+            payload.AddRange(System.Text.Encoding.UTF8.GetBytes(LimitTo256Bytes(ActionInputField.text)));
+
             Debug.Log("Requesting collection of trash 1");
             MqttController.Publish(new MqttApplicationMessageBuilder()
                 .WithTopic($"{ACTION_NAMESPACE}/trash-1/request-collect")
-                .WithPayload(ActionInputField.text)
+                .WithPayload(payload.ToArray())
                 .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                 .Build());
         }
