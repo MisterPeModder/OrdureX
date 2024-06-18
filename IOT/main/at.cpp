@@ -61,11 +61,17 @@
     } \
     Serial.println(); \
   }
-#define DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(trash, code, size) \
+#define DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(trash, clientId, code, size) \
   { \
     Serial.print("Trash "); \
     Serial.print(trash); \
-    Serial.print(" request collect: "); \
+    Serial.print(" request collect: client id: "); \
+    for (size_t i(0); i < 16; i++) { \
+      Serial.print(clientId[i], HEX); \
+    } \
+    Serial.print(" code(size: "); \
+    Serial.print(size); \
+    Serial.print("): "); \
     for (size_t i(0); i < size; i++) { \
       Serial.print((char)code[i]); \
     } \
@@ -81,7 +87,7 @@
 #define DEBUG_PRINT_RECEIVE_LID(lid, state)
 #define DEBUG_PRINT_RECEIVE_MUSIC(trash, music)
 #define DEBUG_PRINT_RECEIVE_DISPLAY(trash, text, size)
-#define DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(trash, code, size)
+#define DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(trash, clientId, code, size)
 #endif
 
 unsigned char statusNumber(0);
@@ -216,7 +222,7 @@ void receive(void* context) {
                 size_t size(0);              // size of string
                 unsigned char clientId[16];  // UUID received
                 unsigned char* code = trashRequestCollect(request, index, clientId, size);
-                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(0, code, size);
+                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(0, clientId, code, size);
                 index += 16 + 1 + 1 + size;  // UUID + type + length
 
                 // handle here
@@ -227,7 +233,7 @@ void receive(void* context) {
                 size_t size(0);              // size of string
                 unsigned char clientId[16];  // UUID received
                 unsigned char* code = trashRequestCollect(request, index, clientId, size);
-                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(1, code, size);
+                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(1, clientId, code, size);
                 index += 16 + 1 + 1 + size;
 
                 // handle here
@@ -238,7 +244,7 @@ void receive(void* context) {
                 size_t size(0);              // size of string
                 unsigned char clientId[16];  // UUID received
                 unsigned char* code = trashRequestCollect(request, index, clientId, size);
-                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(2, code, size);
+                DEBUG_PRINT_RECEIVE_REQUEST_COLLECT(2, clientId, code, size);
                 index += 16 + 1 + 1 + size;
 
                 // handle here
