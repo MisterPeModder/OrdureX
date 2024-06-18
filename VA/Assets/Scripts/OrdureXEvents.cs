@@ -14,16 +14,20 @@ namespace OrdureX
         [Header("Runtime values (read-only)")]
         [Tooltip("Client UUID for this Unity instance, leave empty to generate a new one")]
         public string ClientId = "";
-        public SimulationStatus Status = SimulationStatus.Stopped;
-        public bool Connected = false;
 
         public Guid ClientUuid;
+
+        private SimulationStateManager m_SimulationStateManager;
+
+        private void Awake()
+        {
+            m_SimulationStateManager = FindObjectOfType<SimulationStateManager>();
+        }
 
 
         // Start is called before the first frame update
         public void Start()
         {
-            Status = SimulationStatus.Stopped;
             ClientUuid = Guid.NewGuid();
             ClientId = ClientUuid.ToString();
             Controller.OnConnected.AddListener(MqttConnected);
@@ -40,12 +44,10 @@ namespace OrdureX
         public void MqttConnected()
         {
             Controller.Subscribe("ordurex/status/simulation", OnStatusChange);
-            Connected = true;
         }
 
         public void MqttDisconnected()
         {
-            Connected = false;
         }
 
         // Update is called once per frame
@@ -58,22 +60,22 @@ namespace OrdureX
 
         public void OnStartOrStop()
         {
-            if (!Connected)
-            {
-                Debug.LogError("Cannot start/stop: not connected to MQTT broker");
-                return;
-            }
+            var currentStatus = m_SimulationStateManager.Status;
 
-            var newStatus = Status == SimulationStatus.Stopped || Status == SimulationStatus.Paused
-                ? SimulationStatus.Running
-                : SimulationStatus.Stopped;
+            byte newStatusByte = currentStatus switch
+            {
+                SimulationStatus.Stopped => 1,
+                SimulationStatus.Paused => 1,
+                SimulationStatus.Running => 0,
+                _ => throw new InvalidOperationException($"Cannot start/stop: status is neither Stopped, Paused, nor Running (is {currentStatus})")
+            };
 
             var payloadBytes = new byte[17];
 
-            payloadBytes[0] = (byte)newStatus;
+            payloadBytes[0] = newStatusByte;
             ClientUuid.ToByteArray().CopyTo(payloadBytes, 1);
 
-            Debug.Log("Publishing status change: " + newStatus);
+            Debug.Log("Publishing status change: " + newStatusByte);
 
             Controller.Publish(new MqttApplicationMessageBuilder()
                 .WithTopic("ordurex/action/simulation")
@@ -105,26 +107,46 @@ namespace OrdureX
             var uuidBytes = new byte[16];
             payload.Slice(1, 16).CopyTo(uuidBytes);
 
-            if (!Enum.IsDefined(typeof(SimulationStatus), statusByte))
+            if (!DecodeStatus(statusByte, out var newStatus))
             {
                 Debug.LogError($"Invalid status change byte: {statusByte}");
                 return;
             }
 
-            var newStatus = (SimulationStatus)statusByte;
             var uuid = new Guid(uuidBytes);
 
             Debug.Log("Received status change: " + newStatus + " by client " + uuid);
 
-            Status = newStatus;
-        }
-    }
+            var currentStatus = m_SimulationStateManager.Status;
 
-    public enum SimulationStatus : byte
-    {
-        Stopped = 0,
-        Running = 1,
-        Paused = 2,
+            if (currentStatus != SimulationStatus.Stopped && currentStatus != SimulationStatus.Paused && currentStatus != SimulationStatus.Running)
+            {
+                Debug.LogError($"Cannot change status to {newStatus}: current status is {currentStatus} (expected Stopped, Paused, or Running)");
+                return;
+            }
+
+            m_SimulationStateManager.Status = newStatus;
+        }
+
+
+        private bool DecodeStatus(byte statusByte, out SimulationStatus status)
+        {
+            switch (statusByte)
+            {
+                case 0:
+                    status = SimulationStatus.Stopped;
+                    return true;
+                case 1:
+                    status = SimulationStatus.Running;
+                    return true;
+                case 2:
+                    status = SimulationStatus.Paused;
+                    return true;
+                default:
+                    status = SimulationStatus.ConnectionFailed;
+                    return false;
+            }
+        }
     }
 
 }

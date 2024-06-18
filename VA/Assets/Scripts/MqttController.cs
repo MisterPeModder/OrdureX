@@ -52,6 +52,8 @@ namespace OrdureX.Mqtt
         [Tooltip("Event triggered when the MQTT client is disconnected from the server")]
         public UnityEvent OnDisconnected;
 
+        private SimulationStateManager m_SimulationStateManager;
+
         /// <summary>
         /// Root cancellation token for the MQTT task.
         /// Cancelled when the object is destroyed or when the play mode is exited.
@@ -62,6 +64,11 @@ namespace OrdureX.Mqtt
 
         private readonly ConcurrentQueue<Func<IMqttClient, MqttFactory, Task>> mqttThreadActions = new();
         private readonly AutoResetEvent mqttThreadActionsSignal = new(true);
+
+        private void Awake()
+        {
+            m_SimulationStateManager = FindObjectOfType<SimulationStateManager>();
+        }
 
         public void Start()
         {
@@ -79,17 +86,17 @@ namespace OrdureX.Mqtt
                 try
                 {
                     await StartMqttClient();
-                    SetStatus("Stopped");
+                    SetStatus("Stopped", SimulationStatus.Stopped);
                 }
                 catch (OperationCanceledException)
                 {
                     // ignore cancellation
                     Debug.Log("MQTT Task cancelled");
-                    SetStatus("Cancelled");
+                    SetStatus("Cancelled", SimulationStatus.ConnectionFailed);
                 }
                 catch (Exception ex)
                 {
-                    SetStatus($"Errored: {ex.Message}");
+                    SetStatus($"Errored: {ex.Message}", SimulationStatus.ConnectionFailed);
                     Debug.LogException(ex, this);
                 }
                 finally
@@ -108,7 +115,7 @@ namespace OrdureX.Mqtt
 #if UNITY_EDITOR
             EditorApplication.playModeStateChanged -= OnPlayStateChanged;
 #endif
-            SetStatus("Cancelling");
+            SetStatus("Cancelling", SimulationStatus.Initial);
             cts?.Cancel();
         }
 
@@ -164,7 +171,7 @@ namespace OrdureX.Mqtt
         {
             if (state == PlayModeStateChange.ExitingPlayMode)
             {
-                SetStatus("Cancelling");
+                SetStatus("Cancelling", SimulationStatus.Initial);
                 cts?.Cancel();
             }
         }
@@ -194,7 +201,6 @@ namespace OrdureX.Mqtt
                 }
 
                 // Dispatch to Unity main thread
-                SetStatus($"Listening, last topic: {message.Topic}");
                 ExecuteOnUnityThread(() =>
                 {
                     foreach (var sub in toInvoke)
@@ -208,7 +214,7 @@ namespace OrdureX.Mqtt
 
             await ConnectToMqttServer(mqttClient);
 
-            SetStatus("Listening");
+            SetStatus("Listening", SimulationStatus.Stopped);
 
             // Poll events from the Unity thread indefinitely
             while (!cts.Token.IsCancellationRequested)
@@ -224,7 +230,7 @@ namespace OrdureX.Mqtt
             }
 
 
-            SetStatus("Disconnecting");
+            SetStatus("Disconnecting", SimulationStatus.Initial);
 
             var disconnectOptions = new MqttClientDisconnectOptionsBuilder()
                 .WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection)
@@ -259,9 +265,9 @@ namespace OrdureX.Mqtt
 
                 try
                 {
-                    SetStatus($"Connecting to MQTT server, attempt {i + 1}/{MaxConnectionAttempts}...");
+                    SetStatus($"Connecting to MQTT server, attempt {i + 1}/{MaxConnectionAttempts}...", SimulationStatus.Connecting, i * 2);
                     await mqttClient.ConnectAsync(mqttClientOptions, timeoutCts.Token);
-                    SetStatus("Connection established");
+                    SetStatus("Connection established", SimulationStatus.Stopped);
                     ExecuteOnUnityThread(() => OnConnected.Invoke());
                     return;
                 }
@@ -272,7 +278,7 @@ namespace OrdureX.Mqtt
                         // server is shutting down
                         throw;
                     }
-                    SetStatus($"Connection failed, retrying in {delay}ms...");
+                    SetStatus($"Connection failed, retrying in {delay}ms...", SimulationStatus.Connecting, i * 2 + 1);
                     await Task.Delay(delay, cts.Token);
                     delay *= 2;
                 }
@@ -280,13 +286,14 @@ namespace OrdureX.Mqtt
 
         }
 
-        private void SetStatus(string status)
+        private void SetStatus(string statusMessage, SimulationStatus status, int subStatus = 0)
         {
             ExecuteOnUnityThread(() =>
             {
+                m_SimulationStateManager.SetStatus(status, subStatus);
                 if (StatusDisplay != null)
                 {
-                    StatusDisplay.text = status;
+                    StatusDisplay.text = statusMessage;
                 }
             });
         }
