@@ -1607,6 +1607,9 @@ MonoBehaviour:
     type: 3}
   m_GridInstance: {fileID: 0}
   m_GridOverlays: []
+  m_GridOverlayMaterials:
+  - {fileID: 2100000, guid: 98494c0b22873a1719e7285662642c7f, type: 2}
+  - {fileID: 2100000, guid: 756513c86a38b45d9880da2386c4446b, type: 2}
   m_TileSpacing: 9.021875
   m_TruckPrefab: {fileID: 3221508334959190587, guid: 0d02479e292eafca4b9ab5b26e1d639f,
     type: 3}
@@ -1614,15 +1617,16 @@ MonoBehaviour:
     type: 3}
   m_TrashCanPrefab: {fileID: 4046508963895900400, guid: cfc1ef15e8be0e1ea9e1c6cd6ab72f09,
     type: 3}
-  m_TrashCanProjectionPrefab: {fileID: 3220560173377027960, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
-    type: 3}
+  m_TrashCanProjectionPrefabs:
+  - {fileID: 3220560173377027960, guid: 2bb1a6d0b0fab634b8db1e5279eb2163, type: 3}
+  - {fileID: 2347378545992095847, guid: 10b22762041c7d2978296b30edd0aa3a, type: 3}
+  - {fileID: 2831568255493710252, guid: 66b641923f18e8ccf955fd7bc1227939, type: 3}
   m_TruckInstance: {fileID: 0}
   m_TruckProjectionInstance: {fileID: 0}
-  m_TrashCanInstance: {fileID: 0}
-  m_TrashCanProjectionInstance: {fileID: 0}
-  m_GridOverlayMaterials:
-  - {fileID: 2100000, guid: 98494c0b22873a1719e7285662642c7f, type: 2}
-  - {fileID: 2100000, guid: 756513c86a38b45d9880da2386c4446b, type: 2}
+  m_TrashCanInstances: []
+  m_TrashCanProjectionInstances: []
+  m_MinimumTruckToTrashCanDistance: 3
+  m_TrashCansToSpawn: 3
 --- !u!1 &489862218
 GameObject:
   m_ObjectHideFlags: 0
