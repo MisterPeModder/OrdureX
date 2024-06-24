@@ -1,61 +1,16 @@
 #include "config.h"
 #include "at.h"
+#include "bin.h"
 #include "binary.h"
 #include "scheduler.h"
 
 Scheduler scheduler;
 
-// Example request, will be deleted
-void exampleRequestsRaw() {
-  // invalide code trash 0: array size is 17
-  byte invalid_code0[] = {
-    0x03, 0x36, 0x73, 0x98, 0x9e, 0x8c, 0x85, 0x42, 0x71, 0x86, 0x85, 0x8a, 0xea, 0xc7, 0x98,
-    0x91, 0x47
-  };
-
-  // invalide code trash 2: array size is 17
-  byte invalid_code2[] = {
-    0x05, 0x36, 0x73, 0x98, 0x9e, 0x8c, 0x85, 0x42, 0x71, 0x86, 0x85, 0x8a, 0xea, 0xc7,
-    0x98, 0x91, 0x47
-  };
-
-  addSendData(invalid_code0, 17);
-  addSendData(invalid_code2, 17);
-  addSendData(invalid_code2, 17);
-  // send 3 status
-  send(nullptr);
-  addSendData(invalid_code0, 17);
-  // send 1 status
-  send(nullptr);
-  // send nothing
-  send(nullptr);
-}
-
 /**
- * Example requests with 
+ * Example requests, will be deleted later 
  */
 void exampleRequests(void* context) {
-  // invalide code trash 0: array size is 16
-  // byte client_id[] = {
-  //   0x36, 0x73, 0x98, 0x9e, 0x8c, 0x85, 0x42, 0x71, 0x86, 0x85, 0x8a, 0xea, 0xc7, 0x98,
-  //   0x91, 0x47
-  // };
-
   addSendData(trash0CollectRequested(), 1);
-  //addSendData(trash1CollectRequested(), 1);
-  //addSendData(trash2CollectRequested(), 1);
-
-  //addSendData(trash0InvalidCode(client_id), 17);
-  //at->addSendData(trash1InvalidCode(client_id), 17);
-  //at->addSendData(trash2InvalidCode(client_id), 17);
-
-  //at->addSendData(trash1Burning(), 1);
-  //at->addSendData(trash0LidS(true), 2);
-  //at->addSendData(trash2LidS(false), 2);
-
-  // client_id[5] = 0xff;
-  //at->addSendData(simulationS(true, client_id), 18);
-
   send(nullptr);
 }
 

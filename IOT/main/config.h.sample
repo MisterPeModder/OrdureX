@@ -10,4 +10,9 @@
 #define RELAY_HOST "192.168.0.10"
 #define RELAY_PORT 7070
 
-#endif // CONFIG_H
+// Actuators and assessors config
+
+// First pin of the keypad, others must be aligned like this: n, n+2, n+4...
+#define PIN_KEYPAD_BEGIN 25
+
+#endif  // CONFIG_H
