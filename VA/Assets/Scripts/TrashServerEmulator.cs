@@ -18,7 +18,8 @@ namespace OrdureX
     public class TrashServerEmulator : MonoBehaviour
     {
         [Tooltip("Used to get the URL of the MQTT broker.")]
-        public MqttController Controller;
+        [SerializeField]
+        private MqttController m_Controller;
 
         [Tooltip("Whether to show logs in the Unity console.")]
         public bool ShowLogs = true;
@@ -33,13 +34,19 @@ namespace OrdureX
         private SimulationStatus status;
         private bool trash0LidOpen;
         private bool trash2LidOpen;
+        private SettingsManager m_SettingsManager;
 
 
         private const string ACTION_NAMESPACE = "ordurex/action";
         private const string STATUS_NAMESPACE = "ordurex/status";
 
+        private void Awake()
+        {
+            m_SettingsManager = FindObjectOfType<SettingsManager>();
+        }
+
         // Start is called before the first frame update
-        void Start()
+        void OnEnable()
         {
 #if UNITY_EDITOR
             EditorApplication.playModeStateChanged += OnPlayStateChanged;
@@ -72,6 +79,14 @@ namespace OrdureX
                 }
             });
 
+        }
+
+        private void OnDisable()
+        {
+#if UNITY_EDITOR
+            EditorApplication.playModeStateChanged -= OnPlayStateChanged;
+#endif
+            cts?.Cancel();
         }
 
 #if UNITY_EDITOR
@@ -126,15 +141,15 @@ namespace OrdureX
 
             // Connect to server using WebSocket because Unity rejects raw TCP for unknown reasons
             var mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithWebSocketServer(o => o.WithUri(Controller.ServerUri))
+                .WithWebSocketServer(o => o.WithUri(m_SettingsManager.ServerURL))
                 .Build();
 
-            var delay = Controller.DelayBetweenAttempts;
+            var delay = m_Controller.DelayBetweenAttempts;
 
-            for (int i = 0; i < Controller.MaxConnectionAttempts; i++)
+            for (int i = 0; i < m_Controller.MaxConnectionAttempts; i++)
             {
                 using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
-                timeoutCts.CancelAfter(Controller.ConnectionTimeout);
+                timeoutCts.CancelAfter(m_Controller.ConnectionTimeout);
 
                 try
                 {
@@ -148,7 +163,7 @@ namespace OrdureX
                         // server is shutting down
                         throw;
                     }
-                    Debug.LogWarning($"Failed to connect to MQTT server. Retrying in {delay}ms. ({i + 1}/{Controller.MaxConnectionAttempts})");
+                    Debug.LogWarning($"Failed to connect to MQTT server. Retrying in {delay}ms. ({i + 1}/{m_Controller.MaxConnectionAttempts})");
                     await Task.Delay(delay, cts.Token);
                     delay *= 2;
                 }

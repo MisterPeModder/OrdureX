@@ -1,18 +1,22 @@
 using TMPro;
 using UnityEngine;
 using OrdureX.Grid;
-using System.Xml.Serialization;
 
 namespace OrdureX.AR
 {
     [RequireComponent(typeof(Connectable))]
     public class SurfaceTile : MonoBehaviour
     {
-        [SerializeField] private bool m_ShowOverlay = true;
         [SerializeField] private Renderer m_Overlay;
         [SerializeField] private TMP_Text m_OverlayTitle;
 
         private Connectable m_Connectable;
+        private SettingsManager m_SettingsManager;
+
+        private void Awake()
+        {
+            m_SettingsManager = FindObjectOfType<SettingsManager>();
+        }
 
         public void Activate(SurfaceTileManager manager, string title, GameObject pathPrefab)
         {
@@ -24,7 +28,10 @@ namespace OrdureX.AR
 
         private void Update()
         {
-            if (m_Connectable == null || !m_ShowOverlay)
+            m_Overlay.enabled = m_SettingsManager.ShowTileDebugOverlay;
+            m_OverlayTitle.enabled = m_SettingsManager.ShowTileDebugOverlay;
+
+            if (m_Connectable == null || !m_SettingsManager.ShowTileDebugOverlay)
             {
                 return;
             }

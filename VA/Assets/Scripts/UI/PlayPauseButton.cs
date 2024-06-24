@@ -35,11 +35,13 @@ namespace OrdureX.UI
         {
             UpdateGraphic(m_Button.isOn);
             m_Button.onValueChanged.AddListener(UpdateGraphic);
+            m_SimulationStateManager.OnStatusChanged += OnStatusChanged;
         }
 
         private void OnDisable()
         {
             m_Button.onValueChanged.RemoveListener(UpdateGraphic);
+            m_SimulationStateManager.OnStatusChanged -= OnStatusChanged;
         }
 
         private void Update()
@@ -52,11 +54,15 @@ namespace OrdureX.UI
             m_TargetGraphic.transform.Rotate(0, 0, 360 * Time.deltaTime);
         }
 
+        private void OnStatusChanged(SimulationStatus prevStatus, SimulationStatus newStatus)
+        {
+            UpdateGraphic(m_Button.isOn);
+        }
 
         public void UpdateGraphic(bool value)
         {
-            m_IsLoading = m_SimulationStateManager.Status == SimulationStatus.Connecting;
-            if (m_IsLoading)
+            var status = m_SimulationStateManager.Status;
+            if (status == SimulationStatus.Connecting)
             {
                 m_TargetGraphic.sprite = m_LoaderSprite;
             }
@@ -65,6 +71,8 @@ namespace OrdureX.UI
                 m_TargetGraphic.transform.rotation = Quaternion.identity;
                 m_TargetGraphic.sprite = value ? m_OnSprite : m_OffSprite;
             }
+            m_Button.interactable = status == SimulationStatus.Paused || status == SimulationStatus.Running;
+            m_TargetGraphic.color = m_Button.interactable ? Color.white : Color.gray;
         }
 
     }

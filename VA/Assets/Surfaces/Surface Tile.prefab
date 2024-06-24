@@ -54,7 +54,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68bf2c576efcbd938fe090918afca45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowOverlay: 1
   m_Overlay: {fileID: 1511842860382298969}
   m_OverlayTitle: {fileID: 5073324458306115263}
 --- !u!114 &1642609684395995115
