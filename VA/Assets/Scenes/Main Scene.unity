@@ -6861,12 +6861,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfbc9f90c9b12c7c0a7810cbf386f768, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ServerUri: broker.hivemq.com:8000/mqtt
   MaxConnectionAttempts: 3
   DelayBetweenAttempts: 500
   ConnectionTimeout: 1000
-  Username: 
-  Password: 
   StatusDisplay: {fileID: 0}
   OnConnected:
     m_PersistentCalls:
@@ -7382,7 +7379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_OffSprite: {fileID: 21300000, guid: 8f331630344a11cca8737ba463bcba4c, type: 3}
-  m_OnSprite: {fileID: 21300000, guid: 9092c0caff0d83901a2a13b0d4f08eec, type: 3}
+  m_OnSprite: {fileID: 21300000, guid: b46f713f11827239fac0b572c4aa586d, type: 3}
   m_LoaderSprite: {fileID: 21300000, guid: 13c7a5d6eada2ea7798377ac802eb76b, type: 3}
   m_TargetGraphic: {fileID: 51750774}
 --- !u!1 &1924274297
