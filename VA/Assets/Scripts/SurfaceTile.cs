@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using OrdureX.Grid;
+using Unity.XR.CoreUtils;
 
 namespace OrdureX.AR
 {
@@ -28,8 +29,7 @@ namespace OrdureX.AR
 
         private void Update()
         {
-            m_Overlay.enabled = m_SettingsManager.ShowTileDebugOverlay;
-            m_OverlayTitle.enabled = m_SettingsManager.ShowTileDebugOverlay;
+            m_Overlay.gameObject.SetActive(m_SettingsManager.ShowTileDebugOverlay);
 
             if (m_Connectable == null || !m_SettingsManager.ShowTileDebugOverlay)
             {
