@@ -73,7 +73,6 @@ namespace OrdureX
         {
             LoadSettings();
             m_SettingsPanel.SetActive(false);
-            m_ShowTileDebugOverlay = false;
             m_SimulationStateManager.OnStatusChanged += OnSimulationStatusChanged;
             if (m_BrokerURLInputField != null)
             {
