@@ -269,11 +269,11 @@ namespace OrdureX.Mqtt
 
             // Connect to server using WebSocket because Unity rejects raw TCP for unknown reasons
             var mqttClientBuilder = new MqttClientOptionsBuilder()
-                .WithWebSocketServer(o => o.WithUri(m_SettingsManager.ServerURL));
+                .WithWebSocketServer(o => o.WithUri(m_SettingsManager.BrokerURL));
 
-            if (!string.IsNullOrEmpty(m_SettingsManager.Username))
+            if (!string.IsNullOrEmpty(m_SettingsManager.BrokerUsername))
             {
-                mqttClientBuilder = mqttClientBuilder.WithCredentials(m_SettingsManager.Username, m_SettingsManager.Password);
+                mqttClientBuilder = mqttClientBuilder.WithCredentials(m_SettingsManager.BrokerUsername, m_SettingsManager.BrokerPassword);
             }
             var mqttClientOptions = mqttClientBuilder.Build();
 
