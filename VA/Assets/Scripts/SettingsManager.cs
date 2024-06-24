@@ -12,6 +12,27 @@ namespace OrdureX
     {
         [Header("Settings State")]
         [SerializeField]
+        private string m_BrokerURL = "broker.hivemq.com:8000/mqtt";
+        public string BrokerURL
+        {
+            get => m_BrokerURL;
+        }
+        [Tooltip("MQTT broker username")]
+        [SerializeField]
+        private string m_BrokerUsername = "";
+        public string BrokerUsername
+        {
+            get => m_BrokerUsername;
+        }
+        [Tooltip("MQTT broker password")]
+        [SerializeField]
+        private string m_BrokerPassword = "";
+        public string BrokerPassword
+        {
+            get => m_BrokerPassword;
+        }
+        public Action OnConnectToBroker;
+        [SerializeField]
         private bool m_ShowTileDebugOverlay = false;
         public bool ShowTileDebugOverlay
         {
@@ -24,27 +45,6 @@ namespace OrdureX
             get => m_SimulateArduino;
         }
         public Action<bool> OnSimulateArduinoChanged;
-        [SerializeField]
-        private string m_ServerURL = "broker.hivemq.com:8000/mqtt";
-        public string ServerURL
-        {
-            get => m_ServerURL;
-        }
-        [Tooltip("MQTT broker username")]
-        [SerializeField]
-        private string m_Username = null;
-        public string Username
-        {
-            get => m_Username;
-        }
-        [Tooltip("MQTT broker password")]
-        [SerializeField]
-        private string m_Password = null;
-        public string Password
-        {
-            get => m_Password;
-        }
-        public Action OnConnectToBroker;
 
         [Header("UI Elements")]
         [SerializeField]
@@ -71,9 +71,29 @@ namespace OrdureX
 
         private void OnEnable()
         {
+            LoadSettings();
             m_SettingsPanel.SetActive(false);
             m_ShowTileDebugOverlay = false;
             m_SimulationStateManager.OnStatusChanged += OnSimulationStatusChanged;
+            if (m_BrokerURLInputField != null)
+            {
+                m_BrokerURLInputField.text = m_BrokerURL;
+                m_BrokerURLInputField.onValueChanged.AddListener(OnBrokerURLChanged);
+            }
+            if (m_BrokerPasswordInputField != null)
+            {
+                m_BrokerPasswordInputField.text = m_BrokerPassword;
+                m_BrokerPasswordInputField.onValueChanged.AddListener(OnBrokerPasswordChanged);
+            }
+            if (m_BrokerUsernameInputField != null)
+            {
+                m_BrokerUsernameInputField.text = m_BrokerUsername;
+                m_BrokerUsernameInputField.onValueChanged.AddListener(OnBrokerUsernameChanged);
+            }
+            if (m_ConnectToBrokerButton != null)
+            {
+                m_ConnectToBrokerButton.onClick.AddListener(OnConnectToBrokerButtonClicked);
+            }
             if (m_TileDebugOverlayToggle != null)
             {
                 m_TileDebugOverlayToggle.isOn = m_ShowTileDebugOverlay;
@@ -83,25 +103,6 @@ namespace OrdureX
             {
                 m_SimulateArduinoToggle.isOn = m_SimulateArduino;
                 m_SimulateArduinoToggle.onValueChanged.AddListener(OnSimulateArduinoClicked);
-            }
-            if (m_BrokerURLInputField != null)
-            {
-                m_BrokerURLInputField.text = m_ServerURL;
-                m_BrokerURLInputField.onValueChanged.AddListener(OnBrokerURLChanged);
-            }
-            if (m_BrokerPasswordInputField != null)
-            {
-                m_BrokerPasswordInputField.text = m_Password;
-                m_BrokerPasswordInputField.onValueChanged.AddListener(OnBrokerPasswordChanged);
-            }
-            if (m_BrokerUsernameInputField != null)
-            {
-                m_BrokerUsernameInputField.text = m_Username;
-                m_BrokerUsernameInputField.onValueChanged.AddListener(OnBrokerUsernameChanged);
-            }
-            if (m_ConnectToBrokerButton != null)
-            {
-                m_ConnectToBrokerButton.onClick.AddListener(OnConnectToBrokerButtonClicked);
             }
         }
 
@@ -122,6 +123,17 @@ namespace OrdureX
                 m_ConnectToBrokerButton.onClick.RemoveListener(OnConnectToBrokerButtonClicked);
         }
 
+        private void LoadSettings()
+        {
+            Debug.Log("Loading settings from PlayerPrefs...");
+            m_BrokerURL = PlayerPrefs.GetString("BrokerURL", m_BrokerURL);
+            m_BrokerUsername = PlayerPrefs.GetString("BrokerUsername", m_BrokerUsername);
+            m_BrokerPassword = PlayerPrefs.GetString("BrokerPassword", m_BrokerPassword);
+            m_ShowTileDebugOverlay = PlayerPrefs.GetInt("ShowTileDebugOverlay", m_ShowTileDebugOverlay ? 1 : 0) == 1;
+            m_SimulateArduino = PlayerPrefs.GetInt("SimulateArduino", m_SimulateArduino ? 1 : 0) == 1;
+            Debug.Log("Sucessfully loaded settings from PlayerPrefs");
+        }
+
         private void OnSimulationStatusChanged(SimulationStatus prevStatus, SimulationStatus newStatus)
         {
             if (m_ConnectToBrokerButton != null)
@@ -133,35 +145,45 @@ namespace OrdureX
             m_SettingsPanel.SetActive(!m_SettingsPanel.activeSelf);
         }
 
-        private void OnShowTileOverlayButtonClicked(bool value)
-        {
-            m_ShowTileDebugOverlay = value;
-        }
-
-        private void OnSimulateArduinoClicked(bool value)
-        {
-            m_SimulateArduino = value;
-            OnSimulateArduinoChanged.Invoke(value);
-        }
-
         private void OnBrokerURLChanged(string value)
         {
-            m_ServerURL = value;
+            PlayerPrefs.SetString("BrokerURL", value);
+            PlayerPrefs.Save();
+            m_BrokerURL = value;
         }
 
         private void OnBrokerUsernameChanged(string value)
         {
-            m_Username = value;
+            PlayerPrefs.SetString("BrokerUsername", value);
+            PlayerPrefs.Save();
+            m_BrokerUsername = value;
         }
 
         private void OnBrokerPasswordChanged(string value)
         {
-            m_Password = value;
+            PlayerPrefs.SetString("BrokerPassword", value);
+            PlayerPrefs.Save();
+            m_BrokerPassword = value;
         }
 
         private void OnConnectToBrokerButtonClicked()
         {
             OnConnectToBroker.Invoke();
+        }
+
+        private void OnShowTileOverlayButtonClicked(bool value)
+        {
+            PlayerPrefs.SetInt("ShowTileDebugOverlay", value ? 1 : 0);
+            PlayerPrefs.Save();
+            m_ShowTileDebugOverlay = value;
+        }
+
+        private void OnSimulateArduinoClicked(bool value)
+        {
+            PlayerPrefs.SetInt("SimulateArduino", value ? 1 : 0);
+            PlayerPrefs.Save();
+            m_SimulateArduino = value;
+            OnSimulateArduinoChanged.Invoke(value);
         }
 
     }

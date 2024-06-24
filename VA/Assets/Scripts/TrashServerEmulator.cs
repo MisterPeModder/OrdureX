@@ -141,7 +141,7 @@ namespace OrdureX
 
             // Connect to server using WebSocket because Unity rejects raw TCP for unknown reasons
             var mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithWebSocketServer(o => o.WithUri(m_SettingsManager.ServerURL))
+                .WithWebSocketServer(o => o.WithUri(m_SettingsManager.BrokerURL))
                 .Build();
 
             var delay = m_Controller.DelayBetweenAttempts;
