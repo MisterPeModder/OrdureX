@@ -2,7 +2,8 @@
 
 # Running the Relay
 
-To run the relay, you will need to have Node.js installed. You can download it from [here](https://nodejs.org/en/download/).
+> [!Note]
+> You will need to have Node.js installed. You can download it from [here](https://nodejs.org/en/download/).
 
 ```bash
 npm install

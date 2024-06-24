@@ -2,6 +2,9 @@
 
 ## Running the IOT device
 
+> [!Note]
+> You need to have Arduino CLI to compile for the Arduino Mega 2560.
+
 ```sh
 # fill config file
 cp main/config.h.sample main/config.h
@@ -17,7 +20,8 @@ arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:mega main
 
 ## Testing
 
-> Note: You need to have CMake 3.16+ and gcovr to run the tests.
+> [!Note]
+> You need to have CMake 3.16+ and gcovr to run the tests.
 
 ### Using CMake
 
