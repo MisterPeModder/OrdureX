@@ -9,4 +9,52 @@
 		(rev "0.0.1")
 	)
 	(lib_symbols)
+	(hierarchical_label "GND"
+		(shape bidirectional)
+		(at 129.54 49.53 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "49e22d10-0991-48ac-9832-6d6e1f974006")
+	)
+	(hierarchical_label "D0"
+		(shape output)
+		(at 129.54 40.64 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4c446e79-79c1-4adb-b4f0-375cceceed8a")
+	)
+	(hierarchical_label "5v"
+		(shape bidirectional)
+		(at 129.54 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d3322a72-caa0-4706-ae63-eea6370741b9")
+	)
+	(hierarchical_label "3.3V"
+		(shape bidirectional)
+		(at 129.54 58.42 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e111a9a6-1b85-426b-b071-2950291d93bb")
+	)
 )

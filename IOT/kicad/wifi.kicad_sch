@@ -11,6 +11,7 @@
 	)
 	(lib_symbols
 		(symbol "ESP-01:Adaptateur_ESP-01"
+			(pin_numbers hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -218,6 +219,7 @@
 			)
 		)
 		(symbol "ESP-01:ESP-01"
+			(pin_numbers hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -426,8 +428,16 @@
 		)
 	)
 	(no_connect
+		(at 48.26 49.53)
+		(uuid "5522afc3-f05c-417f-be60-e26073050e91")
+	)
+	(no_connect
 		(at 78.74 49.53)
 		(uuid "57796d4e-d406-4159-8021-aa6bc11f5a2f")
+	)
+	(no_connect
+		(at 48.26 54.61)
+		(uuid "60e5ded7-cd14-45b2-8d5b-be8189a0d5d4")
 	)
 	(no_connect
 		(at 78.74 52.07)
