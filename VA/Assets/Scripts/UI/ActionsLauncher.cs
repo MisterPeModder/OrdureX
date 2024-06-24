@@ -19,7 +19,6 @@ namespace OrdureX.UI
 
         public Toggle StartButton;
         public Button RunActionButton;
-        public GameObject Settings;
         public TMP_InputField ActionInputField;
         public MqttController MqttController;
 
@@ -55,7 +54,6 @@ namespace OrdureX.UI
             Dropdown.value = 0;
             selectedAction = 0;
             Dropdown.RefreshShownValue();
-            Settings.SetActive(false);
         }
 
         // Update is called once per frame
@@ -227,11 +225,6 @@ namespace OrdureX.UI
                 i++;
             }
             return input.Substring(0, i);
-        }
-
-        public void OnSettingsButtonClicked()
-        {
-            Settings.SetActive(!Settings.activeSelf);
         }
     }
 }

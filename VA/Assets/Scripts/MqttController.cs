@@ -30,17 +30,12 @@ namespace OrdureX.Mqtt
     public class MqttController : MonoBehaviour
     {
         [Header("Connection Settings")]
-        public string ServerUri = "broker.hivemq.com:8000/mqtt";
         [Tooltip("Maximum number of connection attempts before giving up")]
         public int MaxConnectionAttempts = 3;
         [Tooltip("Initial delay between connection attempts in milliseconds, will increase exponentially with each attempt")]
         public int DelayBetweenAttempts = 500;
         [Tooltip("Connection/Disconnection timeout in milliseconds")]
         public int ConnectionTimeout = 1000;
-        [Tooltip("MQTT broker username")]
-        public string Username = null;
-        [Tooltip("MQTT broker password")]
-        public string Password = null;
 
         [Header("UI")]
         [Tooltip("Text field to display the connection status, optional")]
@@ -52,7 +47,12 @@ namespace OrdureX.Mqtt
         [Tooltip("Event triggered when the MQTT client is disconnected from the server")]
         public UnityEvent OnDisconnected;
 
+        [Header("Misc")]
+        [SerializeField]
+        private TrashServerEmulator m_TrashServerEmulator;
+
         private SimulationStateManager m_SimulationStateManager;
+        private SettingsManager m_SettingsManager;
 
         /// <summary>
         /// Root cancellation token for the MQTT task.
@@ -68,14 +68,35 @@ namespace OrdureX.Mqtt
         private void Awake()
         {
             m_SimulationStateManager = FindObjectOfType<SimulationStateManager>();
+            m_SettingsManager = FindObjectOfType<SettingsManager>();
         }
 
-        public void Start()
+        private void OnEnable()
         {
 #if UNITY_EDITOR
             EditorApplication.playModeStateChanged += OnPlayStateChanged;
 #endif
+            if (m_TrashServerEmulator != null)
+            {
+                m_TrashServerEmulator.enabled = m_SettingsManager.SimulateArduino;
+            }
+            m_SettingsManager.OnSimulateArduinoChanged += OnSimulateArduinoChanged;
+            m_SettingsManager.OnConnectToBroker += ConnectToBroker;
+            ConnectToBroker();
+        }
 
+
+        private void OnDisable()
+        {
+#if UNITY_EDITOR
+            EditorApplication.playModeStateChanged -= OnPlayStateChanged;
+#endif
+            m_SettingsManager.OnSimulateArduinoChanged -= OnSimulateArduinoChanged;
+            m_SettingsManager.OnConnectToBroker -= ConnectToBroker;
+        }
+
+        public void ConnectToBroker()
+        {
             UnityThreadExecutor.Init();
 
             // Launch MQTT client in a separate thread for Unity
@@ -248,11 +269,11 @@ namespace OrdureX.Mqtt
 
             // Connect to server using WebSocket because Unity rejects raw TCP for unknown reasons
             var mqttClientBuilder = new MqttClientOptionsBuilder()
-                .WithWebSocketServer(o => o.WithUri(ServerUri));
+                .WithWebSocketServer(o => o.WithUri(m_SettingsManager.ServerURL));
 
-            if (!string.IsNullOrEmpty(Username))
+            if (!string.IsNullOrEmpty(m_SettingsManager.Username))
             {
-                mqttClientBuilder = mqttClientBuilder.WithCredentials(Username, Password);
+                mqttClientBuilder = mqttClientBuilder.WithCredentials(m_SettingsManager.Username, m_SettingsManager.Password);
             }
             var mqttClientOptions = mqttClientBuilder.Build();
 
@@ -307,6 +328,14 @@ namespace OrdureX.Mqtt
         {
             mqttThreadActions.Enqueue(action);
             mqttThreadActionsSignal.Set();
+        }
+
+        private void OnSimulateArduinoChanged(bool simulateArduino)
+        {
+            if (m_TrashServerEmulator != null)
+            {
+                m_TrashServerEmulator.enabled = simulateArduino;
+            }
         }
     }
 
