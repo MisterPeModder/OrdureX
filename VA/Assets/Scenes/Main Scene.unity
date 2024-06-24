@@ -379,11 +379,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755db5b4e04ae1da9b75bea895a19cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_BrokerURL: broker.hivemq.com:8000/mqtt
+  m_BrokerUsername: 
+  m_BrokerPassword: 
   m_ShowTileDebugOverlay: 1
   m_SimulateArduino: 1
-  m_ServerURL: broker.hivemq.com:8000/mqtt
-  m_Username: 
-  m_Password: 
   m_SettingsPanel: {fileID: 1280200047}
   m_TileDebugOverlayToggle: {fileID: 1345748529}
   m_SimulateArduinoToggle: {fileID: 623573521}
@@ -2108,6 +2108,15 @@ MonoBehaviour:
     Prefab: {fileID: 5455290369131768822, guid: 80c6073e210e3035da57603cdca0145b,
       type: 3}
   - Name: surface_5
+    Prefab: {fileID: 5455290369131768822, guid: 853d64130488eaedebbf285f7a5ab815,
+      type: 3}
+  - Name: surface_6
+    Prefab: {fileID: 5455290369131768822, guid: 9ed6cdab7c6fab77ea65ea7f52429070,
+      type: 3}
+  - Name: surface_7
+    Prefab: {fileID: 5455290369131768822, guid: b730120da3dd187248572f2d5f1843e6,
+      type: 3}
+  - Name: surface_8
     Prefab: {fileID: 5455290369131768822, guid: 853d64130488eaedebbf285f7a5ab815,
       type: 3}
 --- !u!1 &437204124
