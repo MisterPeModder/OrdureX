@@ -216,10 +216,284 @@
 				)
 			)
 		)
+		(symbol "OrdureX:KY-006"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "KY-006"
+				(at 0 9.398 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" ""
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "KY-006_0_1"
+				(rectangle
+					(start -6.35 3.81)
+					(end 0 -3.81)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "KY-006_1_1"
+				(pin output line
+					(at 2.54 2.54 180)
+					(length 2.54)
+					(name "D0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin free line
+					(at 2.54 0 180)
+					(length 2.54)
+					(name "MID"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "OrdureX:KY-026"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "KY-026"
+				(at -0.635 8.89 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "fire sensor"
+				(at -0.635 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "KY-026_0_1"
+				(rectangle
+					(start -5.08 5.08)
+					(end 2.54 -5.08)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "KY-026_1_1"
+				(pin output line
+					(at 5.08 3.81 180)
+					(length 2.54)
+					(name "D0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 5.08 1.27 180)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 5.08 -1.27 180)
+					(length 2.54)
+					(name "3.3-5V"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 5.08 -3.81 180)
+					(length 2.54)
+					(name "A0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+	(junction
+		(at 104.14 73.66)
+		(diameter 0)
+		(color 0 0 0 1)
+		(uuid "94de6ef3-1529-4512-bcdd-54c48e2b09aa")
+	)
+	(no_connect
+		(at 92.71 64.77)
+		(uuid "449d1aee-9e2d-49c6-845c-95be7fa57877")
+	)
+	(no_connect
+		(at 92.71 88.9)
+		(uuid "5fe7c0d6-1e54-4ccb-b5f2-cd40000e12c5")
 	)
 	(wire
 		(pts
-			(xy 43.18 53.34) (xy 57.15 53.34)
+			(xy 92.71 43.18) (xy 116.84 43.18)
 		)
 		(stroke
 			(width 0)
@@ -229,7 +503,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 40.64) (xy 57.15 40.64)
+			(xy 92.71 30.48) (xy 116.84 30.48)
 		)
 		(stroke
 			(width 0)
@@ -239,7 +513,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 38.1) (xy 57.15 38.1)
+			(xy 92.71 27.94) (xy 116.84 27.94)
 		)
 		(stroke
 			(width 0)
@@ -249,7 +523,28 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 50.8) (xy 57.15 50.8)
+			(xy 92.71 62.23) (xy 116.84 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "251db1a1-71ba-4ccc-b227-13193171491a")
+	)
+	(wire
+		(pts
+			(xy 92.71 67.31) (xy 104.14 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "36972a9a-427f-4191-9804-5fdbe07fb8a1")
+	)
+	(wire
+		(pts
+			(xy 92.71 40.64) (xy 116.84 40.64)
 		)
 		(stroke
 			(width 0)
@@ -259,7 +554,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 55.88) (xy 57.15 55.88)
+			(xy 92.71 45.72) (xy 116.84 45.72)
 		)
 		(stroke
 			(width 0)
@@ -269,7 +564,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 43.18) (xy 57.15 43.18)
+			(xy 92.71 33.02) (xy 116.84 33.02)
 		)
 		(stroke
 			(width 0)
@@ -279,7 +574,29 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 45.72) (xy 57.15 45.72)
+			(xy 92.71 86.36) (xy 116.84 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "805bfe9c-cbf4-4822-89c8-23c855c3bc23")
+	)
+	(wire
+		(pts
+			(xy 104.14 83.82) (xy 92.71 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "9312e024-4bae-43b0-80e2-37f88e1b726b")
+	)
+	(wire
+		(pts
+			(xy 92.71 35.56) (xy 116.84 35.56)
 		)
 		(stroke
 			(width 0)
@@ -289,7 +606,50 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 48.26) (xy 57.15 48.26)
+			(xy 92.71 81.28) (xy 116.84 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b25bb59f-8aa1-4d23-ab1a-42e955224ba0")
+	)
+	(wire
+		(pts
+			(xy 104.14 67.31) (xy 104.14 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "b68a2fb6-d833-4427-bd40-c29b569905d9")
+	)
+	(wire
+		(pts
+			(xy 104.14 73.66) (xy 116.84 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "c696bfa2-afea-4451-ae39-60a0c566b550")
+	)
+	(wire
+		(pts
+			(xy 104.14 73.66) (xy 104.14 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "df212c64-0139-4d75-84e5-24e83da2bd7d")
+	)
+	(wire
+		(pts
+			(xy 92.71 38.1) (xy 116.84 38.1)
 		)
 		(stroke
 			(width 0)
@@ -297,9 +657,9 @@
 		)
 		(uuid "fa9c47d0-d954-425e-9c9f-40691a5b85a2")
 	)
-	(hierarchical_label "D4"
-		(shape input)
-		(at 57.15 48.26 0)
+	(hierarchical_label "Keypad-5"
+		(shape output)
+		(at 116.84 38.1 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -309,9 +669,9 @@
 		)
 		(uuid "0fe5346e-7c6b-46e8-9976-625451ffaf52")
 	)
-	(hierarchical_label "D1"
-		(shape input)
-		(at 57.15 40.64 0)
+	(hierarchical_label "Keypad-2"
+		(shape output)
+		(at 116.84 30.48 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -321,9 +681,9 @@
 		)
 		(uuid "20fc0128-e7cd-447e-8584-df28cbe89024")
 	)
-	(hierarchical_label "D3"
-		(shape input)
-		(at 57.15 45.72 0)
+	(hierarchical_label "Keypad-4"
+		(shape output)
+		(at 116.84 35.56 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -333,9 +693,9 @@
 		)
 		(uuid "27752905-b696-40d3-a200-ada760d32253")
 	)
-	(hierarchical_label "D7"
-		(shape input)
-		(at 57.15 55.88 0)
+	(hierarchical_label "Keypad-8"
+		(shape output)
+		(at 116.84 45.72 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -345,9 +705,33 @@
 		)
 		(uuid "337cf170-b848-4401-b099-bf96c4c89a31")
 	)
-	(hierarchical_label "D6"
-		(shape input)
-		(at 57.15 53.34 0)
+	(hierarchical_label "KY26-out"
+		(shape output)
+		(at 116.84 81.28 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3731f9cd-cefa-4141-bd0f-c012a7c0a3b8")
+	)
+	(hierarchical_label "3.3V"
+		(shape bidirectional)
+		(at 116.84 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5ee2cf61-b91b-4b89-bbe4-37de7a3d3ebc")
+	)
+	(hierarchical_label "Keypad-7"
+		(shape output)
+		(at 116.84 43.18 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -357,9 +741,21 @@
 		)
 		(uuid "7c422587-2d97-41af-8dcb-df49f7254509")
 	)
-	(hierarchical_label "D2"
+	(hierarchical_label "K6-in"
 		(shape input)
-		(at 57.15 43.18 0)
+		(at 116.84 62.23 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9aa9d1f6-1f03-4d24-b21e-2cc6bf8707b0")
+	)
+	(hierarchical_label "Keypad-3"
+		(shape output)
+		(at 116.84 33.02 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -369,9 +765,9 @@
 		)
 		(uuid "a52dac68-c4ae-44aa-999c-ba8edbdfd068")
 	)
-	(hierarchical_label "D5"
-		(shape input)
-		(at 57.15 50.8 0)
+	(hierarchical_label "Keypad-6"
+		(shape output)
+		(at 116.84 40.64 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -381,9 +777,9 @@
 		)
 		(uuid "b0185e60-d283-4a93-b33a-d8f48fd7f0ee")
 	)
-	(hierarchical_label "D0"
-		(shape input)
-		(at 57.15 38.1 0)
+	(hierarchical_label "Keypad-1"
+		(shape output)
+		(at 116.84 27.94 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -393,9 +789,21 @@
 		)
 		(uuid "d2dba4af-d56e-47e3-ad1e-2a75ae491fb5")
 	)
+	(hierarchical_label "GND"
+		(shape bidirectional)
+		(at 116.84 73.66 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d3999cd1-e8d7-4fa2-8b8b-c92c1c7f5eb1")
+	)
 	(symbol
 		(lib_id "OrdureX:27899")
-		(at 34.29 43.18 0)
+		(at 83.82 33.02 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -404,7 +812,7 @@
 		(fields_autoplaced yes)
 		(uuid "7ee19575-d755-4eea-9bbc-35160df14c39")
 		(property "Reference" "MatrixMembraneKeypad"
-			(at 37.465 33.02 0)
+			(at 86.995 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -412,7 +820,7 @@
 			)
 		)
 		(property "Value" "~"
-			(at 37.465 35.56 0)
+			(at 86.995 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -420,7 +828,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 34.29 43.18 0)
+			(at 83.82 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -429,7 +837,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 34.29 43.18 0)
+			(at 83.82 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -438,7 +846,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 34.29 43.18 0)
+			(at 83.82 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -474,6 +882,151 @@
 			(project "ordurex-electronics"
 				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/a99d00ff-1722-48a4-b31a-e7e37101715a"
 					(reference "MatrixMembraneKeypad")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "OrdureX:KY-006")
+		(at 90.17 64.77 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c84dca1f-69ee-472e-bf48-5f4224c6cb1d")
+		(property "Reference" "KY-006"
+			(at 86.995 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "buzzer"
+			(at 86.995 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 90.17 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 90.17 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 90.17 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5c9f4019-0b50-4217-b8be-55a4acc43767")
+		)
+		(pin "2"
+			(uuid "eca79aa8-1ec7-4842-b65d-688b7ccb7fd0")
+		)
+		(pin "0"
+			(uuid "9e92f395-43ad-40f3-84da-bfe6573235c3")
+		)
+		(instances
+			(project "ordurex-electronics"
+				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/a99d00ff-1722-48a4-b31a-e7e37101715a"
+					(reference "KY-006")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "OrdureX:KY-026")
+		(at 87.63 85.09 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fe0e2c89-3b0a-4fc8-bf9c-8220bc3f14a4")
+		(property "Reference" "KY-026"
+			(at 86.995 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "fire sensor"
+			(at 86.995 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 87.63 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 87.63 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 87.63 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "59099b5a-c810-4fd9-a762-2063da4bae2f")
+		)
+		(pin "1"
+			(uuid "eeb64c60-8682-47ae-a89e-15d30f3aac26")
+		)
+		(pin "0"
+			(uuid "5d4ad760-4842-49e4-8393-4db1144f6e7c")
+		)
+		(pin "2"
+			(uuid "6d39c6b7-a610-4661-a12b-54584eb18123")
+		)
+		(instances
+			(project "ordurex-electronics"
+				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/a99d00ff-1722-48a4-b31a-e7e37101715a"
+					(reference "KY-026")
 					(unit 1)
 				)
 			)
