@@ -24,13 +24,26 @@ void setup() {
   connectRelay();
 
   task_t task = { .delay = 8000, .lastRun = millis(), .loop = true, .task = exampleRequests, .context = nullptr };
+  if (!scheduler.addTask(task)) {
+#ifdef DEBUG
+    Serial.println("Send to ESP task not added");
+#endif
+  }
+
+  task.task = receive;
+  task.delay = 1000;
+  if (!scheduler.addTask(task)) {
+#ifdef DEBUG
+    Serial.println("Receive from ESP task not added");
+#endif
+  }
 
   task.loop = false;
   task.task = setupBins;
   task.delay = 0;
   if (!scheduler.addTask(task)) {
 #ifdef DEBUG
-    Serial.println("Setup keypad task not added");
+    Serial.println("Setup bins task not added");
 #endif
   }
 
