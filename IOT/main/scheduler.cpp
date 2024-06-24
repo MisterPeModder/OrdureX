@@ -31,12 +31,16 @@ bool Scheduler::addTask(task_t task) {
 }
 
 void Scheduler::run() {
+#ifdef ARDUINO
   bool hasDoneAnything(false);
+#endif
 
   for (int i = 0; i < MAX_TASKS; i++) {
     if (tasks[i].task != nullptr && GET_TIME >= tasks[i].lastRun + tasks[i].delay) {
       tasks[i].task(tasks[i].context);
+#ifdef ARDUINO
       hasDoneAnything = true;
+#endif
       if (tasks[i].loop) {
         tasks[i].lastRun = GET_TIME;
       } else {
