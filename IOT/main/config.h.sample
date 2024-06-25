@@ -15,8 +15,15 @@
 // First pin of the keypad, others must be aligned like this: n, n+1, n+2...
 #define PIN_KEYPAD_BEGIN 25
 
+#define PASSWORD_SIZE 4
+#define DEFAULT_KEYPAD_PASSWORD "1234"
+
 // RFID module pinout (SPI pins: 50, 51, 52)
 #define PIN_RFID_SDA 53
 #define PIN_RFID_RST 49
+
+#define RFID_UID_SIZE 4
+// This UID is hardcoded in the white card
+#define DEFAULT_RFID_UID { 0xDA, 0x43, 0x96, 0x19 }
 
 #endif  // CONFIG_H

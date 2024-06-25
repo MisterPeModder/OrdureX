@@ -6,12 +6,8 @@
 #include "MFRC522.h"
 #include "SPI.h"
 
-#define PASSWORD_SIZE 4
-#define UID_SIZE 4
-
-char password[PASSWORD_SIZE + 1] = "1234";
-// This UID is hardcoded in the white card
-const unsigned char rfid_uid[UID_SIZE] = { 0xDA, 0x43, 0x96, 0x19 };
+const unsigned char RFID_UID[RFID_UID_SIZE] = DEFAULT_RFID_UID;
+const char password[] = DEFAULT_KEYPAD_PASSWORD;
 
 //------------------ Keypad ------------------
 
@@ -87,13 +83,13 @@ void getChar(void *) {
       }
 
       if (passwordOffset >= PASSWORD_SIZE) {
-        DEBUG_PRINT_INPUT_REQUEST_COLLECT();
-
         if (strcmp(password, input) != 0) {
           DEBUG_PRINT_INPUT_WRONG();
+        } else {
+          DEBUG_PRINT_INPUT_REQUEST_COLLECT();
+          addSendData(trash2CollectRequested(), 1);
         }
 
-        addSendData(trash2CollectRequested(), 1);
         passwordOffset = 0;
       }
   }
@@ -126,7 +122,7 @@ void readRFID(void *) {
     if (rfid.PICC_ReadCardSerial()) {  // NUID has been readed
       DEBUG_PRINT_RFID(rfid.uid);
 
-      if (strncmp(reinterpret_cast<const char *>(rfid.uid.uidByte), reinterpret_cast<const char *>(rfid_uid), UID_SIZE) == 0) {
+      if (strncmp(reinterpret_cast<const char *>(rfid.uid.uidByte), reinterpret_cast<const char *>(RFID_UID), RFID_UID_SIZE) == 0) {
         DEBUG_PRINT_RFID_SUCCESS();
         addSendData(trash1CollectRequested(), 1);
         // TODO do sound when success
@@ -141,7 +137,6 @@ void readRFID(void *) {
 }
 
 void setupBins(void *) {
-  password[PASSWORD_SIZE] = '\0';
   keypad.setHoldTime(HOLD_TIME);
 
   SPI.begin();
