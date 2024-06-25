@@ -2,32 +2,27 @@
 	(version 20231120)
 	(generator "eeschema")
 	(generator_version "8.0")
-	(uuid "8cb1c7c3-d4ca-4021-87ba-65317df5aea4")
+	(uuid "376f4c9f-2676-45a8-beaa-cccc5a16ba9d")
 	(paper "A5")
 	(title_block
-		(title "Poubelle 0")
-		(date "2024-05-21")
+		(title "Poubelle 1")
 		(rev "0.0.1")
 	)
 	(lib_symbols
-		(symbol "Device:R"
-			(pin_numbers hide)
-			(pin_names
-				(offset 0)
-			)
+		(symbol "OrdureX:KY-006"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "R"
-				(at 2.032 0 90)
+			(property "Reference" "KY-006"
+				(at 0 9.398 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "R"
-				(at 0 0 90)
+			(property "Value" ""
+				(at 0 -1.27 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -35,7 +30,7 @@
 				)
 			)
 			(property "Footprint" ""
-				(at -1.778 0 90)
+				(at 0 -1.27 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -43,8 +38,8 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
+			(property "Datasheet" ""
+				(at 0 -1.27 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -52,8 +47,8 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Resistor"
-				(at 0 0 0)
+			(property "Description" ""
+				(at 0 -1.27 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -61,30 +56,12 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "R res resistor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "R_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "R_0_1"
+			(symbol "KY-006_0_1"
 				(rectangle
-					(start -1.016 -2.54)
-					(end 1.016 2.54)
+					(start -6.35 3.81)
+					(end 0 -3.81)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -92,11 +69,29 @@
 					)
 				)
 			)
-			(symbol "R_1_1"
-				(pin passive line
-					(at 0 3.81 270)
-					(length 1.27)
-					(name "~"
+			(symbol "KY-006_1_1"
+				(pin output line
+					(at 2.54 2.54 180)
+					(length 2.54)
+					(name "D0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin free line
+					(at 2.54 0 180)
+					(length 2.54)
+					(name "MID"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -111,10 +106,10 @@
 						)
 					)
 				)
-				(pin passive line
-					(at 0 -3.81 90)
-					(length 1.27)
-					(name "~"
+				(pin power_in line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name "GND"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -131,313 +126,20 @@
 				)
 			)
 		)
-		(symbol "Motor:Motor_Servo"
-			(pin_numbers hide)
-			(pin_names
-				(offset 0.0254)
-			)
+		(symbol "OrdureX:KY-026"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "M"
-				(at -5.08 4.445 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "Motor_Servo"
-				(at -5.08 -4.064 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 -4.826 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "http://forums.parallax.com/uploads/attachments/46831/74481.png"
-				(at 0 -4.826 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Servo Motor (Futaba, HiTec, JR connector)"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "Servo Motor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "PinHeader*P2.54mm*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Motor_Servo_0_1"
-				(polyline
-					(pts
-						(xy 2.413 -1.778) (xy 2.032 -1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.413 -1.778) (xy 2.286 -1.397)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.413 1.778) (xy 1.905 1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.413 1.778) (xy 2.286 1.397)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 6.35 4.445) (xy 2.54 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.62 3.175) (xy 4.191 -1.016)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 3.556) (xy -5.08 3.556) (xy -5.08 -3.556) (xy 6.35 -3.556) (xy 6.35 1.524)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 2.413 1.778)
-					(mid 1.2406 0)
-					(end 2.413 -1.778)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 3.175 0)
-					(radius 0.1778)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 3.175 0)
-					(radius 1.4224)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 5.969 2.794)
-					(radius 0.127)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 6.477 3.302)
-					(radius 0.127)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 6.985 3.81)
-					(radius 0.127)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 7.62 3.175)
-					(mid 7.4485 4.2735)
-					(end 6.35 4.445)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "Motor_Servo_1_1"
-				(pin passive line
-					(at -7.62 2.54 0)
-					(length 2.54)
-					(name "PWM"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -7.62 0 0)
-					(length 2.54)
-					(name "+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -7.62 -2.54 0)
-					(length 2.54)
-					(name "-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "OrdureX:HC-SR04"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "KY-032"
-				(at 3.175 8.89 0)
+			(property "Reference" "KY-026"
+				(at -0.635 8.89 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "Infrared obstacle"
-				(at 3.175 6.35 0)
+			(property "Value" "fire sensor"
+				(at -0.635 6.35 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -471,10 +173,18 @@
 					(hide yes)
 				)
 			)
-			(symbol "HC-SR04_0_1"
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "KY-026_0_1"
 				(rectangle
-					(start 0 5.08)
-					(end 6.35 -5.08)
+					(start -5.08 5.08)
+					(end 2.54 -5.08)
 					(stroke
 						(width 0)
 						(type default)
@@ -484,11 +194,11 @@
 					)
 				)
 			)
-			(symbol "HC-SR04_1_1"
-				(pin power_in line
-					(at 8.89 3.81 180)
+			(symbol "KY-026_1_1"
+				(pin output line
+					(at 5.08 3.81 180)
 					(length 2.54)
-					(name "GND"
+					(name "D0"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -504,9 +214,9 @@
 					)
 				)
 				(pin power_in line
-					(at 8.89 1.27 180)
+					(at 5.08 1.27 180)
 					(length 2.54)
-					(name "VCC"
+					(name "GND"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -521,10 +231,10 @@
 						)
 					)
 				)
-				(pin output line
-					(at 8.89 -1.27 180)
+				(pin power_in line
+					(at 5.08 -1.27 180)
 					(length 2.54)
-					(name "out"
+					(name "3.3-5V"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -539,10 +249,10 @@
 						)
 					)
 				)
-				(pin input line
-					(at 8.89 -3.81 180)
+				(pin output line
+					(at 5.08 -3.81 180)
 					(length 2.54)
-					(name "EN"
+					(name "A0"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -559,128 +269,438 @@
 				)
 			)
 		)
+		(symbol "OrdureX:RFID-RC522"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "RFID-RC522"
+				(at -1.016 2.794 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "RFID-RC522_0_1"
+				(rectangle
+					(start -6.35 0)
+					(end 0 -20.32)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "RFID-RC522_1_1"
+				(pin input line
+					(at 2.54 -1.27 180)
+					(length 2.54)
+					(name "SDA"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 2.54 -3.81 180)
+					(length 2.54)
+					(name "SCLK"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 2.54 -6.35 180)
+					(length 2.54)
+					(name "MOSI"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 2.54 -8.89 180)
+					(length 2.54)
+					(name "MISO"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 2.54 -11.43 180)
+					(length 2.54)
+					(name "IRQ"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 2.54 -13.97 180)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 2.54 -16.51 180)
+					(length 2.54)
+					(name "RST"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 2.54 -19.05 180)
+					(length 2.54)
+					(name "VCC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 	)
 	(junction
-		(at 87.63 69.85)
+		(at 95.25 77.47)
 		(diameter 0)
 		(color 0 0 0 1)
-		(uuid "c2b7324c-5c30-44ab-bb9b-38cf5e13e329")
+		(uuid "94de6ef3-1529-4512-bcdd-54c48e2b09aa")
+	)
+	(junction
+		(at 95.25 71.12)
+		(diameter 0)
+		(color 0 0 0 1)
+		(uuid "9edef061-a1f4-4392-8932-2837c217950f")
+	)
+	(junction
+		(at 101.6 90.17)
+		(diameter 0)
+		(color 255 0 0 1)
+		(uuid "bc5c9e90-c3fc-4576-b020-1158ec8acc3d")
 	)
 	(no_connect
-		(at 71.12 87.63)
-		(uuid "6c7b03a4-65d0-41a4-95a2-315bb1b47491")
+		(at 83.82 38.1)
+		(uuid "300aca2d-9ed9-4d3c-8cba-129895633fef")
+	)
+	(no_connect
+		(at 83.82 68.58)
+		(uuid "449d1aee-9e2d-49c6-845c-95be7fa57877")
+	)
+	(no_connect
+		(at 83.82 92.71)
+		(uuid "5fe7c0d6-1e54-4ccb-b5f2-cd40000e12c5")
 	)
 	(wire
 		(pts
-			(xy 87.63 57.15) (xy 73.66 57.15)
+			(xy 95.25 40.64) (xy 95.25 71.12)
 		)
 		(stroke
 			(width 0)
 			(type default)
 			(color 0 0 0 1)
 		)
-		(uuid "35eeddc2-dfc4-4ccb-96b3-87e8da8e8510")
+		(uuid "03d06d39-088e-4048-bcbe-c61c0bd595fd")
 	)
 	(wire
 		(pts
-			(xy 85.09 59.69) (xy 111.76 59.69)
+			(xy 101.6 90.17) (xy 107.95 90.17)
 		)
 		(stroke
 			(width 0)
 			(type default)
 			(color 255 0 0 1)
 		)
-		(uuid "40e87256-4e9c-457c-94ad-5ea909ec642e")
+		(uuid "0ede0182-e785-4847-8d9a-01e4081144d9")
 	)
 	(wire
 		(pts
-			(xy 73.66 59.69) (xy 77.47 59.69)
+			(xy 83.82 66.04) (xy 107.95 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "251db1a1-71ba-4ccc-b227-13193171491a")
+	)
+	(wire
+		(pts
+			(xy 83.82 71.12) (xy 95.25 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "36972a9a-427f-4191-9804-5fdbe07fb8a1")
+	)
+	(wire
+		(pts
+			(xy 83.82 35.56) (xy 107.95 35.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "54e975e5-cbf9-4ca4-b92a-198391ce5c81")
+	)
+	(wire
+		(pts
+			(xy 101.6 45.72) (xy 101.6 90.17)
 		)
 		(stroke
 			(width 0)
 			(type default)
 			(color 255 0 0 1)
 		)
-		(uuid "49132d8e-2359-4733-b8d8-c173433ae0be")
+		(uuid "6bd006fc-17f8-4e6d-b0a4-27ab1c1c65b1")
 	)
 	(wire
 		(pts
-			(xy 87.63 69.85) (xy 87.63 80.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 0 1)
-		)
-		(uuid "67d8b99f-a409-4ad5-8014-35a61af80ebc")
-	)
-	(wire
-		(pts
-			(xy 71.12 85.09) (xy 111.76 85.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6dd0763d-691b-4572-b11c-6ffa6d92d139")
-	)
-	(wire
-		(pts
-			(xy 71.12 82.55) (xy 111.76 82.55)
+			(xy 83.82 90.17) (xy 101.6 90.17)
 		)
 		(stroke
 			(width 0)
 			(type default)
 			(color 255 0 0 1)
 		)
-		(uuid "6e3cfb5c-f240-4003-b4eb-da36c9f26425")
+		(uuid "805bfe9c-cbf4-4822-89c8-23c855c3bc23")
 	)
 	(wire
 		(pts
-			(xy 71.12 80.01) (xy 87.63 80.01)
+			(xy 95.25 87.63) (xy 83.82 87.63)
 		)
 		(stroke
 			(width 0)
 			(type default)
 			(color 0 0 0 1)
 		)
-		(uuid "7064d647-1f47-4172-bad8-a4dee47e4456")
+		(uuid "9312e024-4bae-43b0-80e2-37f88e1b726b")
 	)
 	(wire
 		(pts
-			(xy 73.66 62.23) (xy 111.76 62.23)
+			(xy 83.82 45.72) (xy 101.6 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "9c2c06d8-a49a-4566-a9e1-7ca2b77a7d78")
+	)
+	(wire
+		(pts
+			(xy 83.82 43.18) (xy 107.95 43.18)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "789d7287-6396-487e-a001-ce5340d8ad0f")
+		(uuid "a1201095-52ce-42d5-9a8e-6e59e16c8c1d")
 	)
 	(wire
 		(pts
-			(xy 87.63 57.15) (xy 87.63 69.85)
+			(xy 83.82 40.64) (xy 95.25 40.64)
 		)
 		(stroke
 			(width 0)
 			(type default)
 			(color 0 0 0 1)
 		)
-		(uuid "eaa92b12-96f5-4f8b-9895-90cb7b8d4f60")
+		(uuid "a2d793e9-34fe-4d8d-8d59-22b788fea19a")
 	)
 	(wire
 		(pts
-			(xy 87.63 69.85) (xy 111.76 69.85)
+			(xy 83.82 27.94) (xy 107.95 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac87e979-344b-4c03-b85b-9c431a002b8a")
+	)
+	(wire
+		(pts
+			(xy 83.82 85.09) (xy 107.95 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b25bb59f-8aa1-4d23-ab1a-42e955224ba0")
+	)
+	(wire
+		(pts
+			(xy 95.25 71.12) (xy 95.25 77.47)
 		)
 		(stroke
 			(width 0)
 			(type default)
 			(color 0 0 0 1)
 		)
-		(uuid "f24f64d8-cd15-4a83-8d26-8c6f0240420b")
+		(uuid "b68a2fb6-d833-4427-bd40-c29b569905d9")
 	)
-	(hierarchical_label "5V"
-		(shape bidirectional)
-		(at 111.76 59.69 0)
+	(wire
+		(pts
+			(xy 83.82 33.02) (xy 107.95 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bd732098-fc05-4a0d-9b9d-cb518e209dec")
+	)
+	(wire
+		(pts
+			(xy 95.25 77.47) (xy 107.95 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "c696bfa2-afea-4451-ae39-60a0c566b550")
+	)
+	(wire
+		(pts
+			(xy 95.25 77.47) (xy 95.25 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "df212c64-0139-4d75-84e5-24e83da2bd7d")
+	)
+	(wire
+		(pts
+			(xy 83.82 30.48) (xy 107.95 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed6cd765-ab1a-48f0-9c5f-ab36d8da0cee")
+	)
+	(hierarchical_label "RFID-MISO"
+		(shape input)
+		(at 107.95 35.56 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -688,23 +708,11 @@
 			)
 			(justify left)
 		)
-		(uuid "01d7a943-b013-4cc9-b906-b575c4acc19b")
+		(uuid "2edeb493-cd62-4593-b5cf-1c2ca93018bc")
 	)
-	(hierarchical_label "GND"
-		(shape bidirectional)
-		(at 111.76 69.85 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "29b1d270-2066-4c20-a89d-24f153b8812a")
-	)
-	(hierarchical_label "KY32-out"
+	(hierarchical_label "KY26-out"
 		(shape output)
-		(at 111.76 85.09 0)
+		(at 107.95 85.09 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -712,11 +720,11 @@
 			)
 			(justify left)
 		)
-		(uuid "6ada44e2-fe10-4ffa-be5a-294c90722da0")
+		(uuid "3731f9cd-cefa-4141-bd0f-c012a7c0a3b8")
 	)
 	(hierarchical_label "3.3V"
 		(shape bidirectional)
-		(at 111.76 82.55 0)
+		(at 107.95 90.17 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -724,11 +732,11 @@
 			)
 			(justify left)
 		)
-		(uuid "865743fa-d212-4fb9-8a9c-ee889f511067")
+		(uuid "5ee2cf61-b91b-4b89-bbe4-37de7a3d3ebc")
 	)
-	(hierarchical_label "SrvM1-PWM-IN"
+	(hierarchical_label "RFID-SCLK"
 		(shape input)
-		(at 111.76 62.23 0)
+		(at 107.95 30.48 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -736,28 +744,88 @@
 			)
 			(justify left)
 		)
-		(uuid "a30eda25-9e5c-4602-a397-0c918ff90787")
+		(uuid "8a27df15-877a-4f8c-8d3e-15560ef3bb78")
+	)
+	(hierarchical_label "RFID-SDA"
+		(shape input)
+		(at 107.95 27.94 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8c7f4b54-e67f-4091-bdbc-49e1a0e789a3")
+	)
+	(hierarchical_label "KY6-in"
+		(shape input)
+		(at 107.95 66.04 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9aa9d1f6-1f03-4d24-b21e-2cc6bf8707b0")
+	)
+	(hierarchical_label "RFID-MOSI"
+		(shape input)
+		(at 107.95 33.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "cc1e3efc-13d4-4af9-b432-43a613103053")
+	)
+	(hierarchical_label "GND"
+		(shape bidirectional)
+		(at 107.95 77.47 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d3999cd1-e8d7-4fa2-8b8b-c92c1c7f5eb1")
+	)
+	(hierarchical_label "RFID-RST"
+		(shape input)
+		(at 107.95 43.18 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "db94f8ce-4391-45c3-ac57-96aacdbb3c00")
 	)
 	(symbol
-		(lib_id "OrdureX:HC-SR04")
-		(at 62.23 83.82 0)
+		(lib_id "OrdureX:RFID-RC522")
+		(at 81.28 26.67 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "6ae0cea0-846a-4158-b439-ae4b6527b0d2")
-		(property "Reference" "KY-032"
-			(at 65.405 73.66 0)
+		(uuid "a35c5dae-cac9-49e2-8789-6ce0a0a5e734")
+		(property "Reference" "RFID-RC1"
+			(at 78.105 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "Infrared obstacle sensor"
-			(at 65.405 76.2 0)
+		(property "Value" "~"
+			(at 78.105 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -765,7 +833,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 62.23 83.82 0)
+			(at 81.28 26.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -774,7 +842,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 62.23 83.82 0)
+			(at 81.28 26.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -783,55 +851,67 @@
 			)
 		)
 		(property "Description" ""
-			(at 62.23 83.82 0)
+			(at 81.28 26.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
+		)
+		(pin "6"
+			(uuid "aaff35e2-4f2a-43cc-bf13-b5e974839c06")
 		)
 		(pin "0"
-			(uuid "dcb9263b-cb9c-40a7-b9c2-998c9de4f414")
+			(uuid "830e1eba-35b6-4077-bf90-f0ae1137202f")
+		)
+		(pin "4"
+			(uuid "73ff052d-6814-4d1f-a3b6-3be2e13d1ac5")
+		)
+		(pin "7"
+			(uuid "021c5818-2d49-4e8f-9c15-3498bfe06464")
 		)
 		(pin "3"
-			(uuid "9b8b8353-552e-4747-aee0-4884ac5d02b7")
+			(uuid "4fb1c3c5-c030-4d05-97b3-f9f7273493c4")
+		)
+		(pin "5"
+			(uuid "9fdd20f8-5f09-418c-8a7b-3aa6e3b5a2dd")
 		)
 		(pin "2"
-			(uuid "6f14c592-0251-4f2b-bf7f-5561a449eaa7")
+			(uuid "3664bd16-2172-4226-ba87-c79b0a0ca6ba")
 		)
 		(pin "1"
-			(uuid "b77148b0-041a-435c-83e5-76e3d85ed282")
+			(uuid "33ae5b2a-d8c8-4abd-8c8d-5ab331e2f9e6")
 		)
 		(instances
 			(project "ordurex-electronics"
-				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/3a515843-82dd-49a8-b946-45f4832b2a6c"
-					(reference "KY-032")
+				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/a99d00ff-1722-48a4-b31a-e7e37101715a"
+					(reference "RFID-RC1")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 81.28 59.69 90)
+		(lib_id "OrdureX:KY-006")
+		(at 81.28 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "daeb944f-d046-4254-bbd2-5e3585bcee80")
-		(property "Reference" "R1"
-			(at 81.28 53.34 90)
+		(uuid "c84dca1f-69ee-472e-bf48-5f4224c6cb1d")
+		(property "Reference" "KY-006"
+			(at 78.105 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "10k"
-			(at 81.28 55.88 90)
+		(property "Value" "buzzer"
+			(at 78.105 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -839,7 +919,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 81.28 61.468 90)
+			(at 81.28 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -847,8 +927,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 81.28 59.69 0)
+		(property "Datasheet" ""
+			(at 81.28 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -856,8 +936,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Resistor"
-			(at 81.28 59.69 0)
+		(property "Description" ""
+			(at 81.28 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -866,40 +946,43 @@
 			)
 		)
 		(pin "1"
-			(uuid "350bc3a6-d76f-4b04-add1-5a4a6d72b109")
+			(uuid "5c9f4019-0b50-4217-b8be-55a4acc43767")
 		)
 		(pin "2"
-			(uuid "39c1a252-5692-4f70-b405-8646f4d11c00")
+			(uuid "eca79aa8-1ec7-4842-b65d-688b7ccb7fd0")
+		)
+		(pin "0"
+			(uuid "9e92f395-43ad-40f3-84da-bfe6573235c3")
 		)
 		(instances
 			(project "ordurex-electronics"
-				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/3a515843-82dd-49a8-b946-45f4832b2a6c"
-					(reference "R1")
+				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/a99d00ff-1722-48a4-b31a-e7e37101715a"
+					(reference "KY-006")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Motor:Motor_Servo")
-		(at 66.04 59.69 180)
+		(lib_id "OrdureX:KY-026")
+		(at 78.74 88.9 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "e2538cc2-533f-4e7f-b58c-9aee5919dd18")
-		(property "Reference" "SG90"
-			(at 64.7811 50.8 0)
+		(uuid "fe0e2c89-3b0a-4fc8-bf9c-8220bc3f14a4")
+		(property "Reference" "KY-026"
+			(at 78.105 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "Motor Servo (SrvM)"
-			(at 64.7811 53.34 0)
+		(property "Value" "fire sensor"
+			(at 78.105 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -907,7 +990,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 66.04 54.864 0)
+			(at 78.74 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -915,8 +998,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://forums.parallax.com/uploads/attachments/46831/74481.png"
-			(at 66.04 54.864 0)
+		(property "Datasheet" ""
+			(at 78.74 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -924,28 +1007,31 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Servo Motor (Futaba, HiTec, JR connector)"
-			(at 66.04 59.69 0)
+		(property "Description" ""
+			(at 78.74 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
-		)
-		(pin "1"
-			(uuid "788fe67f-4dc9-49fe-a826-207fba40e294")
 		)
 		(pin "3"
-			(uuid "c4b84098-ff2f-4007-88a3-c1c40350eaab")
+			(uuid "59099b5a-c810-4fd9-a762-2063da4bae2f")
+		)
+		(pin "1"
+			(uuid "eeb64c60-8682-47ae-a89e-15d30f3aac26")
+		)
+		(pin "0"
+			(uuid "5d4ad760-4842-49e4-8393-4db1144f6e7c")
 		)
 		(pin "2"
-			(uuid "b7d81678-b127-4786-b1da-c7ebcdaaf355")
+			(uuid "6d39c6b7-a610-4661-a12b-54584eb18123")
 		)
 		(instances
 			(project "ordurex-electronics"
-				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/3a515843-82dd-49a8-b946-45f4832b2a6c"
-					(reference "SG90")
+				(path "/4aada830-7f7e-496e-b8b5-3ddacc9dfd0f/a99d00ff-1722-48a4-b31a-e7e37101715a"
+					(reference "KY-026")
 					(unit 1)
 				)
 			)

@@ -3344,13 +3344,22 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "poubelle1.kicad_sch"
+		(property "Sheetfile" "poubelle0.kicad_sch"
 			(at 208.28 46.3046 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(property "Champ2" ""
+			(at 208.28 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
 			)
 		)
 		(pin "GND" bidirectional
@@ -3432,7 +3441,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "poubelle2.kicad_sch"
+		(property "Sheetfile" "poubelle1.kicad_sch"
 			(at 208.28 141.5546 0)
 			(effects
 				(font
@@ -3471,7 +3480,7 @@
 			)
 			(uuid "9b9104a9-0573-456a-9cbc-1cf6da92a28c")
 		)
-		(pin "K6-in" input
+		(pin "KY6-in" input
 			(at 208.28 118.11 180)
 			(effects
 				(font
@@ -3560,7 +3569,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "poubelle3.kicad_sch"
+		(property "Sheetfile" "poubelle2.kicad_sch"
 			(at 208.28 104.7246 0)
 			(effects
 				(font
