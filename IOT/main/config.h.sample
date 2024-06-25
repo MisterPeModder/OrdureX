@@ -12,7 +12,11 @@
 
 // Actuators and assessors config
 
-// First pin of the keypad, others must be aligned like this: n, n+2, n+4...
+// First pin of the keypad, others must be aligned like this: n, n+1, n+2...
 #define PIN_KEYPAD_BEGIN 25
+
+// RFID module pinout (SPI pins: 50, 51, 52)
+#define PIN_RFID_SDA 53
+#define PIN_RFID_RST 49
 
 #endif  // CONFIG_H

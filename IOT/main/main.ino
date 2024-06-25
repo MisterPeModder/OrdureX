@@ -52,7 +52,14 @@ void setup() {
   task.delay = 100;
   if (!scheduler.addTask(task)) {
 #ifdef DEBUG
-    Serial.println("Get charracter from keypad task not added");
+    Serial.println("Get character from keypad task not added");
+#endif
+  }
+
+  task.task = readRFID;
+  if (!scheduler.addTask(task)) {
+#ifdef DEBUG
+    Serial.println("Read card from RFID task not added");
 #endif
   }
 }
