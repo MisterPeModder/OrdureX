@@ -27,3 +27,6 @@ fp-info-cache
 
 # Backups
 ordurex-electronics-backups/*
+
+# Autosave
+\#auto_saved_files#
