@@ -726,7 +726,7 @@
 		)
 		(uuid "865743fa-d212-4fb9-8a9c-ee889f511067")
 	)
-	(hierarchical_label "SrvM-PWM-IN"
+	(hierarchical_label "SrvM1-PWM-IN"
 		(shape input)
 		(at 111.76 62.23 0)
 		(fields_autoplaced yes)
