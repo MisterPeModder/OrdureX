@@ -12,6 +12,8 @@ cp main/config.h.sample main/config.h
 arduino-cli core update-index
 # install Arduino Mega plateform
 arduino-cli core install arduino:avr
+# install some libs
+arduino-cli lib install Keypad MFRC522
 # compile project
 arduino-cli compile --fqbn arduino:avr:mega main
 # upload to Arduino
