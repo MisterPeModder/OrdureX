@@ -21,4 +21,9 @@ void readRFID(void *);
  */
 void readFlameSensor(void *);
 
+/**
+ * @brief Read obstacle sensor
+ */
+void readObstacleSensor(void *);
+
 #endif  // BIN_H

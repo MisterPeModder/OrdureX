@@ -4,6 +4,7 @@
 #include "config.h"
 #include "Keypad.h"
 #include "MFRC522.h"
+#include "Servo.h"
 #include "SPI.h"
 
 const unsigned char RFID_UID[RFID_UID_SIZE] = DEFAULT_RFID_UID;
@@ -188,9 +189,46 @@ void readFlameSensor(void *) {
     }
   } else {
     // if bin was burning, send stop burning once
-    if(burning) {
+    if (burning) {
       burning = false;
       addSendData(trash1Burning(burning), 2);
+    }
+  }
+}
+
+//------------------ Obstacle sensor ------------------
+
+#ifdef DEBUG
+#define DEBUG_PRINT_OBSTACLE() Serial.println("Something is in front bin 0!");
+#define DEBUG_PRINT_CLOSE_0() Serial.println("Closing lid of bin 0!");
+#else
+#define DEBUG_PRINT_OBSTACLE()
+#define DEBUG_PRINT_CLOSE_0()
+#endif
+
+Servo servo0;
+
+void readObstacleSensor(void *) {
+  static bool opened = false;
+  static unsigned long openingStemp = 0;
+
+  if (digitalRead(PIN_OBSTACLE) == LOW) {
+    // detect obstacle once
+    if (!opened) {
+    DEBUG_PRINT_OBSTACLE();
+      addSendData(trash0LidS(opened), 2);
+      servo0.write(SERVO_ANGLE);
+    }
+
+    opened = true;
+    openingStemp = millis();
+  } else {
+    // close lid after a certain delay
+    if (opened && digitalRead(PIN_OBSTACLE) == HIGH && millis() > (openingStemp + OBSTACLE_DELAY * 1000)) {
+      DEBUG_PRINT_CLOSE_0();
+      opened = false;
+
+      servo0.write(0);
     }
   }
 }
@@ -209,4 +247,9 @@ void setupBins(void *) {
 
   pinMode(PIN_BUZZER_SOURCE, OUTPUT);
   pinMode(PIN_FIRE_DIGITAL, INPUT);
+  pinMode(PIN_OBSTACLE, INPUT_PULLUP);
+
+  servo0.attach(PIN_SERVO_0);
+  delay(1);
+  servo0.write(0);
 }

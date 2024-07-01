@@ -12,6 +12,14 @@
 
 // Actuators and assessors config
 
+#define PIN_OBSTACLE 22
+// Delay before closing lid of bin 0 in seconds
+#define OBSTACLE_DELAY 5
+// Pin of the servomotor on the bin 0
+#define PIN_SERVO_0 23
+// Set servomotor angle in degrees when opened (closed is 0°)
+#define SERVO_ANGLE 110
+
 // First pin of the keypad, others must be aligned like this: n, n+1, n+2...
 #define PIN_KEYPAD_BEGIN 25
 

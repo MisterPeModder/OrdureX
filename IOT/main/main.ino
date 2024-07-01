@@ -63,6 +63,13 @@ void setup() {
 #endif
   }
 
+  task.task = readObstacleSensor;
+  if (!scheduler.addTask(task)) {
+#ifdef DEBUG
+    Serial.println("Read obstacle sensor task not added");
+#endif
+  }
+
   task.task = readFlameSensor;
   task.delay = 500;
   if (!scheduler.addTask(task)) {
