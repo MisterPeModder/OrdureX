@@ -155,6 +155,36 @@ void readRFID(void *) {
   }
 }
 
+//------------------ Flame sensor ------------------
+
+#ifdef DEBUG
+#define DEBUG_PRINT_FLAME() Serial.println("Bin 1 is burning!");
+#else
+#define DEBUG_PRINT_FLAME()
+#endif
+
+void readFlameSensor(void *) {
+  if (digitalRead(PIN_FIRE_DIGITAL) == HIGH) {
+    DEBUG_PRINT_FLAME();
+    // simulating a fire alarm
+    for (int i = 0; i < 20; i++) {
+      digitalWrite(PIN_BUZZER_SOURCE, HIGH);
+      delayMicroseconds(600);
+      digitalWrite(PIN_BUZZER_SOURCE, LOW);
+      delayMicroseconds(600);
+    }
+    delay(70);
+    for (int i = 0; i < 150; i++) {
+      digitalWrite(PIN_BUZZER_SOURCE, HIGH);
+      delayMicroseconds(700);
+      digitalWrite(PIN_BUZZER_SOURCE, LOW);
+      delayMicroseconds(700);
+    }
+  }
+}
+
+//------------------ Initial bin configuration ------------------
+
 void setupBins(void *) {
   keypad.setHoldTime(HOLD_TIME);
 
@@ -166,4 +196,5 @@ void setupBins(void *) {
 #endif
 
   pinMode(PIN_BUZZER_SOURCE, OUTPUT);
+  pinMode(PIN_FIRE_DIGITAL, INPUT);
 }

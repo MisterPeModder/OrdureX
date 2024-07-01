@@ -23,6 +23,7 @@
 #define PIN_RFID_RST 49
 
 #define PIN_BUZZER_SOURCE 46
+#define PIN_FIRE_DIGITAL 47
 
 #define RFID_UID_SIZE 4
 // This UID is hardcoded in the white card

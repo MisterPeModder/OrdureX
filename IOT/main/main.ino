@@ -62,6 +62,14 @@ void setup() {
     Serial.println("Read card from RFID task not added");
 #endif
   }
+
+  task.task = readFlameSensor;
+  task.delay = 500;
+  if (!scheduler.addTask(task)) {
+#ifdef DEBUG
+    Serial.println("Read flame sensor task not added");
+#endif
+  }
 }
 
 void loop() {
