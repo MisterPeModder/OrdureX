@@ -2527,6 +2527,16 @@
 	)
 	(wire
 		(pts
+			(xy 166.37 59.69) (xy 190.5 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0f63002d-7cf1-40c7-a2e4-2b9323dfdf74")
+	)
+	(wire
+		(pts
 			(xy 66.04 31.75) (xy 100.33 31.75)
 		)
 		(stroke
@@ -2544,6 +2554,16 @@
 			(type default)
 		)
 		(uuid "1764c654-ebfd-44df-9d93-34f3a6a94eb6")
+	)
+	(wire
+		(pts
+			(xy 204.47 59.69) (xy 204.47 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "19bfbadf-453d-4002-a105-ab9f1a72e595")
 	)
 	(wire
 		(pts
@@ -2585,16 +2605,6 @@
 			(type default)
 		)
 		(uuid "26e3fda3-9faa-43fe-b952-d44f31b5a72f")
-	)
-	(wire
-		(pts
-			(xy 195.58 59.69) (xy 195.58 46.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "29409394-3340-4188-ad56-d47a5da1bc40")
 	)
 	(wire
 		(pts
@@ -2671,6 +2681,16 @@
 	)
 	(wire
 		(pts
+			(xy 190.5 43.18) (xy 190.5 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e09e644-8814-4b89-8175-0a814d718fb0")
+	)
+	(wire
+		(pts
 			(xy 166.37 90.17) (xy 208.28 90.17)
 		)
 		(stroke
@@ -2722,17 +2742,7 @@
 	)
 	(wire
 		(pts
-			(xy 166.37 31.75) (xy 208.28 31.75)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "88a80ef5-8937-42e0-839f-6ec981970d1c")
-	)
-	(wire
-		(pts
-			(xy 208.28 59.69) (xy 195.58 59.69)
+			(xy 208.28 59.69) (xy 204.47 59.69)
 		)
 		(stroke
 			(width 0)
@@ -2827,6 +2837,16 @@
 	)
 	(wire
 		(pts
+			(xy 166.37 62.23) (xy 204.47 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1891430-09a5-4f77-a841-9ad3fc0b40b3")
+	)
+	(wire
+		(pts
 			(xy 240.03 129.54) (xy 240.03 132.08)
 		)
 		(stroke
@@ -2856,6 +2876,16 @@
 			(color 0 0 0 1)
 		)
 		(uuid "cd039e64-34a6-4d72-9160-9c48260eb15e")
+	)
+	(wire
+		(pts
+			(xy 190.5 43.18) (xy 208.28 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d0e9d239-74ea-472a-a78b-eb5519450622")
 	)
 	(wire
 		(pts
@@ -2911,16 +2941,6 @@
 			(color 255 0 0 1)
 		)
 		(uuid "e5c45a39-512c-4ef1-8aa7-8c5f52c5c9ca")
-	)
-	(wire
-		(pts
-			(xy 195.58 46.99) (xy 166.37 46.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e8d620f9-b922-4ad1-8703-28c3577449c8")
 	)
 	(wire
 		(pts
@@ -4157,7 +4177,7 @@
 			(uuid "dd247ad3-b875-410a-bbfc-49c3c2fd394c")
 		)
 		(pin "SrvM1-PWM-IN" input
-			(at 208.28 31.75 180)
+			(at 208.28 43.18 180)
 			(effects
 				(font
 					(size 1.27 1.27)
