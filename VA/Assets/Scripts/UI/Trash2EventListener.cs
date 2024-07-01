@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace OrdureX.UI
 {
-    [RequireComponent(typeof(TrashHologramDisplay))]
+    [RequireComponent(typeof(TrashHologramDisplay), typeof(Animator))]
     public class Trash2EventListener : MonoBehaviour
     {
         [SerializeField]
         private OrdureXEvents m_Events;
         private TrashHologramDisplay m_Display;
+        private Animator m_Animator;
 
         [Header("Status")]
         [SerializeField]
@@ -26,6 +27,7 @@ namespace OrdureX.UI
                 m_Events = FindObjectOfType<OrdureXEvents>();
             }
             m_Display = GetComponent<TrashHologramDisplay>();
+            m_Animator = GetComponent<Animator>();
         }
 
         private void OnEnable()
@@ -58,15 +60,15 @@ namespace OrdureX.UI
 
             if (m_IsCollectRequested)
             {
-                status.Add("collect requested");
+                status.Add("<color=#00ffffff>collect requested</color>");
             }
             if (m_HasInvalidCode)
             {
-                status.Add("invalid code");
+                status.Add("<color=#a52a2aff>invalid code</color>");
             }
 
             m_Display.Title = "Trash #2";
-            m_Display.Status = string.Join(" | ", status);
+            m_Display.Status = string.Join("\n", status);
         }
 
         private void OnCollectRequested()
@@ -84,6 +86,10 @@ namespace OrdureX.UI
 
         private void OnLidChanged(bool isLidOpen)
         {
+            if (m_IsLidOpen != isLidOpen)
+            {
+                m_Animator.Play(isLidOpen ? "Open Lid" : "Close Lid");
+            }
             m_IsLidOpen = isLidOpen;
             UpdateStatus();
         }
