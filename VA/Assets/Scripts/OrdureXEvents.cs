@@ -32,6 +32,9 @@ namespace OrdureX
 
         private SimulationStateManager m_SimulationStateManager;
 
+        public const string ACTION_NAMESPACE = "ordurex/action";
+        public const string STATUS_NAMESPACE = "ordurex/status";
+
         private void Awake()
         {
             m_SimulationStateManager = FindObjectOfType<SimulationStateManager>();
@@ -56,16 +59,16 @@ namespace OrdureX
 
         public void MqttConnected()
         {
-            Controller.Subscribe("ordurex/status/simulation", DecodeStatusChange);
-            Controller.Subscribe("ordurex/trash-0/collect-requested", (_args) => OnTrash0CollectRequested.Invoke());
-            Controller.Subscribe("ordurex/trash-1/collect-requested", (_args) => OnTrash1CollectRequested.Invoke());
-            Controller.Subscribe("ordurex/trash-2/collect-requested", (_args) => OnTrash2CollectRequested.Invoke());
-            Controller.Subscribe("ordurex/trash-0/invalid-code", (args) => DecodeInvalidCode(args, OnTrash0InvalidCode));
-            Controller.Subscribe("ordurex/trash-1/invalid-code", (args) => DecodeInvalidCode(args, OnTrash1InvalidCode));
-            Controller.Subscribe("ordurex/trash-2/invalid-code", (args) => DecodeInvalidCode(args, OnTrash2InvalidCode));
-            Controller.Subscribe("ordurex/trash-1/burning", (args) => DecodeBoolEvent(args, OnTrash1BurningChanged));
-            Controller.Subscribe("ordurex/trash-0/lid", (args) => DecodeBoolEvent(args, OnTrash0LidChanged));
-            Controller.Subscribe("ordurex/trash-2/lid", (args) => DecodeBoolEvent(args, OnTrash2LidChanged));
+            Controller.Subscribe($"{STATUS_NAMESPACE}/simulation", DecodeStatusChange);
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-0/collect-requested", (_args) => OnTrash0CollectRequested.Invoke());
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-1/collect-requested", (_args) => OnTrash1CollectRequested.Invoke());
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-2/collect-requested", (_args) => OnTrash2CollectRequested.Invoke());
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-0/invalid-code", (args) => DecodeInvalidCode(args, OnTrash0InvalidCode));
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-1/invalid-code", (args) => DecodeInvalidCode(args, OnTrash1InvalidCode));
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-2/invalid-code", (args) => DecodeInvalidCode(args, OnTrash2InvalidCode));
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-1/burning", (args) => DecodeBoolEvent(args, OnTrash1BurningChanged));
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-0/lid", (args) => DecodeBoolEvent(args, OnTrash0LidChanged));
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-2/lid", (args) => DecodeBoolEvent(args, OnTrash2LidChanged));
         }
 
         public void MqttDisconnected()

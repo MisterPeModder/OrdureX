@@ -8,6 +8,8 @@ using OrdureX.Mqtt;
 using UnityEditor;
 using UnityEngine;
 
+using static OrdureX.OrdureXEvents;
+
 namespace OrdureX
 {
     /// <summary>Emulates the Arduino+ESP-01+Sensors combination for testing.
@@ -31,14 +33,10 @@ namespace OrdureX
         private CancellationTokenSource cts;
 
         // Simulation Variables //////////////////////////////////////////////
-        private SimulationStatus status;
+        private ArduinoStatus status;
         private bool trash0LidOpen;
         private bool trash2LidOpen;
         private SettingsManager m_SettingsManager;
-
-
-        private const string ACTION_NAMESPACE = "ordurex/action";
-        private const string STATUS_NAMESPACE = "ordurex/status";
 
         private void Awake()
         {
@@ -101,7 +99,7 @@ namespace OrdureX
 
         private void ResetSimulation()
         {
-            status = SimulationStatus.Stopped;
+            status = ArduinoStatus.Stopped;
             trash0LidOpen = false;
             trash2LidOpen = false;
         }
@@ -218,7 +216,7 @@ namespace OrdureX
                     return;
                 }
 
-                var newStatus = (SimulationStatus)payload[0];
+                var newStatus = (ArduinoStatus)payload[0];
 
                 if (newStatus == status)
                 {
@@ -241,7 +239,7 @@ namespace OrdureX
             }
 
 
-            if (status != SimulationStatus.Running)
+            if (status != ArduinoStatus.Running)
             {
                 return;
             }
@@ -269,6 +267,12 @@ namespace OrdureX
                     trash2LidOpen = open;
                 }
                 Log($"Received lid status for trash {trash}: {open}");
+
+                await mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
+                    .WithTopic($"{STATUS_NAMESPACE}/trash-{trash}/lid")
+                    .WithPayload(new byte[1] { open ? (byte)1 : (byte)0 })
+                    .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                    .Build());
             }
 
             if (message.Topic == $"{ACTION_NAMESPACE}/trash-0/request-collect"
@@ -280,9 +284,21 @@ namespace OrdureX
                     LogError("Received empty code payload for trash collection request");
                     return;
                 }
-                var code = System.Text.Encoding.UTF8.GetString(payload.Array, payload.Offset, payload.Count);
 
-                Log($"Received trash {trash} collection request with code: {code}");
+                if (payload.Count < 16)
+                {
+                    LogError($"Invalid payload length for simulation status change, expected at least 16 bytes, got {payload.Count}");
+                    return;
+                }
+                var clientUuid = new Guid(payload[0..16]);
+                var code = System.Text.Encoding.UTF8.GetString(payload.Array, payload.Offset + 16, payload.Count - 16);
+
+                Log($"Received trash {trash} collection request from {clientUuid} with code: {code}");
+
+                await mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
+                    .WithTopic($"{STATUS_NAMESPACE}/trash-{trash}/collect-requested")
+                    .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                    .Build());
             }
 
             if (message.Topic == $"{ACTION_NAMESPACE}/trash-1/buzzer")
@@ -314,5 +330,12 @@ namespace OrdureX
                 Log($"Received display request for trash {trash} with text: {text}");
             }
         }
+    }
+
+    public enum ArduinoStatus : byte
+    {
+        Stopped = 0,
+        Running = 1,
+        Paused = 2,
     }
 }

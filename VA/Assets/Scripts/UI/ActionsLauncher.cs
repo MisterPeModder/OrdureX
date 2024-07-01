@@ -10,6 +10,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+using static OrdureX.OrdureXEvents;
+
 namespace OrdureX.UI
 {
     public class ActionsLauncher : MonoBehaviour
@@ -29,8 +31,6 @@ namespace OrdureX.UI
 
         private SimulationStateManager m_SimulationStateManager;
 
-        private const string ACTION_NAMESPACE = "ordurex/action";
-
         private void Awake()
         {
             m_SimulationStateManager = FindObjectOfType<SimulationStateManager>();
@@ -45,10 +45,14 @@ namespace OrdureX.UI
             HideActionInputField();
             AddAction("Select an action...", () => { });
             AddAction("Trash 0: open lid", OpenTrash0Lid);
+            AddAction("Trash 0: close lid", CloseTrash0Lid);
             AddAction("Trash 0: request collect", RequestCollectTrash0, ShowRequestCollectCodeField, HideActionInputField);
             AddAction("Trash 1: ring buzzer", RingTrash1Buzzer);
             AddAction("Trash 1: request collect", RequestCollectTrash1, ShowDisplayTextField, HideActionInputField);
+            AddAction("Trash 1: ignite", IgniteTrash1);
+            AddAction("Trash 1: extinguish", ExtinguishTrash1);
             AddAction("Trash 2: open lid", OpenTrash2Lid);
+            AddAction("Trash 2: close lid", CloseTrash2Lid);
             AddAction("Trash 2: display text", DisplayTextOnTrash2, ShowDisplayTextField, HideActionInputField);
             AddAction("Trash 2: request collect", RequestCollectTrash2, ShowRequestCollectCodeField, HideActionInputField);
             Dropdown.value = 0;
@@ -116,6 +120,16 @@ namespace OrdureX.UI
                 .Build());
         }
 
+        private void CloseTrash0Lid()
+        {
+            Debug.Log("Closing lid of trash 0");
+            MqttController.Publish(new MqttApplicationMessageBuilder()
+                .WithTopic($"{ACTION_NAMESPACE}/trash-0/lid")
+                .WithPayload(new byte[1] { 0 }) // 1 = open, 0 = close
+                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                .Build());
+        }
+
         private void RequestCollectTrash0()
         {
             List<byte> payload = new();
@@ -156,12 +170,42 @@ namespace OrdureX.UI
                 .Build());
         }
 
+        private void IgniteTrash1()
+        {
+            Debug.Log("Ignting trash 1");
+            MqttController.Publish(new MqttApplicationMessageBuilder()
+                .WithTopic($"{STATUS_NAMESPACE}/trash-1/burning")
+                .WithPayload(new byte[1] { 1 }) // 1 = burning, 0 = normal
+                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                .Build());
+        }
+
+        private void ExtinguishTrash1()
+        {
+            Debug.Log("Ignting trash 1");
+            MqttController.Publish(new MqttApplicationMessageBuilder()
+                .WithTopic($"{STATUS_NAMESPACE}/trash-1/burning")
+                .WithPayload(new byte[1] { 0 }) // 1 = burning, 0 = normal
+                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                .Build());
+        }
+
         private void OpenTrash2Lid()
         {
             Debug.Log("Opening lid of trash 2");
             MqttController.Publish(new MqttApplicationMessageBuilder()
                 .WithTopic($"{ACTION_NAMESPACE}/trash-2/lid")
                 .WithPayload(new byte[1] { 1 }) // 1 = open, 0 = close
+                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                .Build());
+        }
+
+        private void CloseTrash2Lid()
+        {
+            Debug.Log("Closing lid of trash 2");
+            MqttController.Publish(new MqttApplicationMessageBuilder()
+                .WithTopic($"{ACTION_NAMESPACE}/trash-2/lid")
+                .WithPayload(new byte[1] { 0 }) // 1 = open, 0 = close
                 .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                 .Build());
         }
