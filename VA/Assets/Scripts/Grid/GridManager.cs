@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using OrdureX.UI;
 
 namespace OrdureX.Grid
 {
@@ -34,7 +35,7 @@ namespace OrdureX.Grid
         private GameObject m_TrashCanPrefab;
         [SerializeField]
         private List<ScaledProjection> m_TrashCanProjectionPrefabs = new();
-        private int m_TrackCanPrefabIndex = -1;
+        private int m_TrashCanPrefabIndex = -1;
         [SerializeField]
         private GameObject m_TruckInstance;
         [SerializeField]
@@ -321,9 +322,24 @@ namespace OrdureX.Grid
 
             foreach (var trashCan in m_TrashCanInstances)
             {
-                m_TrackCanPrefabIndex = (m_TrackCanPrefabIndex + 1) % m_TrashCanProjectionPrefabs.Count;
-                var trashCanProjectionInstance = Instantiate(m_TrashCanProjectionPrefabs[m_TrackCanPrefabIndex], origin.transform.position, origin.transform.rotation);
+                m_TrashCanPrefabIndex = (m_TrashCanPrefabIndex + 1) % m_TrashCanProjectionPrefabs.Count;
+
+                var trashCanProjectionInstance = Instantiate(m_TrashCanProjectionPrefabs[m_TrashCanPrefabIndex], origin.transform.position, origin.transform.rotation);
                 trashCanProjectionInstance.transform.SetParent(origin.transform);
+
+                switch (m_TrashCanPrefabIndex)
+                {
+                    case 0:
+                        trashCanProjectionInstance.gameObject.AddComponent<Trash0EventListener>();
+                        break;
+                    case 1:
+                        trashCanProjectionInstance.gameObject.AddComponent<Trash1EventListener>();
+                        break;
+                    case 2:
+                        trashCanProjectionInstance.gameObject.AddComponent<Trash2EventListener>();
+                        break;
+                }
+
                 trashCanProjectionInstance.Initialize(transform, origin.transform, trashCan.transform);
                 m_TrashCanProjectionInstances.Add(trashCanProjectionInstance);
             }
