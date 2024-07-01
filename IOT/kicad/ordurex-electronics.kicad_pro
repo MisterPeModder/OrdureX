@@ -237,7 +237,8 @@
   "libraries": {
     "pinned_footprint_libs": [],
     "pinned_symbol_libs": [
-      "OrdureX"
+      "OrdureX",
+      "power"
     ]
   },
   "meta": {
