@@ -31,7 +31,7 @@ namespace OrdureX
         {
             get => m_BrokerPassword;
         }
-        public Action OnConnectToBroker;
+        public Action OnConnectToBroker { get; set; }
         [SerializeField]
         private bool m_ShowTileDebugOverlay = false;
         public bool ShowTileDebugOverlay

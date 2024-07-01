@@ -17,6 +17,19 @@ namespace OrdureX
 
         public Guid ClientUuid;
 
+        public Action OnTrash0CollectRequested { get; set; }
+        public Action OnTrash1CollectRequested { get; set; }
+        public Action OnTrash2CollectRequested { get; set; }
+
+        public Action<Guid> OnTrash0InvalidCode { get; set; }
+        public Action<Guid> OnTrash1InvalidCode { get; set; }
+        public Action<Guid> OnTrash2InvalidCode { get; set; }
+
+        public Action<bool> OnTrash1BurningChanged { get; set; }
+
+        public Action<bool> OnTrash0LidChanged { get; set; }
+        public Action<bool> OnTrash2LidChanged { get; set; }
+
         private SimulationStateManager m_SimulationStateManager;
 
         private void Awake()
@@ -43,7 +56,16 @@ namespace OrdureX
 
         public void MqttConnected()
         {
-            Controller.Subscribe("ordurex/status/simulation", OnStatusChange);
+            Controller.Subscribe("ordurex/status/simulation", DecodeStatusChange);
+            Controller.Subscribe("ordurex/trash-0/collect-requested", (_args) => OnTrash0CollectRequested.Invoke());
+            Controller.Subscribe("ordurex/trash-1/collect-requested", (_args) => OnTrash1CollectRequested.Invoke());
+            Controller.Subscribe("ordurex/trash-2/collect-requested", (_args) => OnTrash2CollectRequested.Invoke());
+            Controller.Subscribe("ordurex/trash-0/invalid-code", (args) => DecodeInvalidCode(args, OnTrash0InvalidCode));
+            Controller.Subscribe("ordurex/trash-1/invalid-code", (args) => DecodeInvalidCode(args, OnTrash1InvalidCode));
+            Controller.Subscribe("ordurex/trash-2/invalid-code", (args) => DecodeInvalidCode(args, OnTrash2InvalidCode));
+            Controller.Subscribe("ordurex/trash-1/burning", (args) => DecodeBoolEvent(args, OnTrash1BurningChanged));
+            Controller.Subscribe("ordurex/trash-0/lid", (args) => DecodeBoolEvent(args, OnTrash0LidChanged));
+            Controller.Subscribe("ordurex/trash-2/lid", (args) => DecodeBoolEvent(args, OnTrash2LidChanged));
         }
 
         public void MqttDisconnected()
@@ -86,7 +108,7 @@ namespace OrdureX
 
         // Events Callbacks ///////////////////////////////////////////////////
 
-        private void OnStatusChange(MqttApplicationMessageReceivedEventArgs args)
+        private void DecodeStatusChange(MqttApplicationMessageReceivedEventArgs args)
         {
             var message = args.ApplicationMessage;
             var payload = message.PayloadSegment;
@@ -145,6 +167,38 @@ namespace OrdureX
                 default:
                     status = SimulationStatus.ConnectionFailed;
                     return false;
+            }
+        }
+
+        private void DecodeInvalidCode(MqttApplicationMessageReceivedEventArgs args, Action<Guid> next)
+        {
+            var message = args.ApplicationMessage;
+            var payload = message.PayloadSegment;
+
+            if (payload.Array != null && payload.Count == 16)
+            {
+                var uuid = new Guid(payload.Array);
+                next.Invoke(uuid);
+            }
+            else
+            {
+                next.Invoke(Guid.Empty);
+            }
+        }
+
+        private void DecodeBoolEvent(MqttApplicationMessageReceivedEventArgs args, Action<bool> next)
+        {
+            var message = args.ApplicationMessage;
+            var payload = message.PayloadSegment;
+
+            if (payload.Array != null && payload.Count == 1)
+            {
+                var value = payload.Array[payload.Offset] == 1;
+                next.Invoke(value);
+            }
+            else
+            {
+                next.Invoke(false);
             }
         }
     }
