@@ -119,16 +119,35 @@ MFRC522 rfid(PIN_RFID_SDA, PIN_RFID_RST);
 
 void readRFID(void *) {
   if (rfid.PICC_IsNewCardPresent()) {  // new tag is available
-    if (rfid.PICC_ReadCardSerial()) {  // NUID has been readed
+    if (rfid.PICC_ReadCardSerial()) {  // UID has been read
       DEBUG_PRINT_RFID(rfid.uid);
 
       if (strncmp(reinterpret_cast<const char *>(rfid.uid.uidByte), reinterpret_cast<const char *>(RFID_UID), RFID_UID_SIZE) == 0) {
         DEBUG_PRINT_RFID_SUCCESS();
         addSendData(trash1CollectRequested(), 1);
-        // TODO do sound when success
+        // high pitch sound on success
+        for (int i = 0; i < 20; i++) {
+          digitalWrite(PIN_BUZZER_SOURCE, HIGH);
+          delayMicroseconds(1200);
+          digitalWrite(PIN_BUZZER_SOURCE, LOW);
+          delayMicroseconds(1200);
+        }
+        delay(70);
+        for (int i = 0; i < 50; i++) {
+          digitalWrite(PIN_BUZZER_SOURCE, HIGH);
+          delayMicroseconds(800);
+          digitalWrite(PIN_BUZZER_SOURCE, LOW);
+          delayMicroseconds(800);
+        }
       } else {
         DEBUG_PRINT_RFID_FAILURE();
-        // TODO do sound when failure
+        // low pitch sound on failure
+        for (int i = 0; i < 30; i++) {
+          digitalWrite(PIN_BUZZER_SOURCE, HIGH);
+          delayMicroseconds(2200);
+          digitalWrite(PIN_BUZZER_SOURCE, LOW);
+          delayMicroseconds(2200);
+        }
       }
       rfid.PICC_HaltA();       // halt PICC
       rfid.PCD_StopCrypto1();  // stop encryption on PCD
@@ -145,4 +164,6 @@ void setupBins(void *) {
   Serial.print("RFID module version: ");
   rfid.PCD_DumpVersionToSerial();
 #endif
+
+  pinMode(PIN_BUZZER_SOURCE, OUTPUT);
 }
