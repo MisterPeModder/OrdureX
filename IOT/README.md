@@ -13,7 +13,7 @@ arduino-cli core update-index
 # install Arduino Mega plateform
 arduino-cli core install arduino:avr
 # install some libs
-arduino-cli lib install Keypad MFRC522
+arduino-cli lib install Keypad MFRC522 Servo
 # compile project
 arduino-cli compile --fqbn arduino:avr:mega main
 # upload to Arduino
