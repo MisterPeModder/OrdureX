@@ -46,8 +46,8 @@ unsigned char* trash2InvalidCode(const unsigned char* clientId) {
   return data;
 }
 
-unsigned char* trash1Burning() {
-  static unsigned char data[] = { trash_1_burning };
+unsigned char* trash1Burning(bool burning) {
+  static unsigned char data[] = { trash_1_burning, burning };
   return data;
 }
 

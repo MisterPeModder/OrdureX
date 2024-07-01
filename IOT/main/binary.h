@@ -98,9 +98,9 @@ unsigned char* trash2InvalidCode(const unsigned char* clientId);
 
 /**
  * Trash 1 is burning
- * @return unsigned char* (1 byte)
+ * @return unsigned char* (2 bytes)
  */
-unsigned char* trash1Burning();
+unsigned char* trash1Burning(bool burning);
 
 /**
  * Trash 0 lid status

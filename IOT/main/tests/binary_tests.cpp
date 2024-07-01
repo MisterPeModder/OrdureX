@@ -57,8 +57,9 @@ TEST(BinaryTests, trash2invalidCode) {
 }
 
 TEST(BinaryTests, trash1Burning) {
-  unsigned char* data = trash1Burning();
+  unsigned char* data = trash1Burning(true);
   EXPECT_EQ(data[0], 0x06);
+  EXPECT_EQ(data[1], 0x01);
 }
 
 TEST(BinaryTests, trash0LidS_open) {

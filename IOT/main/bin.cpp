@@ -164,8 +164,14 @@ void readRFID(void *) {
 #endif
 
 void readFlameSensor(void *) {
+  static bool burning = false;
+
   if (digitalRead(PIN_FIRE_DIGITAL) == HIGH) {
     DEBUG_PRINT_FLAME();
+
+    burning = true;
+    addSendData(trash1Burning(burning), 2);
+
     // simulating a fire alarm
     for (int i = 0; i < 20; i++) {
       digitalWrite(PIN_BUZZER_SOURCE, HIGH);
@@ -179,6 +185,12 @@ void readFlameSensor(void *) {
       delayMicroseconds(700);
       digitalWrite(PIN_BUZZER_SOURCE, LOW);
       delayMicroseconds(700);
+    }
+  } else {
+    // if bin was burning, send stop burning once
+    if(burning) {
+      burning = false;
+      addSendData(trash1Burning(burning), 2);
     }
   }
 }
