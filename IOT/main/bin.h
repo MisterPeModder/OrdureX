@@ -16,4 +16,9 @@ void getChar(void *);
  */
 void readRFID(void *);
 
+/**
+ * @brief Read flame sensor
+ */
+void readFlameSensor(void *);
+
 #endif  // BIN_H
