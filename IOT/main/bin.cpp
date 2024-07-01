@@ -195,6 +195,39 @@ void readFlameSensor(void *) {
   }
 }
 
+//------------------ Obstacle sensor ------------------
+
+#ifdef DEBUG
+#define DEBUG_PRINT_OBSTACLE() Serial.println("Something is in front bin 0!");
+#define DEBUG_PRINT_CLOSE_0() Serial.println("Closing lid of bin 0!");
+#else
+#define DEBUG_PRINT_OBSTACLE()
+#define DEBUG_PRINT_CLOSE_0()
+#endif
+
+void readObstacleSensor(void *) {
+  static bool opened = false;
+  static unsigned long openingStemp = 0;
+
+  // Detect obstacle once
+  if (digitalRead(PIN_OBSTACLE) == LOW && !opened) {
+    DEBUG_PRINT_OBSTACLE();
+
+    opened = true;
+    openingStemp = millis();
+    addSendData(trash0LidS(opened), 2);
+
+    // TODO activate motor
+  } else {
+    if(opened && digitalRead(PIN_OBSTACLE) == HIGH && millis() > (openingStemp + OBSTACLE_DELAY * 1000)) {
+      DEBUG_PRINT_CLOSE_0();
+      opened = false;
+
+      // TODO activate motor
+    }
+  }
+}
+
 //------------------ Initial bin configuration ------------------
 
 void setupBins(void *) {
@@ -209,4 +242,5 @@ void setupBins(void *) {
 
   pinMode(PIN_BUZZER_SOURCE, OUTPUT);
   pinMode(PIN_FIRE_DIGITAL, INPUT);
+  pinMode(PIN_OBSTACLE, INPUT_PULLUP);
 }
