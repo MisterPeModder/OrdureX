@@ -56,19 +56,20 @@ namespace OrdureX.UI
 
             if (m_IsCollectRequested)
             {
-                status.Add("collect requested");
+                status.Add("<color=#00ffffff>collect requested</color>");
             }
             if (m_HasInvalidCode)
             {
-                status.Add("invalid code");
+                status.Add("<color=#a52a2aff>invalid code</color>");
             }
             if (m_IsBurning)
             {
-                status.Add("burning");
+                status.Add("<color=#ffa500ff>burning</color>");
             }
 
             m_Display.Title = "Trash #1";
-            m_Display.Status = status.Any() ? string.Join(" | ", status) : "OK";
+            m_Display.Status = status.Any() ? string.Join("\n", status) : "idle";
+            m_Display.FireActive = m_IsBurning;
         }
 
         private void OnCollectRequested()

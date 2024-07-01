@@ -17,6 +17,11 @@ namespace OrdureX.UI
         private TMP_Text m_TitleText;
         [SerializeField]
         private TMP_Text m_StatusText;
+        /// <summary>
+        /// Because, I didn't want to place it elsewhere
+        /// </summary>
+        [SerializeField]
+        private GameObject m_FireEffect;
 
 
         [Header("Display Settings")]
@@ -52,6 +57,17 @@ namespace OrdureX.UI
         private Vector3 m_BaseScale;
         [SerializeField]
         private float m_DistanceToScaleFactor = 0.3f;
+        public bool FireActive
+        {
+            get => m_FireEffect != null && m_FireEffect.activeSelf;
+            set
+            {
+                if (m_FireEffect != null)
+                {
+                    m_FireEffect.SetActive(value);
+                }
+            }
+        }
 
         private void Awake()
         {
