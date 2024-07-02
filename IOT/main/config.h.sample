@@ -37,4 +37,10 @@
 // This UID is hardcoded in the white card
 #define DEFAULT_RFID_UID { 0xDA, 0x43, 0x96, 0x19 }
 
+// LCD diplay
+#define PIN_DISPLAY_RESET 33
+#define PIN_DISPLAY_ENABLE 34
+// Other pins must be aligned like this: D5=n+1;D6=n+2...
+#define PIN_DISPLAY_D4 35
+
 #endif  // CONFIG_H

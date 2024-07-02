@@ -3,12 +3,17 @@
 #include "binary.h"
 #include "config.h"
 #include "Keypad.h"
+#include "LiquidCrystal.h"
 #include "MFRC522.h"
 #include "Servo.h"
 #include "SPI.h"
 
 const unsigned char RFID_UID[RFID_UID_SIZE] = DEFAULT_RFID_UID;
 const char password[] = DEFAULT_KEYPAD_PASSWORD;
+
+#define LCD_PASSWORD_OFFSET 10
+LiquidCrystal lcd(PIN_DISPLAY_RESET, PIN_DISPLAY_ENABLE, PIN_DISPLAY_D4, PIN_DISPLAY_D4 + 1, PIN_DISPLAY_D4 + 2, PIN_DISPLAY_D4 + 3);
+uint8_t lcdCursor(LCD_PASSWORD_OFFSET);
 
 //------------------ Keypad ------------------
 
@@ -24,10 +29,19 @@ const char password[] = DEFAULT_KEYPAD_PASSWORD;
     Serial.println(); \
   }
 #define DEBUG_PRINT_INPUT_RESET() Serial.println("Reset password");
-#define DEBUG_PRINT_INPUT_REQUEST_COLLECT() Serial.println("Requesting collect of bin 2");DEBUG_PRINT_INPUT();
+#define DEBUG_PRINT_INPUT_REQUEST_COLLECT() \
+  Serial.println("Requesting collect of bin 2"); \
+  DEBUG_PRINT_INPUT();
 #define DEBUG_PRINT_INPUT_WRONG() Serial.println("Wrong password!");
-#define DEBUG_PRINT_SHOW_INPUT() Serial.println("Request to show password!");DEBUG_PRINT_INPUT();
-#define DEBUG_PRINT_SHOW_STARS() Serial.println("Password: ****");
+#define DEBUG_PRINT_SHOW_INPUT() \
+  Serial.println("Request to show password!"); \
+  DEBUG_PRINT_INPUT();
+#define DEBUG_PRINT_SHOW_STARS() \
+  { \
+    Serial.print("Password: "); \
+    for (int i = 0; i < passwordOffset; i++) Serial.print('*'); \
+    Serial.println(); \
+  }
 #else
 #define DEBUG_PRINT_INPUT()
 #define DEBUG_PRINT_INPUT_RESET()
@@ -55,11 +69,24 @@ byte colPins[COLS] = { PIN_KEYPAD_BEGIN + 3, PIN_KEYPAD_BEGIN + 2, PIN_KEYPAD_BE
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
 void getChar(void *) {
+  if (lastKey == '\0' && keypad.getState() == KeyState::RELEASED) {
+    lcd.setCursor(0, 1);
+    lcd.print("                ");
+    for (int i = 0; i < passwordOffset; i++) {
+      lcd.setCursor(LCD_PASSWORD_OFFSET + i, 0);
+      lcd.print('*');
+    }
+  }
   if (lastKey == '*' && keypad.getState() == KeyState::HOLD) {
     DEBUG_PRINT_SHOW_INPUT();
     lastKey = '\0';
 
-    // TODO: show on display,
+    lcd.setCursor(0, 1);
+    lcd.print("Display password");
+    for (int i = 0; i < passwordOffset; i++) {
+      lcd.setCursor(LCD_PASSWORD_OFFSET + i, 0);
+      lcd.print(input[i]);
+    }
 
     return;  // if holding, keypad will not notice any key, returning
   }
@@ -71,24 +98,46 @@ void getChar(void *) {
 
   switch (key) {
     case '*':
-      DEBUG_PRINT_SHOW_STARS();
       break;
     case '#':
       DEBUG_PRINT_INPUT_RESET();
       passwordOffset = 0;
+      lcdCursor = LCD_PASSWORD_OFFSET;
+
+      lcd.setCursor(0, 1);
+      lcd.print("Reset password");
+      for (int i = 0; i <= PASSWORD_SIZE; i++) {
+        lcd.setCursor(LCD_PASSWORD_OFFSET + i, 0);
+        lcd.print(" ");
+      }
       break;
     default:
       if (passwordOffset <= PASSWORD_SIZE - 1) {
         input[passwordOffset++] = key;
-        // TODO: show '**...' on display,
+
+        lcd.setCursor(lcdCursor++, 0);
+        lcd.print('*');
+        lcd.setCursor(0, 1);
+        lcd.print("                ");
       }
+      DEBUG_PRINT_SHOW_STARS();
 
       if (passwordOffset >= PASSWORD_SIZE) {
         if (strcmp(password, input) != 0) {
           DEBUG_PRINT_INPUT_WRONG();
+          lcd.setCursor(0, 1);
+          lcd.print("Wrong password  ");
         } else {
           DEBUG_PRINT_INPUT_REQUEST_COLLECT();
           addSendData(trash2CollectRequested(), 1);
+          lcd.setCursor(0, 1);
+          lcd.print("Good password! ");
+        }
+
+        lcdCursor = LCD_PASSWORD_OFFSET;
+        for (int i = 0; i <= PASSWORD_SIZE; i++) {
+          lcd.setCursor(LCD_PASSWORD_OFFSET + i, 0);
+          lcd.print(" ");
         }
 
         passwordOffset = 0;
@@ -215,7 +264,7 @@ void readObstacleSensor(void *) {
   if (digitalRead(PIN_OBSTACLE) == LOW) {
     // detect obstacle once
     if (!opened) {
-    DEBUG_PRINT_OBSTACLE();
+      DEBUG_PRINT_OBSTACLE();
       addSendData(trash0LidS(opened), 2);
       servo0.write(SERVO_ANGLE);
     }
@@ -248,6 +297,11 @@ void setupBins(void *) {
   pinMode(PIN_BUZZER_SOURCE, OUTPUT);
   pinMode(PIN_FIRE_DIGITAL, INPUT);
   pinMode(PIN_OBSTACLE, INPUT_PULLUP);
+
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  // print a message to the LCD.
+  lcd.print("Password: ");
 
   servo0.attach(PIN_SERVO_0);
   delay(1);
