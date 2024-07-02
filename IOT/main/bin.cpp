@@ -209,8 +209,10 @@ void readRFID(void *) {
 
 #ifdef DEBUG
 #define DEBUG_PRINT_FLAME() Serial.println("Bin 1 is burning!");
+#define DEBUG_PRINT_NOT_BURNING() Serial.println("Bin 1 is not burning!");
 #else
 #define DEBUG_PRINT_FLAME()
+#define DEBUG_PRINT_NOT_BURNING()
 #endif
 
 void readFlameSensor(void *) {
@@ -220,7 +222,7 @@ void readFlameSensor(void *) {
     DEBUG_PRINT_FLAME();
 
     burning = true;
-    addSendData(trash1Burning(burning), 2);
+    addSendData(trash1Burning(true), 2);
 
     // simulating a fire alarm
     for (int i = 0; i < 20; i++) {
@@ -239,8 +241,9 @@ void readFlameSensor(void *) {
   } else {
     // if bin was burning, send stop burning once
     if (burning) {
+      DEBUG_PRINT_NOT_BURNING();
       burning = false;
-      addSendData(trash1Burning(burning), 2);
+      addSendData(trash1Burning(false), 2);
     }
   }
 }

@@ -10,10 +10,10 @@
 #define DEBUG_PRINT_REQUEST() \
   { \
     Serial.print("Request size: "); \
-    Serial.println(offset); \
+    Serial.println(OFFSET); \
     Serial.print("Request content: "); \
     Serial.print(statusNumber); \
-    for (int i(0); i < offset; i++) Serial.print(request[i], HEX); \
+    for (int i(0); i < OFFSET; i++) Serial.print(REQUEST[i], HEX); \
     Serial.println(); \
   }
 #define DEBUG_PRINT_ADD_REQUEST() Serial.println("Adding a request");
@@ -131,7 +131,7 @@ void addSendData(const unsigned char* payload, const size_t payloadSize) {
 
 void send(void* context) {
   if (statusNumber == 0) {
-    DEBUG_PRINT_SEND_NOTHING();
+    //DEBUG_PRINT_SEND_NOTHING();
     return;
   }
 
@@ -142,8 +142,8 @@ void send(void* context) {
   Serial1.write(statusNumber);
   Serial1.write(REQUEST, OFFSET);
 
-  //DEBUG_PRINT_SEND_REQUEST();
-  //DEBUG_PRINT_REQUEST();
+  DEBUG_PRINT_SEND_REQUEST();
+  DEBUG_PRINT_REQUEST();
 
   statusNumber = 0;
   OFFSET = 0;

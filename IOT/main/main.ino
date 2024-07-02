@@ -23,7 +23,7 @@ void setup() {
   connectWifi();
   connectRelay();
 
-  task_t task = { .delay = 8000, .lastRun = millis(), .loop = true, .task = exampleRequests, .context = nullptr };
+  task_t task = { .delay = 2000, .lastRun = millis(), .loop = true, .task = send, .context = nullptr };
   if (!scheduler.addTask(task)) {
 #ifdef DEBUG
     Serial.println("Send to ESP task not added");
