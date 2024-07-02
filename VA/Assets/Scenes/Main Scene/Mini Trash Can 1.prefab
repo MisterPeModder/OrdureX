@@ -8,15 +8,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 918000375599073758, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e10e4f86c3545e4c39b7f84f053b0820, type: 2}
     - target: {fileID: 1408003897929435051, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 83dfbf8af238f7a4a954d51f9652b34a, type: 2}
+      objectReference: {fileID: 2100000, guid: e10e4f86c3545e4c39b7f84f053b0820, type: 2}
+    - target: {fileID: 1664421931984458447, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664421931984458447, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4046508963895900400, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
         type: 3}
       propertyPath: m_Name
-      value: Mini Trash Can Variant
+      value: Mini Trash Can 1
       objectReference: {fileID: 0}
     - target: {fileID: 6476822576208535577, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
         type: 3}
@@ -66,6 +81,46 @@ PrefabInstance:
     - target: {fileID: 6476822576208535577, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684152009355202690, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684152009355202690, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684152009355202690, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684152009355202690, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9131944254602937122, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9131944254602937122, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9131944254602937122, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9131944254602937122, guid: 2bb1a6d0b0fab634b8db1e5279eb2163,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
