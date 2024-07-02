@@ -1,5 +1,7 @@
 // @ts-check
 
+'use strict';
+
 import net from 'net';
 import mqtt from 'mqtt';
 import { unsafeStringify, uuidParse } from './uuid.js';
@@ -201,8 +203,10 @@ function decodePackedData(buf) {
             mqttClient.publish(`ordurex/status/trash-${trashId}/invalid-code`, rawClientId, { qos: 1 });
         } else if (statusId == 6) {
             console.log(`#${s} status name: ordurex/status/trash-1/burning`);
+            const burning = buf.readUInt8(offset++);
+            console.log(`#${s} is it burning? ${burning === 1 ? 'yes' : 'no'}`);
 
-            mqttClient.publish('ordurex/status/trash-1/burning', Buffer.from([]), { qos: 1 });
+            mqttClient.publish('ordurex/status/trash-1/burning', Buffer.from([burning]), { qos: 1 });
         } else if (statusId >= 7 && statusId < 9) {
             const trashId = statusId === 7 ? 0 : 2;
             console.log(`#${s} status name: ordurex/status/trash-${trashId}/lid`);

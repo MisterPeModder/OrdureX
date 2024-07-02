@@ -1,5 +1,8 @@
 // @ts-check
-import { stringify as uuidStringify, parse as uuidParse } from 'uuid';
+
+'use strict';
+
+import { unsafeStringify, uuidParse } from '../uuid.js';
 import net from 'net';
 
 const PORT = 7070;
@@ -77,7 +80,7 @@ mockTcpClient.on('data', (buf) => {
             simState = buf.readUint8(offset++);
             const z = buf.subarray(offset, offset + 16);
             console.log('Client: ', z.length);
-            currentClient = uuidStringify(z);
+            currentClient = unsafeStringify(z);
             offset += 16;
             statusQueue.push({ type: 'simulation', value: simState, client: currentClient });
         } else {
