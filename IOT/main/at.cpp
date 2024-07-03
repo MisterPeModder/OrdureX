@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include "at.h"
+#include "actuator.h"
 #include "binary.h"
 #include "config.h"
 
@@ -186,7 +187,11 @@ void receive(void* context) {
                 DEBUG_PRINT_RECEIVE_LID(0, openLid);
                 index += 2;
 
-                // handle here
+                if(openLid) {
+                  lidOpen(0);
+                } else {
+                  lidClose(0);
+                }
               }
               break;
             case TopicAction::trash_2_lid_a:
@@ -204,7 +209,7 @@ void receive(void* context) {
                 DEBUG_PRINT_RECEIVE_MUSIC(1, music);
                 index += 2;
 
-                // handle here
+                buzzerMusic();
               }
               break;
             case TopicAction::trash_2_display:
