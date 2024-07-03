@@ -1,11 +1,11 @@
 #include "bin.h"
+#include "actuator.h"
 #include "at.h"
 #include "binary.h"
 #include "config.h"
 #include "Keypad.h"
 #include "LiquidCrystal.h"
 #include "MFRC522.h"
-#include "Servo.h"
 #include "SPI.h"
 
 const unsigned char RFID_UID[RFID_UID_SIZE] = DEFAULT_RFID_UID;
@@ -175,29 +175,10 @@ void readRFID(void *) {
       if (strncmp(reinterpret_cast<const char *>(rfid.uid.uidByte), reinterpret_cast<const char *>(RFID_UID), RFID_UID_SIZE) == 0) {
         DEBUG_PRINT_RFID_SUCCESS();
         addSendData(trash1CollectRequested(), 1);
-        // high pitch sound on success
-        for (int i = 0; i < 20; i++) {
-          digitalWrite(PIN_BUZZER_SOURCE, HIGH);
-          delayMicroseconds(1200);
-          digitalWrite(PIN_BUZZER_SOURCE, LOW);
-          delayMicroseconds(1200);
-        }
-        delay(70);
-        for (int i = 0; i < 50; i++) {
-          digitalWrite(PIN_BUZZER_SOURCE, HIGH);
-          delayMicroseconds(800);
-          digitalWrite(PIN_BUZZER_SOURCE, LOW);
-          delayMicroseconds(800);
-        }
+        buzzerGood();
       } else {
         DEBUG_PRINT_RFID_FAILURE();
-        // low pitch sound on failure
-        for (int i = 0; i < 30; i++) {
-          digitalWrite(PIN_BUZZER_SOURCE, HIGH);
-          delayMicroseconds(2200);
-          digitalWrite(PIN_BUZZER_SOURCE, LOW);
-          delayMicroseconds(2200);
-        }
+        buzzerWrong();
       }
       rfid.PICC_HaltA();       // halt PICC
       rfid.PCD_StopCrypto1();  // stop encryption on PCD
@@ -223,21 +204,7 @@ void readFlameSensor(void *) {
 
     burning = true;
     addSendData(trash1Burning(true), 2);
-
-    // simulating a fire alarm
-    for (int i = 0; i < 20; i++) {
-      digitalWrite(PIN_BUZZER_SOURCE, HIGH);
-      delayMicroseconds(600);
-      digitalWrite(PIN_BUZZER_SOURCE, LOW);
-      delayMicroseconds(600);
-    }
-    delay(70);
-    for (int i = 0; i < 150; i++) {
-      digitalWrite(PIN_BUZZER_SOURCE, HIGH);
-      delayMicroseconds(700);
-      digitalWrite(PIN_BUZZER_SOURCE, LOW);
-      delayMicroseconds(700);
-    }
+    buzzerFire();
   } else {
     // if bin was burning, send stop burning once
     if (burning) {
@@ -258,8 +225,6 @@ void readFlameSensor(void *) {
 #define DEBUG_PRINT_CLOSE_0()
 #endif
 
-Servo servo0;
-
 void readObstacleSensor(void *) {
   static bool opened = false;
   static unsigned long openingStemp = 0;
@@ -268,8 +233,8 @@ void readObstacleSensor(void *) {
     // detect obstacle once
     if (!opened) {
       DEBUG_PRINT_OBSTACLE();
-      addSendData(trash0LidS(opened), 2);
-      servo0.write(SERVO_ANGLE);
+      addSendData(trash0LidS(true), 2);
+      lidOpen(0);
     }
 
     opened = true;
@@ -279,8 +244,8 @@ void readObstacleSensor(void *) {
     if (opened && digitalRead(PIN_OBSTACLE) == HIGH && millis() > (openingStemp + OBSTACLE_DELAY * 1000)) {
       DEBUG_PRINT_CLOSE_0();
       opened = false;
-
-      servo0.write(0);
+      addSendData(trash0LidS(false), 2);
+      lidClose(0);
     }
   }
 }
@@ -297,7 +262,6 @@ void setupBins(void *) {
   rfid.PCD_DumpVersionToSerial();
 #endif
 
-  pinMode(PIN_BUZZER_SOURCE, OUTPUT);
   pinMode(PIN_FIRE_DIGITAL, INPUT);
   pinMode(PIN_OBSTACLE, INPUT_PULLUP);
 
@@ -306,7 +270,5 @@ void setupBins(void *) {
   // print a message to the LCD.
   lcd.print("Password: ");
 
-  servo0.attach(PIN_SERVO_0);
-  delay(1);
-  servo0.write(0);
+  setupActuators();
 }
