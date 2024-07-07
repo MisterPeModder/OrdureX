@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace OrdureX.UI
@@ -71,9 +72,9 @@ namespace OrdureX.UI
             m_Display.Status = string.Join("\n", status);
         }
 
-        private void OnCollectRequested()
+        private void OnCollectRequested(bool value)
         {
-            m_IsCollectRequested = true;
+            m_IsCollectRequested = value;
             UpdateStatus();
         }
 

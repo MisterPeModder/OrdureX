@@ -72,9 +72,9 @@ namespace OrdureX.UI
             m_Display.FireActive = m_IsBurning;
         }
 
-        private void OnCollectRequested()
+        private void OnCollectRequested(bool value)
         {
-            m_IsCollectRequested = true;
+            m_IsCollectRequested = value;
             UpdateStatus();
         }
 
