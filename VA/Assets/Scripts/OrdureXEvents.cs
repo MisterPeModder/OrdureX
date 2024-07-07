@@ -17,9 +17,9 @@ namespace OrdureX
 
         public Guid ClientUuid;
 
-        public Action OnTrash0CollectRequested { get; set; }
-        public Action OnTrash1CollectRequested { get; set; }
-        public Action OnTrash2CollectRequested { get; set; }
+        public Action<bool> OnTrash0CollectRequested { get; set; }
+        public Action<bool> OnTrash1CollectRequested { get; set; }
+        public Action<bool> OnTrash2CollectRequested { get; set; }
 
         public Action<Guid> OnTrash0InvalidCode { get; set; }
         public Action<Guid> OnTrash1InvalidCode { get; set; }
@@ -60,9 +60,9 @@ namespace OrdureX
         public void MqttConnected()
         {
             Controller.Subscribe($"{STATUS_NAMESPACE}/simulation", DecodeStatusChange);
-            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-0/collect-requested", (_args) => OnTrash0CollectRequested.Invoke());
-            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-1/collect-requested", (_args) => OnTrash1CollectRequested.Invoke());
-            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-2/collect-requested", (_args) => OnTrash2CollectRequested.Invoke());
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-0/collect-requested", (_args) => OnTrash0CollectRequested.Invoke(true));
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-1/collect-requested", (_args) => OnTrash1CollectRequested.Invoke(true));
+            Controller.Subscribe($"{STATUS_NAMESPACE}/trash-2/collect-requested", (_args) => OnTrash2CollectRequested.Invoke(true));
             Controller.Subscribe($"{STATUS_NAMESPACE}/trash-0/invalid-code", (args) => DecodeInvalidCode(args, OnTrash0InvalidCode));
             Controller.Subscribe($"{STATUS_NAMESPACE}/trash-1/invalid-code", (args) => DecodeInvalidCode(args, OnTrash1InvalidCode));
             Controller.Subscribe($"{STATUS_NAMESPACE}/trash-2/invalid-code", (args) => DecodeInvalidCode(args, OnTrash2InvalidCode));
@@ -107,6 +107,28 @@ namespace OrdureX
                 .WithPayload(payloadBytes)
                 .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.ExactlyOnce)
                 .Build());
+        }
+
+        // Manual Event Triggers //////////////////////////////////////////////
+
+        public void SetCollectRequested(int trashIndex, bool value)
+        {
+            if (trashIndex == 0)
+            {
+                OnTrash0CollectRequested.Invoke(value);
+            }
+            else if (trashIndex == 1)
+            {
+                OnTrash1CollectRequested.Invoke(value);
+                if (!value)
+                {
+                    OnTrash1BurningChanged.Invoke(false);
+                }
+            }
+            else if (trashIndex == 2)
+            {
+                OnTrash2CollectRequested.Invoke(value);
+            }
         }
 
         // Events Callbacks ///////////////////////////////////////////////////

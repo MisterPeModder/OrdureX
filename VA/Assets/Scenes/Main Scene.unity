@@ -388,7 +388,7 @@ MonoBehaviour:
   m_SettingsPanel: {fileID: 1280200047}
   m_TileDebugOverlayToggle: {fileID: 1345748529}
   m_SimulateArduinoToggle: {fileID: 623573521}
-  m_ShowTruckPathToggle: {fileID: 0}
+  m_ShowTruckPathToggle: {fileID: 508412922}
   m_BrokerURLInputField: {fileID: 2123897223}
   m_BrokerUsernameInputField: {fileID: 496000365}
   m_BrokerPasswordInputField: {fileID: 1037908055}

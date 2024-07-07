@@ -119,14 +119,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6651b1a684c87389ceb907a91dc834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Events: {fileID: 0}
+  m_SettingsManager: {fileID: 0}
   m_Targets: []
   m_Agent: {fileID: 0}
-  m_TrashCollectDistance: 1.5
+  m_TrashCollectDistance: 0.2
   m_CurrentTarget: {fileID: 0}
   m_PathCornerPrefab: {fileID: 6119967998093191830, guid: 2946c372f35aa36258a911c5e9834abd,
     type: 3}
   m_PathCornerProjectionPrefab: {fileID: 8175834900822629514, guid: f4515ccf3fcebb90885f1eaa900aafd4,
     type: 3}
+  m_CollectionTime: 3
   m_BigOrigin: {fileID: 0}
   m_SmallOrigin: {fileID: 0}
   m_PathLine: {fileID: 7753549389368124362}
