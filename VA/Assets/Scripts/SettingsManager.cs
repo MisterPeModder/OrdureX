@@ -44,6 +44,12 @@ namespace OrdureX
         {
             get => m_SimulateArduino;
         }
+        [SerializeField]
+        private bool m_ShowTruckPath = false;
+        public bool ShowTruckPath
+        {
+            get => m_ShowTruckPath;
+        }
         public Action<bool> OnSimulateArduinoChanged;
 
         [Header("UI Elements")]
@@ -53,6 +59,8 @@ namespace OrdureX
         private Toggle m_TileDebugOverlayToggle;
         [SerializeField]
         private Toggle m_SimulateArduinoToggle;
+        [SerializeField]
+        private Toggle m_ShowTruckPathToggle;
         [SerializeField]
         private TMP_InputField m_BrokerURLInputField;
         [SerializeField]
@@ -103,6 +111,11 @@ namespace OrdureX
                 m_SimulateArduinoToggle.isOn = m_SimulateArduino;
                 m_SimulateArduinoToggle.onValueChanged.AddListener(OnSimulateArduinoClicked);
             }
+            if (m_ShowTruckPathToggle != null)
+            {
+                m_ShowTruckPathToggle.isOn = m_ShowTruckPath;
+                m_ShowTruckPathToggle.onValueChanged.AddListener(OnShowTruckPathClicked);
+            }
         }
 
         private void OnDisable()
@@ -112,6 +125,8 @@ namespace OrdureX
                 m_TileDebugOverlayToggle.onValueChanged.RemoveListener(OnShowTileOverlayButtonClicked);
             if (m_SimulateArduinoToggle != null)
                 m_SimulateArduinoToggle.onValueChanged.RemoveListener(OnSimulateArduinoClicked);
+            if (m_ShowTruckPathToggle != null)
+                m_ShowTruckPathToggle.onValueChanged.RemoveListener(OnShowTruckPathClicked);
             if (m_BrokerURLInputField != null)
                 m_BrokerURLInputField.onValueChanged.RemoveListener(OnBrokerURLChanged);
             if (m_BrokerPasswordInputField != null)
@@ -130,6 +145,7 @@ namespace OrdureX
             m_BrokerPassword = PlayerPrefs.GetString("BrokerPassword", m_BrokerPassword);
             m_ShowTileDebugOverlay = PlayerPrefs.GetInt("ShowTileDebugOverlay", m_ShowTileDebugOverlay ? 1 : 0) == 1;
             m_SimulateArduino = PlayerPrefs.GetInt("SimulateArduino", m_SimulateArduino ? 1 : 0) == 1;
+            m_ShowTruckPath = PlayerPrefs.GetInt("ShowTruckPath", m_ShowTruckPath ? 1 : 0) == 1;
             Debug.Log("Sucessfully loaded settings from PlayerPrefs");
         }
 
@@ -183,6 +199,13 @@ namespace OrdureX
             PlayerPrefs.Save();
             m_SimulateArduino = value;
             OnSimulateArduinoChanged.Invoke(value);
+        }
+
+        private void OnShowTruckPathClicked(bool value)
+        {
+            PlayerPrefs.SetInt("ShowTruckPath", value ? 1 : 0);
+            PlayerPrefs.Save();
+            m_ShowTruckPath = value;
         }
 
     }

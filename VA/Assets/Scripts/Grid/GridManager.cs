@@ -28,7 +28,7 @@ namespace OrdureX.Grid
 
         [Header("Simulation Objects")]
         [SerializeField]
-        private GameObject m_TruckPrefab;
+        private GarbageTruckAI m_TruckPrefab;
         [SerializeField]
         private ScaledProjection m_TruckProjectionPrefab;
         [SerializeField]
@@ -37,7 +37,7 @@ namespace OrdureX.Grid
         private List<ScaledProjection> m_TrashCanProjectionPrefabs = new();
         private int m_TrashCanPrefabIndex = -1;
         [SerializeField]
-        private GameObject m_TruckInstance;
+        private GarbageTruckAI m_TruckInstance;
         [SerializeField]
         private ScaledProjection m_TruckProjectionInstance;
         [SerializeField]
@@ -210,7 +210,7 @@ namespace OrdureX.Grid
             m_GridInstance.Initialize(this, origin);
 
             var spawnPoints = GameObject.FindGameObjectsWithTag("Spawn Point");
-            RespawnTruck(spawnPoints);
+            RespawnTruck(spawnPoints, origin.transform);
             RespawnTrashCans(spawnPoints);
             SpawnTruckProjection(origin);
             SpawnTrashCanProjections(origin);
@@ -231,7 +231,7 @@ namespace OrdureX.Grid
             }
         }
 
-        private void RespawnTruck(GameObject[] spawnPoints)
+        private void RespawnTruck(GameObject[] spawnPoints, Transform smallOrigin)
         {
             if (m_TruckPrefab == null)
             {
@@ -254,6 +254,7 @@ namespace OrdureX.Grid
 
             m_TruckInstance = Instantiate(m_TruckPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
             m_TruckInstance.transform.SetParent(transform);
+            m_TruckInstance.Initialize(transform, smallOrigin);
         }
 
         private void RespawnTrashCans(GameObject[] spawnPoints)
@@ -292,7 +293,7 @@ namespace OrdureX.Grid
                 trashCansToSpawn--;
             }
 
-            m_TruckInstance.GetComponent<GarbageTruckAI>().Targets = m_TrashCanInstances.Select(trashCan => trashCan.transform).ToList();
+            m_TruckInstance.Targets = m_TrashCanInstances.Select(trashCan => trashCan.transform).ToList();
         }
 
         private void SpawnTruckProjection(Connectable origin)
