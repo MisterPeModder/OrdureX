@@ -244,9 +244,9 @@ void readObstacleSensor(void *) {
     if (opened && digitalRead(PIN_OBSTACLE) == HIGH && millis() > (openingStemp + OBSTACLE_DELAY * 1000)) {
       DEBUG_PRINT_CLOSE_0();
       opened = false;
-      addSendData(trash0LidS(false), 2);
       lidClose(0);
     }
+    addSendData(trash0LidS(false), 2);
   }
 }
 
