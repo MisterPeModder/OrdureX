@@ -23,7 +23,7 @@ void setup() {
   connectWifi();
   connectRelay();
 
-  task_t task = { .delay = 2000, .lastRun = millis(), .loop = true, .task = send, .context = nullptr };
+  task_t task = { .delay = 2000, .lastRun = millis(), .loop = true, .task = send, .context = &scheduler };
   if (!scheduler.addTask(task)) {
 #ifdef DEBUG
     Serial.println("Send to ESP task not added");
@@ -32,6 +32,7 @@ void setup() {
 
   task.task = receive;
   task.delay = 1000;
+  task.context = nullptr;
   if (!scheduler.addTask(task)) {
 #ifdef DEBUG
     Serial.println("Receive from ESP task not added");
@@ -64,6 +65,7 @@ void setup() {
   }
 
   task.task = readObstacleSensor;
+  task.delay = 300;
   if (!scheduler.addTask(task)) {
 #ifdef DEBUG
     Serial.println("Read obstacle sensor task not added");
