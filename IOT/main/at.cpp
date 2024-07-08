@@ -3,6 +3,7 @@
 #include "actuator.h"
 #include "binary.h"
 #include "config.h"
+#include "scheduler.h"
 
 #define REQUEST_SIZE 256
 #define RECEIVE_SIZE 256
@@ -130,16 +131,7 @@ void addSendData(const unsigned char* payload, const size_t payloadSize) {
   //DEBUG_PRINT_REQUEST();
 }
 
-void send(void* context) {
-  if (statusNumber == 0) {
-    //DEBUG_PRINT_SEND_NOTHING();
-    return;
-  }
-
-  Serial1.print("AT+CIPSEND=");
-  Serial1.println(OFFSET + 1);
-  delay(200);
-
+void sendData(void* context) {
   Serial1.write(statusNumber);
   Serial1.write(REQUEST, OFFSET);
 
@@ -149,7 +141,27 @@ void send(void* context) {
   statusNumber = 0;
   OFFSET = 0;
   // may be useless to reset the array
-  memset(REQUEST, 0x00, REQUEST_SIZE);
+  //memset(REQUEST, 0x00, REQUEST_SIZE);
+}
+
+task_t task = { .delay = 200, .lastRun = millis(), .loop = false, .task = sendData, .context = nullptr };
+
+void send(void* context) {
+  if (statusNumber == 0) {
+    //DEBUG_PRINT_SEND_NOTHING();
+    return;
+  }
+
+  Serial1.print("AT+CIPSEND=");
+  Serial1.println(OFFSET + 1);
+
+  Scheduler* s = static_cast<Scheduler*>(context);
+  task.lastRun = millis();
+  if(s->addTask(task)) {
+    Serial.println("Send data added!");
+  } else {
+    Serial.println("Send data not added!");
+  }
 }
 
 void receive(void* context) {
@@ -278,3 +290,4 @@ void receive(void* context) {
     }
   }
 }
+
