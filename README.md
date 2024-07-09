@@ -4,6 +4,8 @@
 
 [Link to original repository](https://github.com/MisterPeModder/OrdureX)
 
+https://github.com/MisterPeModder/OrdureX/assets/7838479/abd5cb15-ebb6-40af-aa9b-4dda8ee57cf2
+
 ## Documentation
 
 Documentation is available in the `Doc` folder:
