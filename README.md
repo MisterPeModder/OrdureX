@@ -4,7 +4,7 @@
 
 [Link to original repository](https://github.com/MisterPeModder/OrdureX)
 
-## Docomentation
+## Documentation
 
 Documentation is available in the `Doc` folder:
 
